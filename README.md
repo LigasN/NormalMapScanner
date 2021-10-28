@@ -6,4 +6,4 @@ Experimental stand for generating normal maps for quasi-flat objects.
 A fully automatic system that generates normal maps for nearly flat objects. The process of generation consists in taking pictures with spotlighting from different sides and computation of normals. The repository consists of all projects (hardware and software) that combined result in a working stand.
 
 ## Worklog
-Worklog is kept up in [docs/worklog](docs/worklog "Worklog").
+Worklog is kept up in [Worklog](docs/worklog "Worklog").
