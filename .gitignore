@@ -258,3 +258,6 @@ cython_debug/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,eclipse,python,visualstudiocode
+
+### Local user trash ###
+desktop.ini
