@@ -259,5 +259,8 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,eclipse,python,visualstudiocode
 
-### Local user trash ###
+### User defined ###
 desktop.ini
+
+# blender
+*.blend1
