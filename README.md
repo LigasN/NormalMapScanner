@@ -7,6 +7,3 @@ A fully automatic system that generates normal maps for nearly flat objects. The
 
 ## Discussions
 I would like to kindly invite you to check the [discussions page](https://github.com/LigasN/NormalMapScanner/discussions).
-
-## Worklog
-Worklog is kept up in [docs/worklog.md](docs/worklog.md).
