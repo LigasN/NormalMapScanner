@@ -11,6 +11,7 @@ lamp_0_position = np.array([40, 0, 15])  # cm
 r, g, b = 0, 1, 2
 x, y, z = 0, 1, 2
 angles = np.array(range(0, 360, 45))
+angles_rad = np.array((angles * np.pi) / 180, float)
 
 
 def sRGB2Linear(im):
@@ -51,30 +52,28 @@ def main():
     lamp_pos = np.empty((8, 3))
     lamp_pos[0] = lamp_0_position
     lamp_distance = lamp_0_position[x]
-    for angle_idx in range(angles.size):
+    for angle_idx in range(angles_rad.size):
         # Calculate every lamp position (z position is not changing)
-        if angles[angle_idx] != 0:
-            lamp_pos[angle_idx][x] = np.cos(angles[angle_idx]) * lamp_distance
-            lamp_pos[angle_idx][y] = np.sin(angles[angle_idx]) * lamp_distance
+        if angles_rad[angle_idx] != 0:
+            lamp_pos[angle_idx][x] = np.cos(
+                angles_rad[angle_idx]) * lamp_distance
+            lamp_pos[angle_idx][y] = np.sin(
+                angles_rad[angle_idx]) * lamp_distance
             lamp_pos[angle_idx][z] = lamp_0_position[z]
 
     print('Calculation of the ...')
     # TODO: probably just right away counting right pixel for normal map
-    matrix = np.zeros((1200, 1200, 3))
+    pixel_size = object_size / image_size
     # Calculate vector pointing to the light source per pixel
     for pixel_index in np.ndindex(image_size[x], image_size[y]):
-        pixel_size = object_size / image_size
-        # (pixel position for an object aligned with its upper left corner # to (0,0)) - half of an object (to center results back)
+        # (pixel position for an object aligned with its upper left corner
+        # to (0,0)) -/+ to center results back)
         pixel_pos = ((pixel_index * pixel_size) +
-                     (pixel_size / 2)) - (object_size / 2)
-        matrix[pixel_index[0]][pixel_index[1]
-                               ][x] = lamp_pos[0][x] - pixel_pos[x]
-        matrix[pixel_index[0]][pixel_index[1]
-                               ][y] = lamp_pos[0][y] - pixel_pos[y]
-        matrix[pixel_index[0]][pixel_index[1]][z] = lamp_pos[0][z]
-    arrOut = np.uint8(np.rint(matrix * 6))
+                     (np.array(pixel_size[x], -pixel_size[y]) / 2)) - (np.array(object_size[x], -object_size[y]) / 2)
+        pixel_pos = np.append(pixel_pos, 0.)  # Z axis
+        L_vector = lamp_pos[0] - pixel_pos
     # Convert back to PIL
-    Image.fromarray(arrOut).show()
+    #Image.fromarray(arrOut, mode='RGB').show()
 
     # Create output image object
     # output_image.show()
