@@ -62,16 +62,19 @@ def main():
             lamp_pos[angle_idx][z] = lamp_0_position[z]
 
     print('Calculation of the ...')
-    # TODO: probably just right away counting right pixel for normal map
     pixel_size = object_size / image_size
-    # Calculate vector pointing to the light source per pixel
-    for pixel_index in np.ndindex(image_size[x], image_size[y]):
+    pixel_idx = np.zeros(2)
+    for pixel_idx[y], pixel_idx[x] in np.ndindex(image_size[y], image_size[x]):
         # (pixel position for an object aligned with its upper left corner
         # to (0,0)) -/+ to center results back)
-        pixel_pos = ((pixel_index * pixel_size) +
-                     (np.array(pixel_size[x], -pixel_size[y]) / 2)) - (np.array(object_size[x], -object_size[y]) / 2)
+        pixel_pos = ((pixel_idx * pixel_size) +
+                     (np.array((pixel_size[x], (-pixel_size[y]))) / 2)) - (np.array((object_size[x], (-object_size[y]))) / 2)
         pixel_pos = np.append(pixel_pos, 0.)  # Z axis
-        L_vector = lamp_pos[0] - pixel_pos
+
+        for angle_idx in range(angles_rad.size):
+            # Vector pointing to the light source
+            L_vector = lamp_pos[angle_idx] - pixel_pos
+
     # Convert back to PIL
     #Image.fromarray(arrOut, mode='RGB').show()
 
