@@ -35,7 +35,7 @@ def load_image(filename):
 
 def main():
     input_images = np.empty(angles.size, dtype=BitmapImage)
-    output_image = Image.new('RGB', image_size.tolist())
+    out_image = np.zeros((1200, 1200, 3))
 
     print('Loading of the input images.')
     for i in range(0, angles.size):
@@ -71,12 +71,19 @@ def main():
                      (np.array((pixel_size[x], (-pixel_size[y]))) / 2)) - (np.array((object_size[x], (-object_size[y]))) / 2)
         pixel_pos = np.append(pixel_pos, 0.)  # Z axis
 
+        weights = np.zeros(8)
         for angle_idx in range(angles_rad.size):
             # Vector pointing to the light source
             L_vector = lamp_pos[angle_idx] - pixel_pos
+            # L_vector is pointing to the lamp. Input image for normal vector equal to this should be white (255,255,255). For opposite vector color would be black (0,0,0). So calculate te percentage value of color in input image and calculate the angle from this.
+            pix = input_images[angle_idx].getpixel(
+                (pixel_idx[x], pixel_idx[y]))
+            pix_value = float(np.sum(pix))
+            weights[angle_idx] = (pix_value * 100.) / 765.
+            # TODO: calculation percentage to angle
 
     # Convert back to PIL
-    #Image.fromarray(arrOut, mode='RGB').show()
+    Image.fromarray(out_image, mode='RGB').show()
 
     # Create output image object
     # output_image.show()
