@@ -101,6 +101,7 @@ def main():
         out_image[int(pixel_idx[y])][int(pixel_idx[x])][x] = N_vector[x]
 
     # Convert back to PIL
+    # TODO: There need to be some sort of conversion to take normals into image space
     normalmap = Image.fromarray(out_image, mode='RGB')
 
     # Create output image object
