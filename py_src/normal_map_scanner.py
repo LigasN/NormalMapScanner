@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from tkinter import BitmapImage
 from PIL import Image, ImageChops
 
@@ -25,6 +26,10 @@ def sRGB2Linear(im):
     return Image.fromarray(arrOut)
 
 
+def vec2_mag(vec2):
+    return math.sqrt(vec2[x]**2 + vec2[y]**2)
+
+
 def load_image(filename):
     try:
         return Image.open(
@@ -35,7 +40,7 @@ def load_image(filename):
 
 def main():
     input_images = np.empty(angles.size, dtype=BitmapImage)
-    out_image = np.zeros((1200, 1200, 3))
+    out_image = np.zeros((1200, 1200, 3), float)
 
     print('Loading of the input images.')
     for i in range(0, angles.size):
@@ -71,7 +76,7 @@ def main():
                      (np.array((pixel_size[x], (-pixel_size[y]))) / 2)) - (np.array((object_size[x], (-object_size[y]))) / 2)
         pixel_pos = np.append(pixel_pos, 0.)  # Z axis
 
-        weights = np.zeros(8)
+        N_vectors = np.zeros((8, 3))
         for angle_idx in range(angles_rad.size):
             # Vector pointing to the light source
             L_vector = lamp_pos[angle_idx] - pixel_pos
@@ -79,16 +84,29 @@ def main():
             pix = input_images[angle_idx].getpixel(
                 (pixel_idx[x], pixel_idx[y]))
             pix_value = float(np.sum(pix))
-            weights[angle_idx] = (pix_value * 100.) / 765.
-            # TODO: calculation percentage to angle
+            weight = pix_value / 765.
+            NL_angle = (1 - weight) * np.pi
+            # To move a vector without using quaterions it is moved on its axis created parallel to diagonal of X and Y values of the vector
+            diagonal = vec2_mag(L_vector[:z])
+            dz_mag = vec2_mag((diagonal, L_vector[z]))
+            new_diagonal = np.cos(
+                NL_angle) * dz_mag  # x axis
+            N_vectors[angle_idx][z] = np.sin(
+                NL_angle) * dz_mag  # y axis
+            # Diagonal change ratio to get x and y back
+            diag_ratio = new_diagonal / diagonal
+            N_vectors[angle_idx][:z] = diag_ratio * L_vector[:z]
+        # Averaging of the N vector results
+        N_vector = np.average(N_vectors, axis=0)
+        out_image[int(pixel_idx[y])][int(pixel_idx[x])][x] = N_vector[x]
 
     # Convert back to PIL
-    Image.fromarray(out_image, mode='RGB').show()
+    normalmap = Image.fromarray(out_image, mode='RGB')
 
     # Create output image object
-    # output_image.show()
+    normalmap.show()
     print('Saving')
-    # output_image.save("./tmp/normalmap.bmp")
+    normalmap.save("./tmp/normalmap.bmp")
 
 
 if __name__ == "__main__":
