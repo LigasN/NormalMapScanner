@@ -6,10 +6,25 @@ from tkinter import BitmapImage
 from PIL import Image, ImageChops
 
 # Properties
-image_size = np.array([1200, 1200])  # px
-object_size = np.array([20, 20])  # cm
-assets_path = '../assets/'
-lamp_0_position = np.array([40, 0, 15])  # cm
+# test = "Real input"
+# test = "All black input"
+test = "All white input"
+if(test == "Real input"):
+    image_size = np.array([1200, 1200])  # px
+    object_size = np.array([20, 20])  # cm
+    assets_path = '../assets/'
+    lamp_0_position = np.array([40, 0, 15])  # cm
+elif(test == "All black input"):
+    image_size = np.array([3, 3])  # px test image size
+    object_size = np.array([3, 3])  # cm virtual test object size
+    assets_path = '../assets/test_assets/all_black/'  # test assets location
+    lamp_0_position = np.array([40, 0, 15])  # cm
+elif(test == "All white input"):
+    image_size = np.array([3, 3])  # px test image size
+    object_size = np.array([3, 3])  # cm virtual test object size
+    assets_path = '../assets/test_assets/all_white/'  # test assets location
+    lamp_0_position = np.array([0, 0, 15])  # cm
+
 
 R, G, B = 0, 1, 2
 X, Y, Z = 0, 1, 2
@@ -33,6 +48,10 @@ def magnitude(v):
 
 
 def normalize(v):
+    mag = magnitude(v)
+    if(mag == 0.0):  # prevents dividing by zero
+        # NINF value suits calculations with images
+        return np.full(np.shape(v), -np.NINF)
     return v / magnitude(v)
 
 
@@ -51,7 +70,7 @@ def main():
 
     print('Loading of the environment light image.')
     environment_light = load_image(
-        '../assets/input_all_off.bmp')
+        'input_all_off.bmp')
 
     for a in range(0, angles.size):
         print('Loading of the input data array with angle: %d' %
@@ -111,14 +130,13 @@ def main():
             # vector color would be black (0,0,0).
             weight = input[angle_idx][y][x] / 765.0
             N_vector += L_vector * weight
-        N_vector = normalize(N_vector)
-        output[y][x] = N_vector
+        output[y][x] = normalize(N_vector)
     print("Normalmap vectors calculated in %d ms" %
           ((time.time() - start_time) * 1000))
 
     print('Conversion back to PIL')
     start_time = time.time()
-    image_data = np.array((((output + 1.0) / 2.0) * 255.0), int)
+    image_data = np.array((((output + 1.0) / 2.0) * 255.0), np.uint8)
     normalmap = Image.fromarray(image_data, mode='RGB')
     print("Convertion back to PIL done in %d ms" %
           ((time.time() - start_time) * 1000))
@@ -127,6 +145,14 @@ def main():
     normalmap.show()
     print('Saving')
     normalmap.save("./tmp/normalmap.bmp")
+
+    # Printing debug stuff
+    print("output")
+    print(output)
+    print("image data")
+    print(image_data)
+    print("normal map")
+    print(list(normalmap.getdata()))
 
 
 if __name__ == "__main__":
