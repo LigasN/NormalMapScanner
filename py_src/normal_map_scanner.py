@@ -1,4 +1,5 @@
 from email import message
+import os
 import numpy as np
 import math
 import time
@@ -144,15 +145,13 @@ def main():
     # Create output image object
     normalmap.show()
     print('Saving')
+    if not os.path.exists("./tmp/"):
+        os.makedirs("./tmp/")
     normalmap.save("./tmp/normalmap.bmp")
 
     # Printing debug stuff
     print("output")
     print(output)
-    print("image data")
-    print(image_data)
-    print("normal map")
-    print(list(normalmap.getdata()))
 
 
 if __name__ == "__main__":
