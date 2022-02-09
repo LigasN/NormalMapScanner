@@ -1,15 +1,15 @@
-from email import message
 import os
+import sys
 import numpy as np
-import math
 import time
-from tkinter import BitmapImage
 from PIL import Image, ImageChops
+import datetime
 
 # Properties
 # test = "Real input"
 # test = "All black input"
-test = "All white input"
+# test = "All white input"
+test = "Simple test"
 if(test == "Real input"):
     image_size = np.array([1200, 1200])  # px
     object_size = np.array([20, 20])  # cm
@@ -25,6 +25,11 @@ elif(test == "All white input"):
     object_size = np.array([3, 3])  # cm virtual test object size
     assets_path = '../assets/test_assets/all_white/'  # test assets location
     lamp_0_position = np.array([0, 0, 15])  # cm
+elif(test == "Simple test"):
+    image_size = np.array([4, 4])  # px test image size
+    object_size = np.array([4, 4])  # cm virtual test object size
+    assets_path = '../assets/test_assets/simple_test/'  # test assets location
+    lamp_0_position = np.array([40, 0, 15])  # cm
 
 
 R, G, B = 0, 1, 2
@@ -65,6 +70,15 @@ def load_image(filename):
 
 
 def main():
+    # Creating tmp directory for future purposes
+    if not os.path.exists("./tmp/"):
+        os.makedirs("./tmp/")
+    
+    # Logging initialization
+    sys.stdout = open('./tmp/log.txt', 'w')
+    a = datetime.datetime.now()
+    print(str(datetime.datetime.now()) + '\n')
+
     # single pixel stores sum of RGB colors
     input = np.zeros((8, image_size[1], image_size[0]), float)
     output = np.zeros((image_size[1], image_size[0], 3), float)
@@ -93,7 +107,7 @@ def main():
             image_size[1], image_size[0])
         print("Loaded and converted in %d ms" %
               ((time.time() - start_time) * 1000))
-
+    print(input)
     print('Calcultion of the positions of the lamps')
     start_time = time.time()
     lamp_pos = np.empty((8, 3))
@@ -109,7 +123,7 @@ def main():
             lamp_pos[angle_idx][2] = lamp_0_position[2]
     print("Position of lamps calculated in %d ms" %
           ((time.time() - start_time) * 1000))
-
+    print(lamp_pos)
     print('Calculation of the normalmap vectors')
     start_time = time.time()
     pixel_size = object_size / image_size
@@ -118,8 +132,9 @@ def main():
         # (pixel position for an object aligned with its upper left corner
         # to (0,0)) and -/+ to center results back)
         pixel_idx = np.array((x, y))
-        pixel_pos = ((pixel_idx * pixel_size) +
-                     (np.array((pixel_size[0], (-pixel_size[1]))) / 2)) - (np.array((object_size[0], (-object_size[1]))) / 2)
+        pixel_pos = (((pixel_idx * pixel_size) +
+                     (np.array((pixel_size[0], (-pixel_size[1]))) / 2)) -
+                     (np.array((object_size[0], (-object_size[1]))) / 2))
         pixel_pos = np.append(pixel_pos, 0.)  # Z axis
 
         N_vector = np.zeros(3, float)
@@ -145,13 +160,14 @@ def main():
     # Create output image object
     normalmap.show()
     print('Saving')
-    if not os.path.exists("./tmp/"):
-        os.makedirs("./tmp/")
     normalmap.save("./tmp/normalmap.bmp")
 
     # Printing debug stuff
     print("output")
     print(output)
+
+    # Close logging
+    sys.stdout.close()
 
 
 if __name__ == "__main__":
