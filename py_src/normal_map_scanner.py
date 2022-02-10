@@ -73,7 +73,7 @@ def main():
     # Creating tmp directory for future purposes
     if not os.path.exists("./tmp/"):
         os.makedirs("./tmp/")
-    
+
     # Logging initialization
     sys.stdout = open('./tmp/log.txt', 'w')
     a = datetime.datetime.now()
@@ -113,14 +113,13 @@ def main():
     lamp_pos = np.empty((8, 3))
     lamp_pos[0] = lamp_0_position
     lamp_distance = lamp_0_position[0]
-    for angle_idx in range(angles_rad.size):
+    for angle_idx in range(1, angles_rad.size):
         # Calculate every lamp position (z position is not changing)
-        if angles_rad[angle_idx] != 0:
-            lamp_pos[angle_idx][0] = np.cos(
-                angles_rad[angle_idx]) * lamp_distance
-            lamp_pos[angle_idx][1] = np.sin(
-                angles_rad[angle_idx]) * lamp_distance
-            lamp_pos[angle_idx][2] = lamp_0_position[2]
+        lamp_pos[angle_idx][0] = np.cos(
+            angles_rad[angle_idx]) * lamp_distance
+        lamp_pos[angle_idx][1] = np.sin(
+            angles_rad[angle_idx]) * lamp_distance
+        lamp_pos[angle_idx][2] = lamp_0_position[2]
     print("Position of lamps calculated in %d ms" %
           ((time.time() - start_time) * 1000))
     print(lamp_pos)
@@ -129,14 +128,17 @@ def main():
     pixel_size = object_size / image_size
     pixel_idx = np.zeros(2)
     for y, x in np.ndindex(image_size[1], image_size[0]):
-        # (pixel position for an object aligned with its upper left corner
-        # to (0,0)) and -/+ to center results back)
         pixel_idx = np.array((x, y))
-        pixel_pos = (((pixel_idx * pixel_size) +
-                     (np.array((pixel_size[0], (-pixel_size[1]))) / 2)) -
-                     (np.array((object_size[0], (-object_size[1]))) / 2))
-        pixel_pos = np.append(pixel_pos, 0.)  # Z axis
+        # Pixel position calculation for an object aligned with its bottom 
+        # left corner to (0, 0)). The right y value for this object which is
+        # in truth aligned with its upper left corner to (0, 0) is assigned 
+        # to final pixel_pos value.
+        pixel_pos = ((pixel_idx * pixel_size) +
+                     (pixel_size / 2) -
+                     (object_size / 2))
+        pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
 
+        print("pixel idx [%d, %d]" % (x, y))
         N_vector = np.zeros(3, float)
         for angle_idx in range(angles_rad.size):
             # Vector pointing to the light source
@@ -146,7 +148,26 @@ def main():
             # vector color would be black (0,0,0).
             weight = input[angle_idx][y][x] / 765.0
             N_vector += L_vector * weight
+            print("angle idx: %d" % angle_idx)
+            print("pixel size")
+            print(pixel_size)
+            print("pixel pos")
+            print(pixel_pos)
+            print("Lamp pos")
+            print(lamp_pos[angle_idx])
+            print("L vector")
+            print(L_vector)
+            print("pixel color")
+            print(input[angle_idx][y][x])
+            print("weight")
+            print(weight)
+            print("N_vector")
+            print(L_vector * weight)
+            print("N_vector after addition")
+            print(N_vector)
         output[y][x] = normalize(N_vector)
+        print("Output")
+        print(output[y][x])
     print("Normalmap vectors calculated in %d ms" %
           ((time.time() - start_time) * 1000))
 
