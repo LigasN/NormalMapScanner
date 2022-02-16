@@ -6,10 +6,10 @@ from PIL import Image, ImageChops
 import datetime
 
 # Properties
-# test = "Real input"
+test = "Real input"
 # test = "All black input"
 # test = "All white input"
-test = "Simple test"
+# test = "Simple test"
 if(test == "Real input"):
     image_size = np.array([1200, 1200])  # px
     object_size = np.array([20, 20])  # cm
@@ -75,9 +75,9 @@ def main():
         os.makedirs("./tmp/")
 
     # Logging initialization
-    sys.stdout = open('./tmp/log.txt', 'w')
-    a = datetime.datetime.now()
-    print(str(datetime.datetime.now()) + '\n')
+    # sys.stdout = open('./tmp/log.txt', 'w')
+    # a = datetime.datetime.now()
+    # print(str(datetime.datetime.now()) + '\n')
 
     # single pixel stores sum of RGB colors
     input = np.zeros((8, image_size[1], image_size[0]), float)
@@ -107,7 +107,7 @@ def main():
             image_size[1], image_size[0])
         print("Loaded and converted in %d ms" %
               ((time.time() - start_time) * 1000))
-    print(input)
+    # print(input)
     print('Calcultion of the positions of the lamps')
     start_time = time.time()
     lamp_pos = np.empty((8, 3))
@@ -122,23 +122,25 @@ def main():
         lamp_pos[angle_idx][2] = lamp_0_position[2]
     print("Position of lamps calculated in %d ms" %
           ((time.time() - start_time) * 1000))
-    print(lamp_pos)
+    # print(lamp_pos)
     print('Calculation of the normalmap vectors')
     start_time = time.time()
     pixel_size = object_size / image_size
     pixel_idx = np.zeros(2)
     for y, x in np.ndindex(image_size[1], image_size[0]):
         pixel_idx = np.array((x, y))
-        # Pixel position calculation for an object aligned with its bottom 
-        # left corner to (0, 0)). The right y value for this object which is
-        # in truth aligned with its upper left corner to (0, 0) is assigned 
-        # to final pixel_pos value.
+        # Pixel position calculation is at first calculated for an object 
+        # aligned with its bottom left corner to (0, 0)). However Pillow 
+        # library is storing images aligned with its upper left corner to
+        # the (0, 0) point. So after first calculations the value of
+        # pixel_pos variable is set on (x, -y, 0) to correct the equations
+        # for Pillow alignment.
         pixel_pos = ((pixel_idx * pixel_size) +
                      (pixel_size / 2) -
                      (object_size / 2))
         pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
 
-        print("pixel idx [%d, %d]" % (x, y))
+        # print("pixel idx [%d, %d]" % (x, y))
         N_vector = np.zeros(3, float)
         for angle_idx in range(angles_rad.size):
             # Vector pointing to the light source
@@ -148,26 +150,26 @@ def main():
             # vector color would be black (0,0,0).
             weight = input[angle_idx][y][x] / 765.0
             N_vector += L_vector * weight
-            print("angle idx: %d" % angle_idx)
-            print("pixel size")
-            print(pixel_size)
-            print("pixel pos")
-            print(pixel_pos)
-            print("Lamp pos")
-            print(lamp_pos[angle_idx])
-            print("L vector")
-            print(L_vector)
-            print("pixel color")
-            print(input[angle_idx][y][x])
-            print("weight")
-            print(weight)
-            print("N_vector")
-            print(L_vector * weight)
-            print("N_vector after addition")
-            print(N_vector)
+            # print("angle idx: %d" % angle_idx)
+            # print("pixel size")
+            # print(pixel_size)
+            # print("pixel pos")
+            # print(pixel_pos)
+            # print("Lamp pos")
+            # print(lamp_pos[angle_idx])
+            # print("L vector")
+            # print(L_vector)
+            # print("pixel color")
+            # print(input[angle_idx][y][x])
+            # print("weight")
+            # print(weight)
+            # print("N_vector")
+            # print(L_vector * weight)
+            # print("N_vector after addition")
+            # print(N_vector)
         output[y][x] = normalize(N_vector)
-        print("Output")
-        print(output[y][x])
+        # print("Output")
+        # print(output[y][x])
     print("Normalmap vectors calculated in %d ms" %
           ((time.time() - start_time) * 1000))
 
@@ -188,7 +190,7 @@ def main():
     print(output)
 
     # Close logging
-    sys.stdout.close()
+    # sys.stdout.close()
 
 
 if __name__ == "__main__":
