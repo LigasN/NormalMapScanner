@@ -6,10 +6,12 @@ from PIL import Image, ImageChops
 import datetime
 
 # Properties
-test = "Real input"
+# debugging = 1 # True
+debugging = 0  # False
+# test = "Real input"
 # test = "All black input"
 # test = "All white input"
-# test = "Simple test"
+test = "Simple test"
 if(test == "Real input"):
     image_size = np.array([1200, 1200])  # px
     object_size = np.array([20, 20])  # cm
@@ -36,6 +38,28 @@ R, G, B = 0, 1, 2
 X, Y, Z = 0, 1, 2
 angles = np.array(range(0, 360, 45))
 angles_rad = np.array((angles * np.pi) / 180, float)
+
+
+# Print iterations progress
+def printProgressBar(iteration, total=image_size[1], prefix='',
+                     suffix='', decimals=1, length=50, fill='█', printEnd="\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : number of decimals in percent (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(
+        100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
 
 
 def sRGB2Linear(im):
@@ -75,9 +99,10 @@ def main():
         os.makedirs("./tmp/")
 
     # Logging initialization
-    # sys.stdout = open('./tmp/log.txt', 'w')
-    # a = datetime.datetime.now()
-    # print(str(datetime.datetime.now()) + '\n')
+    if(debugging):
+        sys.stdout = open('./tmp/log.txt', 'w')
+        a = datetime.datetime.now()
+        print(str(datetime.datetime.now()) + '\n')
 
     # single pixel stores sum of RGB colors
     input = np.zeros((8, image_size[1], image_size[0]), float)
@@ -122,15 +147,19 @@ def main():
         lamp_pos[angle_idx][2] = lamp_0_position[2]
     print("Position of lamps calculated in %d ms" %
           ((time.time() - start_time) * 1000))
-    # print(lamp_pos)
+
+    if(debugging):
+        print(lamp_pos)
+
     print('Calculation of the normalmap vectors')
     start_time = time.time()
     pixel_size = object_size / image_size
     pixel_idx = np.zeros(2)
     for y, x in np.ndindex(image_size[1], image_size[0]):
+        printProgressBar(y + 1)
         pixel_idx = np.array((x, y))
-        # Pixel position calculation is at first calculated for an object 
-        # aligned with its bottom left corner to (0, 0)). However Pillow 
+        # Pixel position calculation is at first calculated for an object
+        # aligned with its bottom left corner to (0, 0)). However Pillow
         # library is storing images aligned with its upper left corner to
         # the (0, 0) point. So after first calculations the value of
         # pixel_pos variable is set on (x, -y, 0) to correct the equations
@@ -140,7 +169,6 @@ def main():
                      (object_size / 2))
         pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
 
-        # print("pixel idx [%d, %d]" % (x, y))
         N_vector = np.zeros(3, float)
         for angle_idx in range(angles_rad.size):
             # Vector pointing to the light source
@@ -150,27 +178,33 @@ def main():
             # vector color would be black (0,0,0).
             weight = input[angle_idx][y][x] / 765.0
             N_vector += L_vector * weight
-            # print("angle idx: %d" % angle_idx)
-            # print("pixel size")
-            # print(pixel_size)
-            # print("pixel pos")
-            # print(pixel_pos)
-            # print("Lamp pos")
-            # print(lamp_pos[angle_idx])
-            # print("L vector")
-            # print(L_vector)
-            # print("pixel color")
-            # print(input[angle_idx][y][x])
-            # print("weight")
-            # print(weight)
-            # print("N_vector")
-            # print(L_vector * weight)
-            # print("N_vector after addition")
-            # print(N_vector)
+
+            if(debugging):
+                print("pixel idx [%d, %d]" % (x, y))
+                print("angle idx: %d" % angle_idx)
+                print("pixel size")
+                print(pixel_size)
+                print("pixel pos")
+                print(pixel_pos)
+                print("Lamp pos")
+                print(lamp_pos[angle_idx])
+                print("L vector")
+                print(L_vector)
+                print("pixel color")
+                print(input[angle_idx][y][x])
+                print("weight")
+                print(weight)
+                print("N_vector")
+                print(L_vector * weight)
+                print("N_vector after addition")
+                print(N_vector)
+
         output[y][x] = normalize(N_vector)
-        # print("Output")
-        # print(output[y][x])
-    print("Normalmap vectors calculated in %d ms" %
+        if(debugging):
+            print("Output")
+            print(output[y][x])
+
+    print("\nNormalmap vectors calculated in %d ms" %
           ((time.time() - start_time) * 1000))
 
     print('Conversion back to PIL')
@@ -186,11 +220,10 @@ def main():
     normalmap.save("./tmp/normalmap.bmp")
 
     # Printing debug stuff
-    print("output")
-    print(output)
-
-    # Close logging
-    # sys.stdout.close()
+    if(debugging):
+        print("output")
+        print(output)
+        sys.stdout.close() # Close logging
 
 
 if __name__ == "__main__":
