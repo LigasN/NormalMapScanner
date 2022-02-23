@@ -271,6 +271,7 @@ desktop.ini
 */MDK-ARM/*
 */EWARM/*
 */Debug/*
+*/Drivers/*
 # CrossWorks project files
 !*/*.hzp
 !*/*.hzs
