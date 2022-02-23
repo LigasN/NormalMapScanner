@@ -267,10 +267,10 @@ desktop.ini
 *.blend1
 
 # STM32CubeIDE and STM32CubeMX
-Drivers/*
-MDK-ARM/*
-EWARM/*
-Debug/*
+*/Drivers/*
+*/MDK-ARM/*
+*/EWARM/*
+*/Debug/*
 # CrossWorks project files
 !*/*.hzp
 !*/*.hzs
