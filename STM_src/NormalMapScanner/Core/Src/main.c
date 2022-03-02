@@ -9,55 +9,97 @@
  * Copyright (c) 2022 STMicroelectronics.
  * All rights reserved.
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
+ * This software is licensed under terms that can be found in the
+ *LICENSE file in the root directory of this software component. If no
+ *LICENSE file comes with this software, it is provided AS-IS.
  *
  ******************************************************************************
  */
 /* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+/* Includes
+ * ------------------------------------------------------------------*/
 #include "main.h"
 #include "dcmi.h"
+#include "dma.h"
+#include "gpio.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"
-#include "gpio.h"
 
-/* Private includes ----------------------------------------------------------*/
+/* Private includes
+ * ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+// LCD
 #include "LCD_Driver.h"
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
+
+// Camera
+#include "ov2640.h"
+
 /* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
+/* Private typedef
+ * -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+uint8_t CAMERA_FRAME_BUFFER[1600 * 33];
+#define BufferLen (sizeof(CAMERA_FRAME_BUFFER) / sizeof(char))
+uint8_t Value;
 
 /* USER CODE END PTD */
 
-/* Private define ------------------------------------------------------------*/
+/* Private define
+ * ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
+{
+    /* NOTE : This function Should not be modified, when the callback
+       is needed, the HAL_DCMI_FrameEventCallback could be implemented
+       in the user file
+     */
+
+    printf("End of shooting\r\n");
+    // HAL_UART_DMAStop(&huart1);FF D8 FF E0
+    printf("%x  %x  %x  %x\r\n", CAMERA_FRAME_BUFFER[0],
+           CAMERA_FRAME_BUFFER[1], CAMERA_FRAME_BUFFER[2],
+           CAMERA_FRAME_BUFFER[3]);
+    if (CAMERA_FRAME_BUFFER[0] == 0)
+    {
+        CAMERA_FRAME_BUFFER[0] = 0xFF;
+        CAMERA_FRAME_BUFFER[1] = 0xD8;
+        CAMERA_FRAME_BUFFER[2] = 0xFF;
+        CAMERA_FRAME_BUFFER[3] = 0xE0;
+    }
+    HAL_UART_Transmit(&huart1, (uint8_t*)CAMERA_FRAME_BUFFER,
+                      BufferLen, 0x01FF);
+}
+
 /* USER CODE END PD */
 
-/* Private macro -------------------------------------------------------------*/
+/* Private macro
+ * -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
 /* USER CODE END PM */
 
-/* Private variables ---------------------------------------------------------*/
+/* Private variables
+ * ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
+/* Private function prototypes
+ * -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
+/* Private user code
+ * ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -66,93 +108,135 @@ void SystemClock_Config(void);
  * @brief  The application entry point.
  * @retval int
  */
-int main(void) {
-	/* USER CODE BEGIN 1 */
+int main(void)
+{
+    /* USER CODE BEGIN 1 */
 
-	/* USER CODE END 1 */
+    /* USER CODE END 1 */
 
-	/* MCU Configuration--------------------------------------------------------*/
+    /* MCU
+     * Configuration--------------------------------------------------------*/
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+    /* Reset of all peripherals, Initializes the Flash interface and
+     * the Systick. */
+    HAL_Init();
 
-	/* USER CODE BEGIN Init */
+    /* USER CODE BEGIN Init */
 
-	/* USER CODE END Init */
+    /* USER CODE END Init */
 
-	/* Configure the system clock */
-	SystemClock_Config();
+    /* Configure the system clock */
+    SystemClock_Config();
 
-	/* USER CODE BEGIN SysInit */
+    /* USER CODE BEGIN SysInit */
 
-	/* USER CODE END SysInit */
+    /* USER CODE END SysInit */
 
-	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_DCMI_Init();
-	MX_I2C2_Init();
-	MX_SPI2_Init();
-	MX_TIM2_Init();
-	/* USER CODE BEGIN 2 */
-	LCD_SCAN_DIR Lcd_ScanDir = SCAN_DIR_DFT; //SCAN_DIR_DFT = D2U_L2R
-	LCD_Init(Lcd_ScanDir, 1000);
-	TP_Init(Lcd_ScanDir);
+    /* Initialize all configured peripherals */
+    MX_GPIO_Init();
+    MX_DCMI_Init();
+    MX_I2C2_Init();
+    MX_SPI2_Init();
+    MX_DMA_Init();
+    MX_TIM2_Init();
+    /* USER CODE BEGIN 2 */
 
-	TP_GetAdFac();
-	/* USER CODE END 2 */
+    // Display setup
+    LCD_SCAN_DIR Lcd_ScanDir = SCAN_DIR_DFT; // SCAN_DIR_DFT = D2U_L2R
+    LCD_Init(Lcd_ScanDir, 1000);
 
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
-	while (1) {
-		/* USER CODE END WHILE */
+    // Touch screen setup
+    TP_Init(Lcd_ScanDir);
+    TP_GetAdFac();
 
-		/* USER CODE BEGIN 3 */
-		TP_DrawBoard();
-	}
-	/* USER CODE END 3 */
+    // Camera setup
+    OV2640_JPEGConfig(JPEG_320x240);
+    OV2640_BrightnessConfig(0x20);
+    OV2640_AutoExposure(5);
+
+    /* USER CODE END 2 */
+
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
+    while (1)
+    {
+        /* USER CODE END WHILE */
+
+        /* USER CODE BEGIN 3 */
+
+        if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
+        {
+            HAL_Delay(10);
+            if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
+            {
+                printf("Start shooting   \r\n");
+                HAL_DCMI_Stop(&hdcmi);
+                MX_DCMI_Init();
+                __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
+                HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT,
+                                   (uint32_t)&CAMERA_FRAME_BUFFER,
+                                   1600 * 8);
+            }
+            while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
+                ;
+        }
+    }
+    /* USER CODE END 3 */
 }
 
 /**
  * @brief System Clock Configuration
  * @retval None
  */
-void SystemClock_Config(void) {
-	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
-	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
+void SystemClock_Config(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-	/** Configure the main internal regulator output voltage
-	 */
-	__HAL_RCC_PWR_CLK_ENABLE();
-	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
-	/** Initializes the RCC Oscillators according to the specified parameters
-	 * in the RCC_OscInitTypeDef structure.
-	 */
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-	RCC_OscInitStruct.PLL.PLLM = 8;
-	RCC_OscInitStruct.PLL.PLLN = 100;
-	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-	RCC_OscInitStruct.PLL.PLLQ = 2;
-	RCC_OscInitStruct.PLL.PLLR = 2;
-	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		Error_Handler();
-	}
-	/** Initializes the CPU, AHB and APB buses clocks
-	 */
-	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+    /** Configure the main internal regulator output voltage
+     */
+    __HAL_RCC_PWR_CLK_ENABLE();
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+    /** Initializes the RCC Oscillators according to the specified
+     * parameters in the RCC_OscInitTypeDef structure.
+     */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+    RCC_OscInitStruct.HSIState       = RCC_HSI_ON;
+    RCC_OscInitStruct.HSICalibrationValue =
+        RCC_HSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.PLL.PLLState  = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+    RCC_OscInitStruct.PLL.PLLM      = 8;
+    RCC_OscInitStruct.PLL.PLLN      = 180;
+    RCC_OscInitStruct.PLL.PLLP      = RCC_PLLP_DIV2;
+    RCC_OscInitStruct.PLL.PLLQ      = 2;
+    RCC_OscInitStruct.PLL.PLLR      = 2;
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /** Activate the Over-Drive mode
+     */
+    if (HAL_PWREx_EnableOverDrive() != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /** Initializes the CPU, AHB and APB buses clocks
+     */
+    RCC_ClkInitStruct.ClockType =
+        RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK |
+        RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK) {
-		Error_Handler();
-	}
-	HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_4);
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) !=
+        HAL_OK)
+    {
+        Error_Handler();
+    }
+    HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
 }
 
 /* USER CODE BEGIN 4 */
@@ -163,29 +247,32 @@ void SystemClock_Config(void) {
  * @brief  This function is executed in case of error occurrence.
  * @retval None
  */
-void Error_Handler(void) {
-	/* USER CODE BEGIN Error_Handler_Debug */
-	/* User can add his own implementation to report the HAL error return state */
-	__disable_irq();
-	while (1) {
-	}
-	/* USER CODE END Error_Handler_Debug */
+void Error_Handler(void)
+{
+    /* USER CODE BEGIN Error_Handler_Debug */
+    /* User can add his own implementation to report the HAL error
+     * return state */
+    __disable_irq();
+    while (1)
+    {
+    }
+    /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
+ * @brief  Reports the name of the source file and the source line
+ * number where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
+void assert_failed(uint8_t* file, uint32_t line)
 {
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
+    /* USER CODE BEGIN 6 */
+    /* User can add his own implementation to report the file name and
+       line number, ex: printf("Wrong parameters value: file %s on
+       line %d\r\n", file, line) */
+    /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
