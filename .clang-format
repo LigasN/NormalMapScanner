@@ -2,6 +2,7 @@ Language:        Cpp
 BasedOnStyle:  LLVM
 AlignConsecutiveAssignments: true
 AlwaysBreakTemplateDeclarations: true
+BreakBeforeBraces: Custom
 BraceWrapping:   
   AfterClass:      true
   AfterControlStatement: true
@@ -15,7 +16,6 @@ BraceWrapping:
   BeforeElse:      true
   IndentBraces:    false
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 PointerAlignment: Left
