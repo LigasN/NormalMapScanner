@@ -54,6 +54,16 @@ uint8_t Value;
  * ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+int32_t firstNonZeroValue(const uint8_t* array, int32_t size)
+{
+    for (int32_t i = 0; i < size; ++i)
+    {
+        if (array[i] != 0U)
+            return i;
+    }
+    return -1;
+}
+
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 {
     /* NOTE : This function Should not be modified, when the callback
@@ -73,8 +83,12 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
         CAMERA_FRAME_BUFFER[2] = 0xFF;
         CAMERA_FRAME_BUFFER[3] = 0xE0;
     }
-    HAL_UART_Transmit(&huart1, (uint8_t*)CAMERA_FRAME_BUFFER,
-                      BufferLen, 0x01FF);
+
+    int32_t index = firstNonZeroValue(CAMERA_FRAME_BUFFER, BufferLen);
+    if (index != -1)
+        printf("Success");
+
+    GUI_DrawImage(LCD_X, LCD_Y, CAMERA_FRAME_BUFFER);
 }
 
 /* USER CODE END PD */
@@ -144,6 +158,7 @@ int main(void)
     // Display setup
     LCD_SCAN_DIR Lcd_ScanDir = SCAN_DIR_DFT; // SCAN_DIR_DFT = D2U_L2R
     LCD_Init(Lcd_ScanDir, 1000);
+    LCD_Clear(WHITE);
 
     // Touch screen setup
     TP_Init(Lcd_ScanDir);
@@ -170,6 +185,9 @@ int main(void)
             if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
             {
                 printf("Start shooting   \r\n");
+                HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,
+                                  GPIO_PIN_SET);
+
                 HAL_DCMI_Stop(&hdcmi);
                 MX_DCMI_Init();
                 __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
@@ -179,6 +197,7 @@ int main(void)
             }
             while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
                 ;
+            HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
         }
     }
     /* USER CODE END 3 */

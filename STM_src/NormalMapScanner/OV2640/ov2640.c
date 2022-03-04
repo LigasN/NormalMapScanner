@@ -878,7 +878,8 @@ void SCCB_WriteRegs(const uint8_t* pbuf)
         }
         else
         {
-            DCMI_SingleRandomWrite(*pbuf++, *pbuf++);
+            // No idea what they wanted to do here
+            DCMI_SingleRandomWrite(*(++pbuf), *(++pbuf));
         }
     }
 }
