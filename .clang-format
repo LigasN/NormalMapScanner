@@ -19,5 +19,9 @@ BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 PointerAlignment: Left
+BinPackParameters: true
+BinPackArguments: true
+AlignTrailingComments: true
+AlignAfterOpenBracket: true
 IndentWidth: 4
-ColumnLimit: 70
+ColumnLimit: 80
