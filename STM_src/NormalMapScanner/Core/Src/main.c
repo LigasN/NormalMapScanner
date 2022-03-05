@@ -112,6 +112,38 @@ int32_t firstNonZeroValue(const uint8_t* array, int32_t size)
     return -1;
 }
 
+/// Refreshes DCMI status information on display
+void refreshStatusInfo()
+{
+    switch (HAL_DCMI_GetState(&hdcmi))
+    {
+    case HAL_DCMI_STATE_RESET:
+        window.textboxes[StatusValueText].text =
+            "DCMI not yet initialized or disabled.";
+        break;
+    case HAL_DCMI_STATE_READY:
+        window.textboxes[StatusValueText].text =
+            "DCMI initialized and ready for use.";
+        break;
+    case HAL_DCMI_STATE_BUSY:
+        window.textboxes[StatusValueText].text =
+            "DCMI internal processing is ongoing.";
+        break;
+    case HAL_DCMI_STATE_TIMEOUT:
+        window.textboxes[StatusValueText].text = "DCMI timeout state.";
+        break;
+    case HAL_DCMI_STATE_ERROR:
+        window.textboxes[StatusValueText].text = "DCMI error state.";
+        break;
+    case HAL_DCMI_STATE_SUSPENDED:
+        window.textboxes[StatusValueText].text = "DCMI suspend state.";
+        break;
+    default:
+        window.textboxes[StatusValueText].text = "Unknown state.";
+    }
+    GUI_RefreshTextBox(&window.textboxes[StatusValueText]);
+}
+
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 {
     /* NOTE : This function Should not be modified, when the callback
@@ -148,23 +180,30 @@ void HAL_DCMI_ErrorCallback(DCMI_HandleTypeDef* hdcmi)
 
      This is the user implementation.
      */
-    uint32_t error              = HAL_DCMI_GetError(hdcmi);
-    HAL_DCMI_StateTypeDef state = HAL_DCMI_GetState(hdcmi);
-    switch (state)
+
+    switch (HAL_DCMI_GetError(hdcmi))
     {
-    case HAL_DCMI_STATE_RESET:
-    case HAL_DCMI_STATE_READY:
-    case HAL_DCMI_STATE_BUSY:
-    case HAL_DCMI_STATE_TIMEOUT:
-    case HAL_DCMI_STATE_ERROR:
-    case HAL_DCMI_STATE_SUSPENDED:
-        window.textboxes[StatusValueText].text =
-            "Some status stuff right there.";
-        window.textboxes[ErrorValueText].text = "Some error stuff right there.";
-        GUI_RefreshTextBox(&window.textboxes[StatusValueText]);
-        GUI_RefreshTextBox(&window.textboxes[ErrorValueText]);
+    case HAL_DCMI_ERROR_NONE:
+        window.textboxes[ErrorValueText].text = "No error";
         break;
+    case HAL_DCMI_ERROR_OVR:
+        window.textboxes[ErrorValueText].text = "Overrun error";
+        break;
+    case HAL_DCMI_ERROR_SYNC:
+        window.textboxes[ErrorValueText].text = "Synchronization error";
+        break;
+    case HAL_DCMI_ERROR_TIMEOUT:
+        window.textboxes[ErrorValueText].text = "Timeout error";
+        break;
+    case HAL_DCMI_ERROR_DMA:
+        window.textboxes[ErrorValueText].text = "DMA error";
+        break;
+    default:
+        window.textboxes[ErrorValueText].text = "Unknown error";
     }
+
+    GUI_RefreshTextBox(&window.textboxes[ErrorValueText]);
+    refreshStatusInfo();
 }
 
 /* USER CODE END PD */
@@ -261,7 +300,8 @@ int main(void)
             HAL_Delay(10);
             if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
             {
-                printf("Start shooting   \r\n");
+                refreshStatusInfo();
+                HAL_Delay(1000);
                 HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
 
                 HAL_DCMI_Stop(&hdcmi);
