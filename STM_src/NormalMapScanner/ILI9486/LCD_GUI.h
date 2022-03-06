@@ -153,7 +153,7 @@ void GUI_WaveShare_Show(void);
  * https://github.com/LigasN
  ********************************************************************************/
 
-#define TEXTBOXES_NUMBER 4
+#define TEXTBOXES_NUMBER 6
 
 typedef struct
 {

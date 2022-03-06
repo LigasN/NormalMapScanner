@@ -30,6 +30,9 @@
  * ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+// Libraries
+#include <string.h>
+
 // LCD
 #include "LCD_Driver.h"
 #include "LCD_GUI.h"
@@ -55,62 +58,75 @@ GUI_Window window;
 /// Declared textboxes
 enum TextBoxes
 {
+    LogText,
+    LogValueText,
     StatusText,
-    ErrorText,
     StatusValueText,
+    ErrorText,
     ErrorValueText
 };
 
 /// Default GUI with informations about camera status and errors
 void initGUI(GUI_Window* w)
 {
-    w->background                   = WHITE;
-    w->textboxesSize                = TEXTBOXES_NUMBER;
-    GUI_TextBox GUI_TextBox_default = {LCD_X + 10,
-                                       LCD_Y + 10,
-                                       LCD_X_MAXPIXEL - 10,
-                                       LCD_Y_MAXPIXEL - 10,
-                                       &Font12,
-                                       WHITE,
-                                       BLACK,
-                                       '\0'};
+    w->background              = WHITE;
+    w->textboxesSize           = TEXTBOXES_NUMBER;
+    GUI_TextBox defaultTextBox = {LCD_X + 10,
+                                  LCD_Y + 10,
+                                  LCD_X_MAXPIXEL - 10,
+                                  LCD_Y_MAXPIXEL - 10,
+                                  &Font12,
+                                  WHITE,
+                                  BLACK,
+                                  '\0'};
 
-    w->textboxes[StatusText]      = GUI_TextBox_default;
-    w->textboxes[StatusText].xEnd = LCD_X_MAXPIXEL / 4U;
-    w->textboxes[StatusText].yEnd = 30U;
-    w->textboxes[StatusText].text = "Status:";
+    w->textboxes[LogText]      = defaultTextBox;
+    w->textboxes[LogText].xEnd = LCD_X_MAXPIXEL / 5U;
+    w->textboxes[LogText].yEnd =
+        w->textboxes[LogText].yPos + w->textboxes[LogText].font->Height;
+    w->textboxes[LogText].text = "Log:";
+
+    w->textboxes[StatusText]      = w->textboxes[LogText];
+    w->textboxes[StatusText].yPos = LCD_Y_MAXPIXEL / 3U;
+    w->textboxes[StatusText].yEnd =
+        w->textboxes[StatusText].yPos + w->textboxes[StatusText].font->Height;
+    w->textboxes[StatusText].text = "DCMI status:";
 
     w->textboxes[ErrorText]      = w->textboxes[StatusText];
-    w->textboxes[ErrorText].yPos = LCD_Y_MAXPIXEL / 2U;
-    w->textboxes[ErrorText].yEnd = w->textboxes[ErrorText].yPos + 20U;
-    w->textboxes[ErrorText].text = "Error:";
+    w->textboxes[ErrorText].yPos *= 2U;
+    w->textboxes[ErrorText].yEnd =
+        w->textboxes[ErrorText].yPos + w->textboxes[ErrorText].font->Height;
+    w->textboxes[ErrorText].text = "DCMI error:";
 
-    w->textboxes[StatusValueText]      = GUI_TextBox_default;
+    w->textboxes[LogValueText]      = w->textboxes[LogText];
+    w->textboxes[LogValueText].xPos = w->textboxes[LogText].xEnd + 10;
+    w->textboxes[LogValueText].xEnd = defaultTextBox.xEnd;
+    w->textboxes[LogValueText].yEnd = w->textboxes[StatusText].yPos - 10;
+    w->textboxes[LogValueText].text = "Push Blue Button to make a picture.";
+
+    w->textboxes[StatusValueText]      = w->textboxes[LogValueText];
     w->textboxes[StatusValueText].xPos = w->textboxes[StatusText].xEnd + 10;
     w->textboxes[StatusValueText].yPos = w->textboxes[StatusText].yPos;
     w->textboxes[StatusValueText].yEnd = w->textboxes[ErrorText].yPos - 10;
     w->textboxes[StatusValueText].text = "No status info received yet";
 
-    w->textboxes[ErrorValueText]      = GUI_TextBox_default;
+    w->textboxes[ErrorValueText]      = w->textboxes[LogValueText];
     w->textboxes[ErrorValueText].xPos = w->textboxes[ErrorText].xEnd + 10;
     w->textboxes[ErrorValueText].yPos = w->textboxes[ErrorText].yPos;
-    w->textboxes[ErrorValueText].xEnd = w->textboxes[StatusValueText].xEnd;
+    w->textboxes[ErrorValueText].yEnd = defaultTextBox.yEnd;
     w->textboxes[ErrorValueText].text = "No error info for now";
+}
+
+void refreshLog(char* log)
+{
+    window.textboxes[LogValueText].text =
+        strcat(log, strcat("\n", window.textboxes[LogValueText].text));
+    GUI_RefreshTextBox(&window.textboxes[LogValueText]);
 }
 
 //-------------------          Camera          -------------------
 uint8_t CAMERA_FRAME_BUFFER[1600 * 33];
 #define BufferLen (sizeof(CAMERA_FRAME_BUFFER) / sizeof(char))
-
-int32_t firstNonZeroValue(const uint8_t* array, int32_t size)
-{
-    for (int32_t i = 0; i < size; ++i)
-    {
-        if (array[i] != 0U)
-            return i;
-    }
-    return -1;
-}
 
 /// Refreshes DCMI status information on display
 void refreshStatusInfo()
@@ -144,6 +160,16 @@ void refreshStatusInfo()
     GUI_RefreshTextBox(&window.textboxes[StatusValueText]);
 }
 
+int32_t firstNonZeroValue(const uint8_t* array, int32_t size)
+{
+    for (int32_t i = 0; i < size; ++i)
+    {
+        if (array[i] != 0U)
+            return i;
+    }
+    return -1;
+}
+
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 {
     /* NOTE : This function Should not be modified, when the callback
@@ -153,7 +179,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
      This is the user implementation.
      */
 
-    printf("End of shooting\r\n");
+    refreshLog("End of shooting\r\n");
     // HAL_UART_DMAStop(&huart1);FF D8 FF E0
     printf("%x  %x  %x  %x\r\n", CAMERA_FRAME_BUFFER[0], CAMERA_FRAME_BUFFER[1],
            CAMERA_FRAME_BUFFER[2], CAMERA_FRAME_BUFFER[3]);
@@ -315,6 +341,7 @@ int main(void)
             HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
         }
     }
+
     /* USER CODE END 3 */
 }
 
