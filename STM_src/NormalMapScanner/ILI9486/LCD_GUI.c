@@ -873,6 +873,8 @@ void GUI_DrawImage(POINT xPoint, POINT yPoint, const unsigned char* image_data)
 
 /******************************************************************************
  function:	Display new or refresh once used GUI_TextBox
+ parameter:
+                 t	:   textbox where text should be refreshed or displayed
  ******************************************************************************/
 void GUI_RefreshTextBox(const GUI_TextBox* t)
 {
@@ -881,6 +883,42 @@ void GUI_RefreshTextBox(const GUI_TextBox* t)
                       DRAW_FULL, DOT_PIXEL_1X1);
     GUI_DisStringInBox_EN(t->xPos, t->yPos, t->xEnd, t->yEnd, t->text, t->font,
                           t->backgroundColor, t->foregroundColor);
+}
+
+/******************************************************************************
+ function:	Adds new first line with provided text, moving older text to the
+                        next ones.
+ parameter:
+                 t		:   textbox where text should be refreshed
+                 text	:	text to add on the beggining
+ ******************************************************************************/
+void printOnTextBox(GUI_TextBox* t, char* text)
+{
+    t->text = strcat(text, strcat("\n", t->text));
+    GUI_RefreshTextBox(t);
+}
+
+/******************************************************************************
+ function:	Adds new first line with provided formatted text (like printf),
+                        moving older text to the next ones.
+ parameter:
+                 t		:   textbox where text should be refreshed
+                 fmt	:	formatted text to add on the beggining
+ ******************************************************************************/
+void printfOnTextBox(GUI_TextBox* t, const char* fmt, ...)
+{
+    // formatting
+    va_list args1;
+    va_start(args1, fmt);
+    va_list args2;
+    va_copy(args2, args1);
+    char info[1 + vsnprintf(NULL, 0, fmt, args1)];
+    va_end(args1);
+    vsnprintf(info, sizeof(info), fmt, args2);
+    va_end(args2);
+
+    // displaying
+    printOnTextBox(t, info);
 }
 
 /******************************************************************************

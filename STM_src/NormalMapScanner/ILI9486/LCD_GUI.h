@@ -153,6 +153,10 @@ void GUI_WaveShare_Show(void);
  * https://github.com/LigasN
  ********************************************************************************/
 
+// Libraries
+#include <stdarg.h>
+#include <string.h>
+
 #define TEXTBOXES_NUMBER 6
 
 typedef struct
@@ -179,6 +183,8 @@ int GUI_DisStringInBox_EN(POINT Xbegin, POINT Ybegin, POINT Xend, POINT Yend,
                           COLOR Color_Background, COLOR Color_Foreground);
 void GUI_DrawImage(POINT xPoint, POINT yPoint, const unsigned char* image_data);
 void GUI_RefreshTextBox(const GUI_TextBox* t);
+void printOnTextBox(GUI_TextBox* t, char* text);
+void printfOnTextBox(GUI_TextBox* t, const char* text, ...);
 void GUI_DrawGUI(const GUI_Window* w);
 
 #ifdef __cplusplus

@@ -30,9 +30,6 @@
  * ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-// Libraries
-#include <string.h>
-
 // LCD
 #include "LCD_Driver.h"
 #include "LCD_GUI.h"
@@ -56,15 +53,15 @@
 GUI_Window window;
 
 /// Declared textboxes
-enum TextBoxes
+typedef enum
 {
-    LogText,
-    LogValueText,
+    infoText,
+    infoValueText,
     StatusText,
     StatusValueText,
     ErrorText,
     ErrorValueText
-};
+} TextBoxes;
 
 /// Default GUI with informations about camera status and errors
 void initGUI(GUI_Window* w)
@@ -80,49 +77,47 @@ void initGUI(GUI_Window* w)
                                   BLACK,
                                   '\0'};
 
-    w->textboxes[LogText]      = defaultTextBox;
-    w->textboxes[LogText].xEnd = LCD_X_MAXPIXEL / 5U;
-    w->textboxes[LogText].yEnd =
-        w->textboxes[LogText].yPos + w->textboxes[LogText].font->Height;
-    w->textboxes[LogText].text = "Log:";
+    w->textboxes[infoText]      = defaultTextBox;
+    w->textboxes[infoText].xEnd = LCD_X_MAXPIXEL / 5U;
+    w->textboxes[infoText].yEnd =
+        w->textboxes[infoText].yPos + w->textboxes[infoText].font->Height;
+    w->textboxes[infoText].text = "Information:";
 
-    w->textboxes[StatusText]      = w->textboxes[LogText];
+    w->textboxes[StatusText]      = w->textboxes[infoText];
     w->textboxes[StatusText].yPos = LCD_Y_MAXPIXEL / 3U;
     w->textboxes[StatusText].yEnd =
         w->textboxes[StatusText].yPos + w->textboxes[StatusText].font->Height;
     w->textboxes[StatusText].text = "DCMI status:";
 
-    w->textboxes[ErrorText]      = w->textboxes[StatusText];
+    w->textboxes[ErrorText] = w->textboxes[StatusText];
     w->textboxes[ErrorText].yPos *= 2U;
     w->textboxes[ErrorText].yEnd =
         w->textboxes[ErrorText].yPos + w->textboxes[ErrorText].font->Height;
     w->textboxes[ErrorText].text = "DCMI error:";
 
-    w->textboxes[LogValueText]      = w->textboxes[LogText];
-    w->textboxes[LogValueText].xPos = w->textboxes[LogText].xEnd + 10;
-    w->textboxes[LogValueText].xEnd = defaultTextBox.xEnd;
-    w->textboxes[LogValueText].yEnd = w->textboxes[StatusText].yPos - 10;
-    w->textboxes[LogValueText].text = "Push Blue Button to make a picture.";
+    w->textboxes[infoValueText]      = w->textboxes[infoText];
+    w->textboxes[infoValueText].xPos = w->textboxes[infoText].xEnd + 10;
+    w->textboxes[infoValueText].xEnd = defaultTextBox.xEnd;
+    w->textboxes[infoValueText].yEnd = w->textboxes[StatusText].yPos - 10;
+    w->textboxes[infoValueText].text = "No log for now";
 
-    w->textboxes[StatusValueText]      = w->textboxes[LogValueText];
+    w->textboxes[StatusValueText]      = w->textboxes[infoValueText];
     w->textboxes[StatusValueText].xPos = w->textboxes[StatusText].xEnd + 10;
     w->textboxes[StatusValueText].yPos = w->textboxes[StatusText].yPos;
     w->textboxes[StatusValueText].yEnd = w->textboxes[ErrorText].yPos - 10;
     w->textboxes[StatusValueText].text = "No status info received yet";
 
-    w->textboxes[ErrorValueText]      = w->textboxes[LogValueText];
+    w->textboxes[ErrorValueText]      = w->textboxes[infoValueText];
     w->textboxes[ErrorValueText].xPos = w->textboxes[ErrorText].xEnd + 10;
     w->textboxes[ErrorValueText].yPos = w->textboxes[ErrorText].yPos;
     w->textboxes[ErrorValueText].yEnd = defaultTextBox.yEnd;
     w->textboxes[ErrorValueText].text = "No error info for now";
 }
 
-void refreshLog(char* log)
-{
-    window.textboxes[LogValueText].text =
-        strcat(log, strcat("\n", window.textboxes[LogValueText].text));
-    GUI_RefreshTextBox(&window.textboxes[LogValueText]);
-}
+/// Macros on the library methods to spare some code
+#define printInfo(info) printOnTextBox(&window.textboxes[infoValueText], info)
+#define printfInfo(format, ...)                                                \
+    printfOnTextBox(&window.textboxes[infoValueText], format, __VA_ARGS__)
 
 //-------------------          Camera          -------------------
 uint8_t CAMERA_FRAME_BUFFER[1600 * 33];
@@ -179,10 +174,11 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
      This is the user implementation.
      */
 
-    refreshLog("End of shooting\r\n");
+    printInfo("End of shooting\r\n");
     // HAL_UART_DMAStop(&huart1);FF D8 FF E0
-    printf("%x  %x  %x  %x\r\n", CAMERA_FRAME_BUFFER[0], CAMERA_FRAME_BUFFER[1],
-           CAMERA_FRAME_BUFFER[2], CAMERA_FRAME_BUFFER[3]);
+    printfInfo("%x  %x  %x  %x\r\n", CAMERA_FRAME_BUFFER[0],
+               CAMERA_FRAME_BUFFER[1], CAMERA_FRAME_BUFFER[2],
+               CAMERA_FRAME_BUFFER[3]);
     if (CAMERA_FRAME_BUFFER[0] == 0)
     {
         CAMERA_FRAME_BUFFER[0] = 0xFF;
@@ -193,7 +189,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 
     int32_t index = firstNonZeroValue(CAMERA_FRAME_BUFFER, BufferLen);
     if (index != -1)
-        printf("Success");
+        printInfo("Success");
 
     GUI_DrawImage(LCD_X, LCD_Y, CAMERA_FRAME_BUFFER);
 }
@@ -315,6 +311,9 @@ int main(void)
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
+    printInfo("Initialization done.");
+    printInfo("Push Blue Button to make a picture.");
+    printfInfo("Make me count to %d. %d! %d! %d!...", 3, 3, 2, 1);
     while (1)
     {
         /* USER CODE END WHILE */
@@ -326,6 +325,7 @@ int main(void)
             HAL_Delay(10);
             if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
             {
+                printInfo("Button pushed");
                 refreshStatusInfo();
                 HAL_Delay(1000);
                 HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
@@ -335,10 +335,12 @@ int main(void)
                 __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
                 HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT,
                                    (uint32_t)&CAMERA_FRAME_BUFFER, 1600 * 8);
+                printInfo("DCMI DMA started");
             }
             while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
                 ;
             HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+            printInfo("Button released, push again to make another shot.");
         }
     }
 
