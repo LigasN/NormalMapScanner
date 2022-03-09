@@ -157,34 +157,68 @@ void GUI_WaveShare_Show(void);
 #include <stdarg.h>
 #include <string.h>
 
-#define TEXTBOXES_NUMBER 6
+/// Max number of textboxes in GUI
+#define TEXTBOXES_NUMBER 5
+/// Max number of consoles in GUI
+#define CONSOLES_NUMBER 1
+/// Max number of chars in GUI_Console's text
+#define CONSOLE_TEXT_SIZE 52 * 7
 
+/// Simple text object with possibilities to:
+///  - setup start and end points of it,
+///  - refresh once placed text with new one (GUI_RefreshTextBox()),
+///  - use of different fonts,
+///  - setup different fore and background colors
 typedef struct
 {
-    uint32_t xPos;
-    uint32_t yPos;
-    uint32_t xEnd;
-    uint32_t yEnd;
-    sFONT* font;
+    POINT xPos;
+    POINT yPos;
+    POINT xEnd;
+    POINT yEnd;
     COLOR backgroundColor;
     COLOR foregroundColor;
+    sFONT* font;
     char* text;
 } GUI_TextBox;
 
+/// Text object with possibilities to:
+///  - setup start and end points of it,
+///  - use of different fonts,
+///  - setup different fore and background colors
+///  - print next line of text like in a console:
+///     - printOnConsole()
+///     - printfOnConsole()
+typedef struct
+{
+    POINT xPos;
+    POINT yPos;
+    POINT xEnd;
+    POINT yEnd;
+    COLOR backgroundColor;
+    COLOR foregroundColor;
+    sFONT* font;
+    char text[CONSOLE_TEXT_SIZE];
+} GUI_Console;
+
+/// Simple window object which holds all GUI data together. Usable with
+/// GUI_DrawGUI() to draw whole GUI at once.
 typedef struct
 {
     COLOR background;
-    uint8_t textboxesSize;
     GUI_TextBox textboxes[TEXTBOXES_NUMBER];
+    GUI_Console consoles[CONSOLES_NUMBER];
 } GUI_Window;
 
-int GUI_DisStringInBox_EN(POINT Xbegin, POINT Ybegin, POINT Xend, POINT Yend,
-                          const char* pString, sFONT* Font,
-                          COLOR Color_Background, COLOR Color_Foreground);
+// Functions
+// Descriptions for all functions are placed in LCD_GUI.c file, because Eclipse
+// somehow prefers this way to enable showing hints during coding.
+void GUI_DisStringInBox(POINT Xbegin, POINT Ybegin, POINT Xend, POINT Yend,
+                        const char* pString, sFONT* Font,
+                        COLOR Color_Background, COLOR Color_Foreground);
 void GUI_DrawImage(POINT xPoint, POINT yPoint, const unsigned char* image_data);
 void GUI_RefreshTextBox(const GUI_TextBox* t);
-void printOnTextBox(GUI_TextBox* t, char* text);
-void printfOnTextBox(GUI_TextBox* t, const char* text, ...);
+void printOnConsole(GUI_Console* c, char* text);
+void printfOnConsole(GUI_Console* c, const char* text, ...);
 void GUI_DrawGUI(const GUI_Window* w);
 
 #ifdef __cplusplus

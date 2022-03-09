@@ -55,8 +55,7 @@ GUI_Window window;
 /// Declared textboxes
 typedef enum
 {
-    infoText,
-    infoValueText,
+    InfoText,
     StatusText,
     StatusValueText,
     ErrorText,
@@ -67,23 +66,22 @@ typedef enum
 void initGUI(GUI_Window* w)
 {
     w->background              = WHITE;
-    w->textboxesSize           = TEXTBOXES_NUMBER;
     GUI_TextBox defaultTextBox = {LCD_X + 10,
                                   LCD_Y + 10,
                                   LCD_X_MAXPIXEL - 10,
                                   LCD_Y_MAXPIXEL - 10,
-                                  &Font12,
                                   WHITE,
                                   BLACK,
+                                  &Font12,
                                   '\0'};
 
-    w->textboxes[infoText]      = defaultTextBox;
-    w->textboxes[infoText].xEnd = LCD_X_MAXPIXEL / 5U;
-    w->textboxes[infoText].yEnd =
-        w->textboxes[infoText].yPos + w->textboxes[infoText].font->Height;
-    w->textboxes[infoText].text = "Information:";
+    w->textboxes[InfoText]      = defaultTextBox;
+    w->textboxes[InfoText].xEnd = LCD_X_MAXPIXEL / 5U;
+    w->textboxes[InfoText].yEnd =
+        w->textboxes[InfoText].yPos + w->textboxes[InfoText].font->Height;
+    w->textboxes[InfoText].text = "Information:";
 
-    w->textboxes[StatusText]      = w->textboxes[infoText];
+    w->textboxes[StatusText]      = w->textboxes[InfoText];
     w->textboxes[StatusText].yPos = LCD_Y_MAXPIXEL / 3U;
     w->textboxes[StatusText].yEnd =
         w->textboxes[StatusText].yPos + w->textboxes[StatusText].font->Height;
@@ -95,19 +93,22 @@ void initGUI(GUI_Window* w)
         w->textboxes[ErrorText].yPos + w->textboxes[ErrorText].font->Height;
     w->textboxes[ErrorText].text = "DCMI error:";
 
-    w->textboxes[infoValueText]      = w->textboxes[infoText];
-    w->textboxes[infoValueText].xPos = w->textboxes[infoText].xEnd + 10;
-    w->textboxes[infoValueText].xEnd = defaultTextBox.xEnd;
-    w->textboxes[infoValueText].yEnd = w->textboxes[StatusText].yPos - 10;
-    w->textboxes[infoValueText].text = "No log for now";
+    w->consoles[0].xPos            = w->textboxes[InfoText].xEnd + 10;
+    w->consoles[0].yPos            = w->textboxes[InfoText].yPos;
+    w->consoles[0].xEnd            = defaultTextBox.xEnd;
+    w->consoles[0].yEnd            = w->textboxes[StatusText].yPos - 8;
+    w->consoles[0].font            = w->textboxes[InfoText].font;
+    w->consoles[0].backgroundColor = w->textboxes[InfoText].backgroundColor;
+    w->consoles[0].foregroundColor = w->textboxes[InfoText].foregroundColor;
+    printOnConsole(w->consoles, "No log for now\n");
 
-    w->textboxes[StatusValueText]      = w->textboxes[infoValueText];
+    w->textboxes[StatusValueText]      = w->textboxes[StatusText];
     w->textboxes[StatusValueText].xPos = w->textboxes[StatusText].xEnd + 10;
-    w->textboxes[StatusValueText].yPos = w->textboxes[StatusText].yPos;
+    w->textboxes[StatusValueText].xEnd = defaultTextBox.xEnd;
     w->textboxes[StatusValueText].yEnd = w->textboxes[ErrorText].yPos - 10;
     w->textboxes[StatusValueText].text = "No status info received yet";
 
-    w->textboxes[ErrorValueText]      = w->textboxes[infoValueText];
+    w->textboxes[ErrorValueText]      = w->textboxes[StatusValueText];
     w->textboxes[ErrorValueText].xPos = w->textboxes[ErrorText].xEnd + 10;
     w->textboxes[ErrorValueText].yPos = w->textboxes[ErrorText].yPos;
     w->textboxes[ErrorValueText].yEnd = defaultTextBox.yEnd;
@@ -115,9 +116,9 @@ void initGUI(GUI_Window* w)
 }
 
 /// Macros on the library methods to spare some code
-#define printInfo(info) printOnTextBox(&window.textboxes[infoValueText], info)
+#define printInfo(info) printOnConsole(window.consoles, info)
 #define printfInfo(format, ...)                                                \
-    printfOnTextBox(&window.textboxes[infoValueText], format, __VA_ARGS__)
+    printfOnConsole(window.consoles, format, __VA_ARGS__)
 
 //-------------------          Camera          -------------------
 uint8_t CAMERA_FRAME_BUFFER[1600 * 33];
@@ -189,7 +190,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 
     int32_t index = firstNonZeroValue(CAMERA_FRAME_BUFFER, BufferLen);
     if (index != -1)
-        printInfo("Success");
+        printInfo("Success\n");
 
     GUI_DrawImage(LCD_X, LCD_Y, CAMERA_FRAME_BUFFER);
 }
@@ -311,9 +312,11 @@ int main(void)
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    printInfo("Initialization done.");
-    printInfo("Push Blue Button to make a picture.");
-    printfInfo("Make me count to %d. %d! %d! %d!...", 3, 3, 2, 1);
+    printInfo("Initialization done.\n");
+    printInfo("Push Blue Button to make a picture.\n");
+    printfInfo("Don't make Don't make Don't make Don't make me count down to "
+               "%d. %d! %d! %d!...\n",
+               3, 3, 2, 1);
     while (1)
     {
         /* USER CODE END WHILE */
@@ -325,7 +328,7 @@ int main(void)
             HAL_Delay(10);
             if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
             {
-                printInfo("Button pushed");
+                printInfo("Button pushed.\n");
                 refreshStatusInfo();
                 HAL_Delay(1000);
                 HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
@@ -335,12 +338,12 @@ int main(void)
                 __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
                 HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT,
                                    (uint32_t)&CAMERA_FRAME_BUFFER, 1600 * 8);
-                printInfo("DCMI DMA started");
+                printInfo("DCMI DMA started.\n");
             }
             while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
                 ;
             HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-            printInfo("Button released, push again to make another shot.");
+            printInfo("Button released, push again to make another shot.\n");
         }
     }
 

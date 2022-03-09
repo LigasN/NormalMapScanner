@@ -63,7 +63,6 @@ void Driver_Delay_ms(uint32_t xms) { HAL_Delay(xms); }
 
 void Driver_Delay_us(uint32_t xus)
 {
-    int j;
-    for (j = xus; j > 0; j--)
+    for (uint32_t j = xus; j > 0; j--)
         ;
 }

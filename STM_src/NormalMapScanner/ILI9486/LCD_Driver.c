@@ -50,8 +50,8 @@ void LCD_WriteData(uint8_t Data)
 {
     LCD_DC_1;
     LCD_CS_0;
-    SPI4W_Write_Byte(Data >> 8);
-    SPI4W_Write_Byte(Data & 0XFF);
+    SPI4W_Write_Byte((uint8_t)(Data >> 8U));
+    SPI4W_Write_Byte((uint8_t)(Data & 0XFF));
     LCD_CS_1;
 }
 
@@ -66,8 +66,8 @@ static void LCD_Write_AllData(uint16_t Data, uint32_t DataLen)
     LCD_CS_0;
     for (i = 0; i < DataLen; i++)
     {
-        SPI4W_Write_Byte(Data >> 8);
-        SPI4W_Write_Byte(Data & 0XFF);
+        SPI4W_Write_Byte((uint8_t)(Data >> 8));
+        SPI4W_Write_Byte((uint8_t)(Data & 0XFF));
     }
     LCD_CS_1;
 }
@@ -90,17 +90,15 @@ static void LCD_InitReg(void)
     LCD_WriteData(0x45); // VGH,VGL    VGH>=14V.
     LCD_WriteData(0x00);
 
-    LCD_WriteReg(
-        0xC2); // Normal mode, increase can change the display
-               // quality, while increasing power consumption
+    LCD_WriteReg(0xC2); // Normal mode, increase can change the display
+                        // quality, while increasing power consumption
     LCD_WriteData(0x33);
 
     LCD_WriteReg(0XC5);
     LCD_WriteData(0x00);
     LCD_WriteData(0x28); // VCM_REG[7:0]. <=0X80.
 
-    LCD_WriteReg(
-        0xB1); // Sets the frame frequency of full color normal mode
+    LCD_WriteReg(0xB1);  // Sets the frame frequency of full color normal mode
     LCD_WriteData(0xA0); // 0XB0 =70HZ, <=0XB0.0xA0=62HZ
     LCD_WriteData(0x11);
 
@@ -231,14 +229,19 @@ void LCD_SetGramScanWay(LCD_SCAN_DIR Scan_dir)
         MemoryAccessReg_Data = 0x28;
         DisFunReg_Data       = 0x42;
         break;
+    default:
+        while (1)
+        {
+            // Undefined Scan_dir value
+        }
     }
 
     // Get the screen scan direction
     sLCD_DIS.LCD_Scan_Dir = Scan_dir;
 
     // Get GRAM and LCD width and height
-    if (Scan_dir == L2R_U2D || Scan_dir == L2R_D2U ||
-        Scan_dir == R2L_U2D || Scan_dir == R2L_D2U)
+    if (Scan_dir == L2R_U2D || Scan_dir == L2R_D2U || Scan_dir == R2L_U2D ||
+        Scan_dir == R2L_D2U)
     {
         sLCD_DIS.LCD_Dis_Column = LCD_HEIGHT;
         sLCD_DIS.LCD_Dis_Page   = LCD_WIDTH;
@@ -298,16 +301,12 @@ void LCD_SetWindow(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend)
 {
     // set the X coordinates
     LCD_WriteReg(0x2A);
-    LCD_WriteData(
-        Xstart >>
-        8); // Set the horizontal starting point to the high octet
-    LCD_WriteData(
-        Xstart &
-        0xff); // Set the horizontal starting point to the low octet
-    LCD_WriteData((Xend - 1) >>
-                  8); // Set the horizontal end to the high octet
-    LCD_WriteData((Xend - 1) &
-                  0xff); // Set the horizontal end to the low octet
+    LCD_WriteData(Xstart >>
+                  8); // Set the horizontal starting point to the high octet
+    LCD_WriteData(Xstart &
+                  0xff); // Set the horizontal starting point to the low octet
+    LCD_WriteData((Xend - 1) >> 8); // Set the horizontal end to the high octet
+    LCD_WriteData((Xend - 1) & 0xff); // Set the horizontal end to the low octet
 
     // set the Y coordinates
     LCD_WriteReg(0x2B);
@@ -367,8 +366,8 @@ void LCD_SetPointlColor(POINT Xpoint, POINT Ypoint, COLOR Color)
  Yend   :   End point coordinates
  Color  :   Set the color
  ********************************************************************************/
-void LCD_SetArealColor(POINT Xstart, POINT Ystart, POINT Xend,
-                       POINT Yend, COLOR Color)
+void LCD_SetArealColor(POINT Xstart, POINT Ystart, POINT Xend, POINT Yend,
+                       COLOR Color)
 {
     if ((Xend > Xstart) && (Yend > Ystart))
     {
@@ -383,6 +382,6 @@ void LCD_SetArealColor(POINT Xstart, POINT Ystart, POINT Xend,
  ********************************************************************************/
 void LCD_Clear(COLOR Color)
 {
-    LCD_SetArealColor(0, 0, sLCD_DIS.LCD_Dis_Column,
-                      sLCD_DIS.LCD_Dis_Page, Color);
+    LCD_SetArealColor(0, 0, sLCD_DIS.LCD_Dis_Column, sLCD_DIS.LCD_Dis_Page,
+                      Color);
 }

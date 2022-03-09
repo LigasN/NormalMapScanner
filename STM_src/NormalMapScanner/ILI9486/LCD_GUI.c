@@ -775,6 +775,7 @@ void GUI_Show(void)
  https://github.com/LigasN
 //------------------------------------------------------------------------------
 ********************************************************************************/
+#include "CharHelpers.h"
 
 // clang-format off
 /****************************************************************************
@@ -792,56 +793,63 @@ void GUI_Show(void)
  * 			Color_Foreground	: 	Foreground color of the character
  ****************************************************************************/
 // clang-format on
-int GUI_DisStringInBox_EN(POINT Xbegin, POINT Ybegin, POINT Xend, POINT Yend,
-                          const char* pString, sFONT* Font,
-                          COLOR Color_Background, COLOR Color_Foreground)
+void GUI_DisStringInBox(POINT Xbegin, POINT Ybegin, POINT Xend, POINT Yend,
+                        const char* pString, sFONT* Font,
+                        COLOR Color_Background, COLOR Color_Foreground)
 {
-    POINT Xpoint = Xbegin;
-    POINT Ypoint = Ybegin;
-
+    // Arguments check
     if (Xbegin > sLCD_DIS.LCD_Dis_Column || Ybegin > sLCD_DIS.LCD_Dis_Page ||
         Xend > sLCD_DIS.LCD_Dis_Column || Yend > sLCD_DIS.LCD_Dis_Page)
     {
-        //        DEBUG("GUI_DisString_EN Input exceeds the normal
-        //        display range\r\n");
-        return -2; // GUI_DisString_EN Input exceeds the normal
-                   // display range
+        while (1)
+            ; // Input exceeds the normal display range
     }
     else if (Xbegin >= Xend || Ybegin >= Yend)
     {
-        //        DEBUG("GUI_DisString_EN wrong values of the position
-        //        arguments Xbegin >= Xend || Ybegin >= Yend\r\n");
-        return -3; // GUI_DisString_EN wrong values of the position
-                   // arguments Xbegin >= Xend || Ybegin >= Yend
+        while (1)
+            ; // Wrong values of the position arguments
     }
 
+    // Initial px address values
+    POINT Xpoint = Xbegin;
+    POINT Ypoint = Ybegin;
+
+    // Displaying one char after another until end line character.
     while (*pString != '\0')
     {
-        // if X direction filled , reposition to(Xstart,Ypoint),Ypoint
-        // is Y direction plus the height of the character
-        if ((Xpoint + Font->Width) > Xend)
+        // Start new line if X direction is already filled or it is special '\n'
+        // (new line) character now
+        if ((Xpoint + Font->Width) > Xend || *pString == '\n')
         {
             Xpoint = Xbegin;
             Ypoint += Font->Height;
+
+            // If next character is space, just skip it on the beginning of the
+            // new line or in case of special character
+            if (*pString == ' ' || *pString == '\n')
+                ++pString;
+
+            // After some skipping chack again if it's not '\0' character
+            if (*pString == '\0')
+                break;
         }
 
         // If the Y direction is full, stop drawing
         if ((Ypoint + Font->Height) > Yend)
         {
-            return -1; // Box is full.
+            break; // Box is full.
         }
 
-        GUI_DisChar(Xpoint, Ypoint + 4u, *pString, Font, Color_Background,
+        // Single char drawing function
+        GUI_DisChar(Xpoint, Ypoint, *pString, Font, Color_Background,
                     Color_Foreground);
 
-        // The next character of the address
+        // String address increment
         ++pString;
 
-        // The next word of the abscissa increases the font of the
-        // broadband
+        // Px position increment
         Xpoint += Font->Width;
     }
-    return 0;
 }
 
 /******************************************************************************
@@ -881,31 +889,41 @@ void GUI_RefreshTextBox(const GUI_TextBox* t)
     // Clears display in plece where new text should be placed
     GUI_DrawRectangle(t->xPos, t->yPos, t->xEnd, t->yEnd, t->backgroundColor,
                       DRAW_FULL, DOT_PIXEL_1X1);
-    GUI_DisStringInBox_EN(t->xPos, t->yPos, t->xEnd, t->yEnd, t->text, t->font,
-                          t->backgroundColor, t->foregroundColor);
+    GUI_DisStringInBox(t->xPos, t->yPos, t->xEnd, t->yEnd, t->text, t->font,
+                       t->backgroundColor, t->foregroundColor);
 }
 
 /******************************************************************************
  function:	Adds new first line with provided text, moving older text to the
                         next ones.
  parameter:
-                 t		:   textbox where text should be refreshed
+                 c		:   console where the next line of text should
+                            be added
                  text	:	text to add on the beggining
  ******************************************************************************/
-void printOnTextBox(GUI_TextBox* t, char* text)
+void printOnConsole(GUI_Console* c, char* text)
 {
-    t->text = strcat(text, strcat("\n", t->text));
-    GUI_RefreshTextBox(t);
+    size_t size = strnlen(text, CONSOLE_TEXT_SIZE);
+    if (c->text[0] != '\0')
+        shiftRightCharsInArray(c->text, size, CONSOLE_TEXT_SIZE);
+    strncpy(c->text, text, size);
+
+    // Clears display in place where new text should be placed
+    GUI_DrawRectangle(c->xPos - 1, c->yPos - 1, c->xEnd + 1, c->yEnd + 1,
+                      c->backgroundColor, DRAW_FULL, DOT_PIXEL_1X1);
+    GUI_DisStringInBox(c->xPos, c->yPos, c->xEnd, c->yEnd, c->text, c->font,
+                       c->backgroundColor, c->foregroundColor);
 }
 
 /******************************************************************************
  function:	Adds new first line with provided formatted text (like printf),
                         moving older text to the next ones.
  parameter:
-                 t		:   textbox where text should be refreshed
-                 fmt	:	formatted text to add on the beggining
+                 c		:   console where the next line of text should
+                            be added
+                 fmt	:	formatted text to add on the beginning
  ******************************************************************************/
-void printfOnTextBox(GUI_TextBox* t, const char* fmt, ...)
+void printfOnConsole(GUI_Console* c, const char* fmt, ...)
 {
     // formatting
     va_list args1;
@@ -918,7 +936,7 @@ void printfOnTextBox(GUI_TextBox* t, const char* fmt, ...)
     va_end(args2);
 
     // displaying
-    printOnTextBox(t, info);
+    printOnConsole(c, info);
 }
 
 /******************************************************************************
@@ -928,7 +946,7 @@ void GUI_DrawGUI(const GUI_Window* w)
 {
     GUI_Clear(w->background);
 
-    for (uint8_t i = 0; i < w->textboxesSize; ++i)
+    for (uint8_t i = 0; i < TEXTBOXES_NUMBER; ++i)
     {
         GUI_RefreshTextBox(&w->textboxes[i]);
     }
