@@ -1,74 +1,56 @@
-/**
- ******************************************************************************
- * @file    ov2640.h
- * @author  MCD Application Team
- * @version V1.0.2
- * @date    02-December-2014
- * @brief   This file contains all the functions prototypes for the
- *ov2640.c driver.
- ******************************************************************************
- * @attention
+/*
+ * ov2640.c
  *
- * COPYRIGHT(c) 2014 STMicroelectronics
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *   1. Redistributions of source code must retain the above copyright
- *		notice, this list of conditions and the following
- *		disclaimer.
- *   2. Redistributions in binary form must reproduce the above
- *		copyright notice, this list of conditions and the
- *		following disclaimer in the documentation and/or other
- *		materials provided with the distribution.
- *   3. Neither the name of STMicroelectronics nor the names of its
- *		contributors may be used to endorse or promote
- *		products derived from this software without specific
- *		prior written permission.
- *
- *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************
+ *  Copied from previous author on: 19. 03. 2022
+ *      Previous author: hjh
+ *      Current author: https://github.com/LigasN
  */
+/*
+ * my_ov2640.h
+ *
+ *  Created on: 2. okt. 2020
+ *      Author: hjh
+ */
+#ifndef __OV2640_H__
+#define __OV2640_H__
 
-/* Define to prevent recursive inclusion
- * -------------------------------------*/
-#ifndef __OV2640_H
-#define __OV2640_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* Includes
- * ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
-//#include "../BSP/camera.h"
+// Other
+#include "debug.h"
 
-/** @addtogroup BSP
- * @{
- */
+#define CAMERA_R160x120 0x00 /* QQVGA Resolution                     */
+#define CAMERA_R320x240 0x01 /* QVGA Resolution                      */
+#define CAMERA_R480x272 0x02 /* 480x272 Resolution                   */
+#define CAMERA_R640x480 0x03 /* VGA Resolution                       */
 
-/** @addtogroup Components
- * @{
- */
+#define CAMERA_CONTRAST_BRIGHTNESS                                             \
+    0x00                         /* Camera contrast brightness features  */
+#define CAMERA_BLACK_WHITE 0x01  /* Camera black white feature           */
+#define CAMERA_COLOR_EFFECT 0x03 /* Camera color effect feature          */
 
-/** @addtogroup ov2640
- * @{
- */
+#define CAMERA_BRIGHTNESS_LEVEL0 0x00 /* Brightness level -2         */
+#define CAMERA_BRIGHTNESS_LEVEL1 0x01 /* Brightness level -1         */
+#define CAMERA_BRIGHTNESS_LEVEL2 0x02 /* Brightness level 0          */
+#define CAMERA_BRIGHTNESS_LEVEL3 0x03 /* Brightness level +1         */
+#define CAMERA_BRIGHTNESS_LEVEL4 0x04 /* Brightness level +2         */
 
+#define CAMERA_CONTRAST_LEVEL0 0x05 /* Contrast level -2           */
+#define CAMERA_CONTRAST_LEVEL1 0x06 /* Contrast level -1           */
+#define CAMERA_CONTRAST_LEVEL2 0x07 /* Contrast level  0           */
+#define CAMERA_CONTRAST_LEVEL3 0x08 /* Contrast level +1           */
+#define CAMERA_CONTRAST_LEVEL4 0x09 /* Contrast level +2           */
+
+#define CAMERA_BLACK_WHITE_BW 0x00          /* Black and white effect      */
+#define CAMERA_BLACK_WHITE_NEGATIVE 0x01    /* Negative effect             */
+#define CAMERA_BLACK_WHITE_BW_NEGATIVE 0x02 /* BW and Negative effect      */
+#define CAMERA_BLACK_WHITE_NORMAL 0x03      /* Normal effect               */
+
+#define CAMERA_COLOR_EFFECT_NONE 0x00    /* No effects                  */
+#define CAMERA_COLOR_EFFECT_BLUE 0x01    /* Blue effect                 */
+#define CAMERA_COLOR_EFFECT_GREEN 0x02   /* Green effect                */
+#define CAMERA_COLOR_EFFECT_RED 0x03     /* Red effect                  */
+#define CAMERA_COLOR_EFFECT_ANTIQUE 0x04 /* Antique effect              */
 /** @defgroup OV2640_Exported_Types
  * @{
  */
@@ -80,10 +62,10 @@ typedef enum
     JPEG_176x144 = 0x03, /* JPEG Image 176x144 Size */
     JPEG_320x240 = 0x04, /* JPEG Image 320x240 Size */
     JPEG_352x288 = 0x05  /* JPEG Image 352x288 Size */
+
 } ImageFormat_TypeDef;
 
-/* Exported types
- * ------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
 typedef struct
 {
     uint8_t Manufacturer_ID1;
@@ -91,21 +73,15 @@ typedef struct
     uint8_t Version;
     uint8_t PID;
 } OV2640_IDTypeDef;
-/**
- * @}
- */
 
-/** @defgroup OV2640_Exported_Constants
- * @{
- */
 #define CAMERA_I2C_ADDRESS 0x60
-/**
- * @brief  OV2640 ID
- */
-#define OV2640_ID 0x26
-/**
- * @brief  OV2640 Registers
- */
+
+// Address bank Table12 -- 0x00 or Table 13 -- 0x01
+// Library fixed to Table 13
+#define CAMERA_DSP_ADDRESS_BANK 0x01
+#define CAMERA_SENSOR_ADDRESS_BANK 0x01
+#define OV2640_ID 0x2642
+
 /* OV2640 Registers definition when DSP bank selected (0xFF = 0x00) */
 #define OV2640_DSP_R_BYPASS 0x05
 #define OV2640_DSP_Qs 0x44
@@ -142,8 +118,7 @@ typedef struct
 #define OV2640_DSP_P_STATUS 0xFE
 #define OV2640_DSP_RA_DLMT 0xFF
 
-/* OV2640 Registers definition when sensor bank selected (0xFF = 0x01)
- */
+/* OV2640 Registers definition when sensor bank selected (0xFF = 0x01) */
 #define OV2640_SENSOR_GAIN 0x00
 #define OV2640_SENSOR_COM1 0x03
 #define OV2640_SENSOR_REG04 0x04
@@ -194,80 +169,36 @@ typedef struct
 /**
  * @brief  OV2640 Features Parameters
  */
-#define OV2640_BRIGHTNESS_LEVEL0                                     \
-    0x40 /* Brightness level -2         */
-#define OV2640_BRIGHTNESS_LEVEL1                                     \
-    0x30 /* Brightness level -1         */
-#define OV2640_BRIGHTNESS_LEVEL2                                     \
-    0x20 /* Brightness level 0          */
-#define OV2640_BRIGHTNESS_LEVEL3                                     \
-    0x10 /* Brightness level +1         */
-#define OV2640_BRIGHTNESS_LEVEL4                                     \
-    0x00 /* Brightness level +2         */
+#define OV2640_BRIGHTNESS_LEVEL0 0x40 /* Brightness level -2         */
+#define OV2640_BRIGHTNESS_LEVEL1 0x30 /* Brightness level -1         */
+#define OV2640_BRIGHTNESS_LEVEL2 0x20 /* Brightness level 0          */
+#define OV2640_BRIGHTNESS_LEVEL3 0x10 /* Brightness level +1         */
+#define OV2640_BRIGHTNESS_LEVEL4 0x00 /* Brightness level +2         */
 
-#define OV2640_BLACK_WHITE_BW 0x18 /* Black and white effect      */
-#define OV2640_BLACK_WHITE_NEGATIVE                                  \
-    0x40 /* Negative effect             */
-#define OV2640_BLACK_WHITE_BW_NEGATIVE                               \
-    0x58 /* BW and Negative effect      */
-#define OV2640_BLACK_WHITE_NORMAL                                    \
-    0x00 /* Normal effect               */
+#define OV2640_BLACK_WHITE_BW 0x18          /* Black and white effect      */
+#define OV2640_BLACK_WHITE_NEGATIVE 0x40    /* Negative effect             */
+#define OV2640_BLACK_WHITE_BW_NEGATIVE 0x58 /* BW and Negative effect      */
+#define OV2640_BLACK_WHITE_NORMAL 0x00      /* Normal effect               */
 
-#define OV2640_CONTRAST_LEVEL0                                       \
-    0x3418 /* Contrast level -2           */
-#define OV2640_CONTRAST_LEVEL1                                       \
-    0x2A1C /* Contrast level -2           */
-#define OV2640_CONTRAST_LEVEL2                                       \
-    0x2020 /* Contrast level -2           */
-#define OV2640_CONTRAST_LEVEL3                                       \
-    0x1624 /* Contrast level -2           */
-#define OV2640_CONTRAST_LEVEL4                                       \
-    0x0C28 /* Contrast level -2           */
+#define OV2640_CONTRAST_LEVEL0 0x3418 /* Contrast level -2           */
+#define OV2640_CONTRAST_LEVEL1 0x2A1C /* Contrast level -2           */
+#define OV2640_CONTRAST_LEVEL2 0x2020 /* Contrast level -2           */
+#define OV2640_CONTRAST_LEVEL3 0x1624 /* Contrast level -2           */
+#define OV2640_CONTRAST_LEVEL4 0x0C28 /* Contrast level -2           */
 
-#define OV2640_COLOR_EFFECT_ANTIQUE                                  \
-    0xA640 /* Antique effect              */
-#define OV2640_COLOR_EFFECT_BLUE                                     \
-    0x40A0 /* Blue effect                 */
-#define OV2640_COLOR_EFFECT_GREEN                                    \
-    0x4040 /* Green effect                */
-#define OV2640_COLOR_EFFECT_RED                                      \
-    0xC040 /* Red effect                  */
-/**
- * @}
- */
+#define OV2640_COLOR_EFFECT_ANTIQUE 0xA640 /* Antique effect              */
+#define OV2640_COLOR_EFFECT_BLUE 0x40A0    /* Blue effect                 */
+#define OV2640_COLOR_EFFECT_GREEN 0x4040   /* Green effect                */
+#define OV2640_COLOR_EFFECT_RED 0xC040     /* Red effect                  */
 
-/** @defgroup OV2640_Exported_Functions
- * @{
- */
-void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution);
-void ov2640_Config(uint16_t DeviceAddr, uint32_t feature,
-                   uint32_t value, uint32_t BR_value);
-void OV2640_JPEGConfig(ImageFormat_TypeDef ImageFormat);
-void OV2640_BrightnessConfig(uint8_t Brightness);
-void OV2640_AutoExposure(uint8_t level);
-uint8_t OV2640_ReadID(OV2640_IDTypeDef* OV2640ID);
+void ov2640Init();
+void ov2640Config(uint32_t feature, uint32_t value, uint32_t BR_value);
+void ov2640JPEGConfig(ImageFormat_TypeDef ImageFormat);
+void ov2640BrightnessConfig(uint8_t Brightness);
+void ov2640AutoExposure(uint8_t level);
+uint16_t ov2640ReadID();
+
 /* I2C_HandleTypeDef structure */
 extern I2C_HandleTypeDef hi2c2;
 
-/**
- * @}
- */
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __OV2640_H */
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF
- * FILE****/
+#endif // __OV2640_H__

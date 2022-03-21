@@ -16,8 +16,7 @@
  ******************************************************************************
  */
 /* USER CODE END Header */
-/* Includes
- * ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dcmi.h"
 #include "dma.h"
@@ -26,8 +25,7 @@
 #include "spi.h"
 #include "tim.h"
 
-/* Private includes
- * ----------------------------------------------------------*/
+/* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 // LCD
@@ -38,15 +36,16 @@
 // Camera
 #include "ov2640.h"
 
+// Other
+#include "debug.h"
+
 /* USER CODE END Includes */
 
-/* Private typedef
- * -----------------------------------------------------------*/
+/* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 /* USER CODE END PTD */
 
-/* Private define
- * ------------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
 //---------------          GUI          -------------------------
@@ -58,8 +57,6 @@ typedef enum
     InfoText,
     StatusText,
     StatusValueText,
-    ErrorText,
-    ErrorValueText
 } TextBoxes;
 
 /// Default GUI with informations about camera status and errors
@@ -87,12 +84,6 @@ void initGUI(GUI_Window* w)
         w->textboxes[StatusText].yPos + w->textboxes[StatusText].font->Height;
     w->textboxes[StatusText].text = "DCMI status:";
 
-    w->textboxes[ErrorText] = w->textboxes[StatusText];
-    w->textboxes[ErrorText].yPos *= 2U;
-    w->textboxes[ErrorText].yEnd =
-        w->textboxes[ErrorText].yPos + w->textboxes[ErrorText].font->Height;
-    w->textboxes[ErrorText].text = "DCMI error:";
-
     w->consoles[0].xPos            = w->textboxes[InfoText].xEnd + 10;
     w->consoles[0].yPos            = w->textboxes[InfoText].yPos;
     w->consoles[0].xEnd            = defaultTextBox.xEnd;
@@ -105,23 +96,11 @@ void initGUI(GUI_Window* w)
     w->textboxes[StatusValueText]      = w->textboxes[StatusText];
     w->textboxes[StatusValueText].xPos = w->textboxes[StatusText].xEnd + 10;
     w->textboxes[StatusValueText].xEnd = defaultTextBox.xEnd;
-    w->textboxes[StatusValueText].yEnd = w->textboxes[ErrorText].yPos - 10;
     w->textboxes[StatusValueText].text = "No status info received yet";
-
-    w->textboxes[ErrorValueText]      = w->textboxes[StatusValueText];
-    w->textboxes[ErrorValueText].xPos = w->textboxes[ErrorText].xEnd + 10;
-    w->textboxes[ErrorValueText].yPos = w->textboxes[ErrorText].yPos;
-    w->textboxes[ErrorValueText].yEnd = defaultTextBox.yEnd;
-    w->textboxes[ErrorValueText].text = "No error info for now";
 }
 
-/// Macros on the library methods to spare some code
-#define printInfo(info) printOnConsole(window.consoles, info)
-#define printfInfo(format, ...)                                                \
-    printfOnConsole(window.consoles, format, __VA_ARGS__)
-
 //-------------------          Camera          -------------------
-uint8_t CAMERA_FRAME_BUFFER[1600 * 33];
+uint8_t CAMERA_FRAME_BUFFER[360 * 180];
 #define BufferLen (sizeof(CAMERA_FRAME_BUFFER) / sizeof(char))
 
 /// Refreshes DCMI status information on display
@@ -129,29 +108,35 @@ void refreshStatusInfo()
 {
     switch (HAL_DCMI_GetState(&hdcmi))
     {
-    case HAL_DCMI_STATE_RESET:
-        window.textboxes[StatusValueText].text =
-            "DCMI not yet initialized or disabled.";
-        break;
-    case HAL_DCMI_STATE_READY:
-        window.textboxes[StatusValueText].text =
-            "DCMI initialized and ready for use.";
-        break;
-    case HAL_DCMI_STATE_BUSY:
-        window.textboxes[StatusValueText].text =
-            "DCMI internal processing is ongoing.";
-        break;
-    case HAL_DCMI_STATE_TIMEOUT:
-        window.textboxes[StatusValueText].text = "DCMI timeout state.";
-        break;
-    case HAL_DCMI_STATE_ERROR:
-        window.textboxes[StatusValueText].text = "DCMI error state.";
-        break;
-    case HAL_DCMI_STATE_SUSPENDED:
-        window.textboxes[StatusValueText].text = "DCMI suspend state.";
-        break;
-    default:
-        window.textboxes[StatusValueText].text = "Unknown state.";
+        case HAL_DCMI_STATE_RESET:
+        {
+            window.textboxes[StatusValueText].text =
+                "DCMI not yet initialized or disabled.";
+            break;
+        }
+        case HAL_DCMI_STATE_READY:
+        {
+            window.textboxes[StatusValueText].text =
+                "DCMI initialized and ready for use.";
+            break;
+        }
+        case HAL_DCMI_STATE_BUSY:
+        {
+            window.textboxes[StatusValueText].text =
+                "DCMI internal processing is ongoing.";
+            break;
+        }
+        case HAL_DCMI_STATE_TIMEOUT:
+            window.textboxes[StatusValueText].text = "DCMI timeout state.";
+            break;
+        case HAL_DCMI_STATE_ERROR:
+            window.textboxes[StatusValueText].text = "DCMI error state.";
+            break;
+        case HAL_DCMI_STATE_SUSPENDED:
+            window.textboxes[StatusValueText].text = "DCMI suspend state.";
+            break;
+        default:
+            window.textboxes[StatusValueText].text = "Unknown state.";
     }
     GUI_RefreshTextBox(&window.textboxes[StatusValueText]);
 }
@@ -203,55 +188,50 @@ void HAL_DCMI_ErrorCallback(DCMI_HandleTypeDef* hdcmi)
 
      This is the user implementation.
      */
-
+    char* text = "Unknown error";
     switch (HAL_DCMI_GetError(hdcmi))
     {
-    case HAL_DCMI_ERROR_NONE:
-        window.textboxes[ErrorValueText].text = "No error";
-        break;
-    case HAL_DCMI_ERROR_OVR:
-        window.textboxes[ErrorValueText].text = "Overrun error";
-        break;
-    case HAL_DCMI_ERROR_SYNC:
-        window.textboxes[ErrorValueText].text = "Synchronization error";
-        break;
-    case HAL_DCMI_ERROR_TIMEOUT:
-        window.textboxes[ErrorValueText].text = "Timeout error";
-        break;
-    case HAL_DCMI_ERROR_DMA:
-        window.textboxes[ErrorValueText].text = "DMA error";
-        break;
-    default:
-        window.textboxes[ErrorValueText].text = "Unknown error";
+        case HAL_DCMI_ERROR_NONE:
+            text = "No error";
+            break;
+        case HAL_DCMI_ERROR_OVR:
+            text = "Overrun error";
+            break;
+        case HAL_DCMI_ERROR_SYNC:
+            text = "Synchronization error";
+            break;
+        case HAL_DCMI_ERROR_TIMEOUT:
+            text = "Timeout error";
+            break;
+        case HAL_DCMI_ERROR_DMA:
+            text = "DMA error";
+        default:
+            break;
     }
 
-    GUI_RefreshTextBox(&window.textboxes[ErrorValueText]);
+    printfInfo("%s.\n", text);
     refreshStatusInfo();
 }
 
 /* USER CODE END PD */
 
-/* Private macro
- * -------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
 /* USER CODE END PM */
 
-/* Private variables
- * ---------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
 
-/* Private function prototypes
- * -----------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
-/* Private user code
- * ---------------------------------------------------------*/
+/* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -269,8 +249,8 @@ int main(void)
     /* MCU
      * Configuration--------------------------------------------------------*/
 
-    /* Reset of all peripherals, Initializes the Flash interface and
-     * the Systick. */
+    /* Reset of all peripherals, Initializes the Flash interface and the
+     * Systick. */
     HAL_Init();
 
     /* USER CODE BEGIN Init */
@@ -304,9 +284,12 @@ int main(void)
     TP_GetAdFac();
 
     // Camera setup
-    OV2640_JPEGConfig(JPEG_320x240);
-    OV2640_BrightnessConfig(0x20);
-    OV2640_AutoExposure(5);
+    ov2640Init();
+    HAL_Delay(100);
+    // 	ov2640_Config(CAMERA_I2C_ADDRESS, CAMERA_CONTRAST_BRIGHTNESS,
+    // CAMERA_CONTRAST_LEVEL2, CAMERA_BRIGHTNESS_LEVEL4);
+    HAL_Delay(100);
+    // printfInfo("ID: %u", OV2640_ReadID(CAMERA_I2C_ADDRESS));
 
     /* USER CODE END 2 */
 
@@ -314,9 +297,6 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     printInfo("Initialization done.\n");
     printInfo("Push Blue Button to make a picture.\n");
-    printfInfo("Don't make Don't make Don't make Don't make me count down to "
-               "%d. %d! %d! %d!...\n",
-               3, 3, 2, 1);
     while (1)
     {
         /* USER CODE END WHILE */
@@ -337,11 +317,12 @@ int main(void)
                 MX_DCMI_Init();
                 __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
                 HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT,
-                                   (uint32_t)&CAMERA_FRAME_BUFFER, 1600 * 8);
+                                   (uint32_t)&CAMERA_FRAME_BUFFER,
+                                   0xFD20); // Buffer size
                 printInfo("DCMI DMA started.\n");
             }
             while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
-                ;
+                HAL_Delay(10);
             HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
             printInfo("Button released, push again to make another shot.\n");
         }
@@ -363,8 +344,8 @@ void SystemClock_Config(void)
      */
     __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-    /** Initializes the RCC Oscillators according to the specified
-     * parameters in the RCC_OscInitTypeDef structure.
+    /** Initializes the RCC Oscillators according to the specified parameters
+     * in the RCC_OscInitTypeDef structure.
      */
     RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_HSI;
     RCC_OscInitStruct.HSIState            = RCC_HSI_ON;
@@ -399,7 +380,7 @@ void SystemClock_Config(void)
     {
         Error_Handler();
     }
-    HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
+    HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_2);
 }
 
 /* USER CODE BEGIN 4 */
@@ -424,8 +405,8 @@ void Error_Handler(void)
 
 #ifdef USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line
- * number where the assert_param error has occurred.
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
  * @param  file: pointer to the source file name
  * @param  line: assert_param error line source number
  * @retval None

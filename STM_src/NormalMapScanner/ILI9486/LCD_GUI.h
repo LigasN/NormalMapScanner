@@ -158,7 +158,7 @@ void GUI_WaveShare_Show(void);
 #include <string.h>
 
 /// Max number of textboxes in GUI
-#define TEXTBOXES_NUMBER 5
+#define TEXTBOXES_NUMBER 3
 /// Max number of consoles in GUI
 #define CONSOLES_NUMBER 1
 /// Max number of chars in GUI_Console's text

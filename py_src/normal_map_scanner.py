@@ -11,7 +11,7 @@ debugging = 0  # False
 # test = "Real input"
 # test = "All black input"
 # test = "All white input"
-test = "Simple test"
+test = "Photos"
 if(test == "Real input"):
     image_size = np.array([1200, 1200])  # px
     object_size = np.array([20, 20])  # cm
@@ -32,6 +32,11 @@ elif(test == "Simple test"):
     object_size = np.array([4, 4])  # cm virtual test object size
     assets_path = '../assets/test_assets/simple_test/'  # test assets location
     lamp_0_position = np.array([40, 0, 15])  # cm
+elif(test == "Photos"):
+    image_size = np.array([2200, 2200])  # px test image size
+    object_size = np.array([20, 20])  # cm virtual test object size
+    assets_path = '../assets/test_assets/photos/'  # test assets location
+    lamp_0_position = np.array([40, 0, 22])  # cm
 
 
 R, G, B = 0, 1, 2

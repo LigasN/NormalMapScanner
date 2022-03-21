@@ -128,7 +128,7 @@ void MX_DCMI_Init(void)
 
   /* USER CODE END DCMI_Init 1 */
   hdcmi.Instance = DCMI;
-  hdcmi.Init.SynchroMode = DCMI_SYNCHRO_EMBEDDED;
+  hdcmi.Init.SynchroMode = DCMI_SYNCHRO_HARDWARE;
   hdcmi.Init.PCKPolarity = DCMI_PCKPOLARITY_RISING;
   hdcmi.Init.CaptureRate = DCMI_CR_ALL_FRAME;
   hdcmi.Init.ExtendedDataMode = DCMI_EXTEND_DATA_8B;
