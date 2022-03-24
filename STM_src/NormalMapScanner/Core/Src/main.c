@@ -63,38 +63,43 @@ typedef enum
 void initGUI(GUI_Window* w)
 {
     w->background              = WHITE;
-    GUI_TextBox defaultTextBox = {LCD_X + 10,
-                                  LCD_Y + 10,
-                                  LCD_X_MAXPIXEL - 10,
-                                  LCD_Y_MAXPIXEL - 10,
+    GUI_TextBox defaultTextBox = {LCD_X + Font12.Height,
+                                  LCD_Y_MAXPIXEL / 5,
+                                  LCD_X_MAXPIXEL - Font12.Height,
+                                  LCD_Y_MAXPIXEL - Font12.Height,
                                   WHITE,
                                   BLACK,
                                   &Font12,
                                   '\0'};
+    uint16_t fontHeight        = defaultTextBox.font->Height;
 
+    // Console
     w->textboxes[InfoText]      = defaultTextBox;
-    w->textboxes[InfoText].xEnd = LCD_X_MAXPIXEL / 5U;
-    w->textboxes[InfoText].yEnd =
-        w->textboxes[InfoText].yPos + w->textboxes[InfoText].font->Height;
-    w->textboxes[InfoText].text = "Information:";
+    w->textboxes[InfoText].xEnd = LCD_X_MAXPIXEL / 5;
+    w->textboxes[InfoText].yEnd = w->textboxes[InfoText].yPos + fontHeight;
+    w->textboxes[InfoText].text = "Console:";
 
-    w->textboxes[StatusText]      = w->textboxes[InfoText];
-    w->textboxes[StatusText].yPos = LCD_Y_MAXPIXEL / 3U;
-    w->textboxes[StatusText].yEnd =
-        w->textboxes[StatusText].yPos + w->textboxes[StatusText].font->Height;
-    w->textboxes[StatusText].text = "DCMI status:";
-
-    w->consoles[0].xPos            = w->textboxes[InfoText].xEnd + 10;
+    w->consoles[0].xPos            = w->textboxes[InfoText].xEnd + fontHeight;
     w->consoles[0].yPos            = w->textboxes[InfoText].yPos;
     w->consoles[0].xEnd            = defaultTextBox.xEnd;
-    w->consoles[0].yEnd            = w->textboxes[StatusText].yPos - 8;
+    w->consoles[0].yEnd            = w->consoles[0].yPos + fontHeight * 10;
     w->consoles[0].font            = w->textboxes[InfoText].font;
     w->consoles[0].backgroundColor = w->textboxes[InfoText].backgroundColor;
     w->consoles[0].foregroundColor = w->textboxes[InfoText].foregroundColor;
-    printOnConsole(w->consoles, "No log for now\n");
 
-    w->textboxes[StatusValueText]      = w->textboxes[StatusText];
-    w->textboxes[StatusValueText].xPos = w->textboxes[StatusText].xEnd + 10;
+    char* text  = "Console initialized.\n";
+    size_t size = strnlen(text, CONSOLE_TEXT_SIZE);
+    strncpy(w->consoles->text, text, size);
+
+    // DCMI status
+    w->textboxes[StatusText]      = w->textboxes[InfoText];
+    w->textboxes[StatusText].yPos = w->consoles[0].yEnd + fontHeight;
+    w->textboxes[StatusText].yEnd = w->textboxes[StatusText].yPos + fontHeight;
+    w->textboxes[StatusText].text = "DCMI status:";
+
+    w->textboxes[StatusValueText] = w->textboxes[StatusText];
+    w->textboxes[StatusValueText].xPos =
+        w->textboxes[StatusText].xEnd + fontHeight;
     w->textboxes[StatusValueText].xEnd = defaultTextBox.xEnd;
     w->textboxes[StatusValueText].text = "No status info received yet";
 }
