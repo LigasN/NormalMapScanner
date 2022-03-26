@@ -1,3 +1,4 @@
+
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
@@ -7,11 +8,10 @@ extern "C" {
 
 #include "LCD_GUI.h"
 
-GUI_Window window;
-
+extern GUI_Window g_window;
 /// Macros on the library methods to spare some code
-#define printInfo(info) printOnConsole(window.consoles, info)
+#define printInfo(info) printOnConsole(g_window.consoles, info)
 #define printfInfo(format, ...)                                                \
-    printfOnConsole(window.consoles, format, __VA_ARGS__)
+    printfOnConsole(g_window.consoles, format, __VA_ARGS__)
 
 #endif //__DEBUG_H

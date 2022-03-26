@@ -16,8 +16,12 @@
 
 #include "stm32f4xx_hal.h"
 
-// Other
-#include "debug.h"
+// User settings
+
+#define IMAGE_RESOLUTION_WIDTH 400 // Actual display is 480x320
+#define IMAGE_RESOLUTION_HEIGHT 300
+
+//------------------------------------------------------------------------------
 
 #define CAMERA_R160x120 0x00 /* QQVGA Resolution                     */
 #define CAMERA_R320x240 0x01 /* QVGA Resolution                      */
@@ -77,8 +81,7 @@ typedef struct
 #define CAMERA_I2C_ADDRESS 0x60
 
 // Address bank Table12 -- 0x00 or Table 13 -- 0x01
-// Library fixed to Table 13
-#define CAMERA_DSP_ADDRESS_BANK 0x01
+#define CAMERA_DSP_ADDRESS_BANK 0x00
 #define CAMERA_SENSOR_ADDRESS_BANK 0x01
 #define OV2640_ID 0x2642
 

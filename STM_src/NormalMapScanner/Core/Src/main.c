@@ -49,8 +49,8 @@
 /* USER CODE BEGIN PD */
 
 //---------------          GUI          -------------------------
-GUI_Window window;
 
+GUI_Window g_window;
 /// Declared textboxes
 typedef enum
 {
@@ -105,8 +105,8 @@ void initGUI(GUI_Window* w)
 }
 
 //-------------------          Camera          -------------------
-uint8_t CAMERA_FRAME_BUFFER[360 * 180];
-#define BufferLen (sizeof(CAMERA_FRAME_BUFFER) / sizeof(char))
+uint8_t FRAME_BUFFER[0xFD20];
+#define FRAME_BUFFER_SIZE (sizeof(FRAME_BUFFER) / sizeof(char))
 
 /// Refreshes DCMI status information on display
 void refreshStatusInfo()
@@ -115,35 +115,35 @@ void refreshStatusInfo()
     {
         case HAL_DCMI_STATE_RESET:
         {
-            window.textboxes[StatusValueText].text =
+            g_window.textboxes[StatusValueText].text =
                 "DCMI not yet initialized or disabled.";
             break;
         }
         case HAL_DCMI_STATE_READY:
         {
-            window.textboxes[StatusValueText].text =
+            g_window.textboxes[StatusValueText].text =
                 "DCMI initialized and ready for use.";
             break;
         }
         case HAL_DCMI_STATE_BUSY:
         {
-            window.textboxes[StatusValueText].text =
+            g_window.textboxes[StatusValueText].text =
                 "DCMI internal processing is ongoing.";
             break;
         }
         case HAL_DCMI_STATE_TIMEOUT:
-            window.textboxes[StatusValueText].text = "DCMI timeout state.";
+            g_window.textboxes[StatusValueText].text = "DCMI timeout state.";
             break;
         case HAL_DCMI_STATE_ERROR:
-            window.textboxes[StatusValueText].text = "DCMI error state.";
+            g_window.textboxes[StatusValueText].text = "DCMI error state.";
             break;
         case HAL_DCMI_STATE_SUSPENDED:
-            window.textboxes[StatusValueText].text = "DCMI suspend state.";
+            g_window.textboxes[StatusValueText].text = "DCMI suspend state.";
             break;
         default:
-            window.textboxes[StatusValueText].text = "Unknown state.";
+            g_window.textboxes[StatusValueText].text = "Unknown state.";
     }
-    GUI_RefreshTextBox(&window.textboxes[StatusValueText]);
+    GUI_RefreshTextBox(&g_window.textboxes[StatusValueText]);
 }
 
 int32_t firstNonZeroValue(const uint8_t* array, int32_t size)
@@ -167,22 +167,21 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef* hdcmi)
 
     printInfo("End of shooting\r\n");
     // HAL_UART_DMAStop(&huart1);FF D8 FF E0
-    printfInfo("%x  %x  %x  %x\r\n", CAMERA_FRAME_BUFFER[0],
-               CAMERA_FRAME_BUFFER[1], CAMERA_FRAME_BUFFER[2],
-               CAMERA_FRAME_BUFFER[3]);
-    if (CAMERA_FRAME_BUFFER[0] == 0)
+    printfInfo("%x  %x  %x  %x\r\n", FRAME_BUFFER[0], FRAME_BUFFER[1],
+               FRAME_BUFFER[2], FRAME_BUFFER[3]);
+    if (FRAME_BUFFER[0] == 0)
     {
-        CAMERA_FRAME_BUFFER[0] = 0xFF;
-        CAMERA_FRAME_BUFFER[1] = 0xD8;
-        CAMERA_FRAME_BUFFER[2] = 0xFF;
-        CAMERA_FRAME_BUFFER[3] = 0xE0;
+        FRAME_BUFFER[0] = 0xFF;
+        FRAME_BUFFER[1] = 0xD8;
+        FRAME_BUFFER[2] = 0xFF;
+        FRAME_BUFFER[3] = 0xE0;
     }
 
-    int32_t index = firstNonZeroValue(CAMERA_FRAME_BUFFER, BufferLen);
+    int32_t index = firstNonZeroValue(FRAME_BUFFER, FRAME_BUFFER_SIZE);
     if (index != -1)
         printInfo("Success\n");
 
-    GUI_DrawImage(LCD_X, LCD_Y, CAMERA_FRAME_BUFFER);
+    GUI_DrawImage(LCD_X, LCD_Y, FRAME_BUFFER);
 }
 
 void HAL_DCMI_ErrorCallback(DCMI_HandleTypeDef* hdcmi)
@@ -272,17 +271,17 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_DCMI_Init();
+    MX_DMA_Init();
     MX_I2C2_Init();
     MX_SPI2_Init();
-    MX_DMA_Init();
     MX_TIM2_Init();
     /* USER CODE BEGIN 2 */
 
     // Display setup
     LCD_SCAN_DIR Lcd_ScanDir = SCAN_DIR_DFT; // SCAN_DIR_DFT = D2U_L2R
     LCD_Init(Lcd_ScanDir, 1000);
-    initGUI(&window);
-    GUI_DrawGUI(&window);
+    initGUI(&g_window);
+    GUI_DrawGUI(&g_window);
 
     // Touch screen setup
     TP_Init(Lcd_ScanDir);
@@ -294,7 +293,6 @@ int main(void)
     // 	ov2640_Config(CAMERA_I2C_ADDRESS, CAMERA_CONTRAST_BRIGHTNESS,
     // CAMERA_CONTRAST_LEVEL2, CAMERA_BRIGHTNESS_LEVEL4);
     HAL_Delay(100);
-    // printfInfo("ID: %u", OV2640_ReadID(CAMERA_I2C_ADDRESS));
 
     /* USER CODE END 2 */
 
@@ -322,8 +320,8 @@ int main(void)
                 MX_DCMI_Init();
                 __HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
                 HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT,
-                                   (uint32_t)&CAMERA_FRAME_BUFFER,
-                                   0xFD20); // Buffer size
+                                   (uint32_t)&FRAME_BUFFER,
+                                   FRAME_BUFFER_SIZE); // Buffer size
                 printInfo("DCMI DMA started.\n");
             }
             while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
