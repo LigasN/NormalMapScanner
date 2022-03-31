@@ -105,7 +105,7 @@ void initGUI(GUI_Window* w)
 }
 
 //-------------------          Camera          -------------------
-uint8_t FRAME_BUFFER[0xFD20];
+uint8_t FRAME_BUFFER[IMAGE_RESOLUTION_WIDTH * IMAGE_RESOLUTION_HEIGHT];
 #define FRAME_BUFFER_SIZE (sizeof(FRAME_BUFFER) / sizeof(char))
 
 /// Refreshes DCMI status information on display
@@ -308,7 +308,9 @@ int main(void)
 
         if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
         {
-            HAL_Delay(10);
+            int32_t index = firstNonZeroValue(FRAME_BUFFER, FRAME_BUFFER_SIZE);
+            if (index != -1)
+                printInfo("Success\n");
             if (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == RESET)
             {
                 printInfo("Button pushed.\n");
