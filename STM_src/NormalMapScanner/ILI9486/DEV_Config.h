@@ -18,49 +18,39 @@ extern "C" {
 #endif
 
 #include "main.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f7xx_hal.h"
 
 #define USE_SPI_4W 1
 #define USE_IIC 0
 
 // SPI
-#define SPI1_CLK_0                                                   \
-    HAL_GPIO_WritePin(SPI1_SCK_GPIO_Port, SPI1_SCK_Pin,              \
-                      GPIO_PIN_RESET)
-#define SPI1_CLK_1                                                   \
+#define SPI1_CLK_0                                                             \
+    HAL_GPIO_WritePin(SPI1_SCK_GPIO_Port, SPI1_SCK_Pin, GPIO_PIN_RESET)
+#define SPI1_CLK_1                                                             \
     HAL_GPIO_WritePin(SPI1_SCK_GPIO_Port, SPI1_SCK_Pin, GPIO_PIN_SET)
 
-#define GET_SPI1_MISO                                                \
-    HAL_GPIO_ReadPin(SPI1_MISO_GPIO_Port, SPI1_MISO_Pin)
+#define GET_SPI1_MISO HAL_GPIO_ReadPin(SPI1_MISO_GPIO_Port, SPI1_MISO_Pin)
 
-#define SPI1_MOSI_0                                                  \
-    HAL_GPIO_WritePin(SPI1_MOSI_GPIO_Port, SPI1_MOSI_Pin,            \
-                      GPIO_PIN_RESET)
-#define SPI1_MOSI_1                                                  \
-    HAL_GPIO_WritePin(SPI1_MOSI_GPIO_Port, SPI1_MOSI_Pin,            \
-                      GPIO_PIN_SET)
+#define SPI1_MOSI_0                                                            \
+    HAL_GPIO_WritePin(SPI1_MOSI_GPIO_Port, SPI1_MOSI_Pin, GPIO_PIN_RESET)
+#define SPI1_MOSI_1                                                            \
+    HAL_GPIO_WritePin(SPI1_MOSI_GPIO_Port, SPI1_MOSI_Pin, GPIO_PIN_SET)
 
 // LCD
-#define LCD_CS_0                                                     \
-    HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET)
-#define LCD_CS_1                                                     \
-    HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET)
+#define LCD_CS_0 HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET)
+#define LCD_CS_1 HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET)
 
-#define LCD_RST_0                                                    \
+#define LCD_RST_0                                                              \
     HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_RESET)
-#define LCD_RST_1                                                    \
+#define LCD_RST_1                                                              \
     HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_SET)
 
-#define LCD_DC_0                                                     \
-    HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET)
-#define LCD_DC_1                                                     \
-    HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET)
+#define LCD_DC_0 HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET)
+#define LCD_DC_1 HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET)
 
 // Touch
-#define TP_CS_0                                                      \
-    HAL_GPIO_WritePin(TP_CS_GPIO_Port, TP_CS_Pin, GPIO_PIN_RESET)
-#define TP_CS_1                                                      \
-    HAL_GPIO_WritePin(TP_CS_GPIO_Port, TP_CS_Pin, GPIO_PIN_SET)
+#define TP_CS_0 HAL_GPIO_WritePin(TP_CS_GPIO_Port, TP_CS_Pin, GPIO_PIN_RESET)
+#define TP_CS_1 HAL_GPIO_WritePin(TP_CS_GPIO_Port, TP_CS_Pin, GPIO_PIN_SET)
 
 #define GET_TP_BUSY HAL_GPIO_ReadPin(TP_BUSY_GPIO_Port, TP_BUSY_Pin)
 
@@ -68,10 +58,8 @@ extern "C" {
 
 // SD card
 #define MAX_BMP_FILES 25
-#define SD_CS_0                                                      \
-    HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_RESET)
-#define SD_CS_1                                                      \
-    HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_SET)
+#define SD_CS_0 HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_RESET)
+#define SD_CS_1 HAL_GPIO_WritePin(SD_CS_GPIO_Port, SD_CS_Pin, GPIO_PIN_SET)
 
 /*--------------------------------------------------------------------------*/
 void System_Exit(void);

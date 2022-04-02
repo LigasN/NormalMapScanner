@@ -12,7 +12,7 @@
  ****************************************************************************/
 #include "DEV_Config.h"
 #include "spi.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f7xx_hal.h"
 #include "tim.h"
 
 /*****************************************************************************
@@ -30,8 +30,8 @@ void PWM_SetValue(uint16_t value)
     sConfigOC.Pulse      = value;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+    HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 }
 
 /*********************************************
