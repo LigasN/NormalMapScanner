@@ -12,6 +12,8 @@
 // Other
 #include "debug.h"
 
+inline I2C_HandleTypeDef* g_phi2c;
+
 static uint32_t ov2640ConvertValue(uint32_t feature, uint32_t value);
 
 /* Initialization sequence */
@@ -594,7 +596,7 @@ const unsigned char InitializationSequence[][2] = {
 uint8_t cameraRead(uint8_t Reg)
 {
     uint8_t value;
-    HAL_I2C_Mem_Read(&hi2c2, CAMERA_I2C_ADDRESS, (uint16_t)Reg,
+    HAL_I2C_Mem_Read(g_phi2c, CAMERA_I2C_ADDRESS, (uint16_t)Reg,
                      I2C_MEMADD_SIZE_8BIT, &value, 1, 100);
     return value;
 }
@@ -609,16 +611,18 @@ uint8_t cameraRead(uint8_t Reg)
  */
 void cameraWrite(uint8_t Reg, uint8_t Value)
 {
-    HAL_I2C_Mem_Write(&hi2c2, CAMERA_I2C_ADDRESS, (uint16_t)Reg,
+    HAL_I2C_Mem_Write(g_phi2c, CAMERA_I2C_ADDRESS, (uint16_t)Reg,
                       I2C_MEMADD_SIZE_8BIT, &Value, 1, 100);
 }
 
-void ov2640Init()
+void ov2640Init(I2C_HandleTypeDef* p_hi2c)
 {
+    g_phi2c = p_hi2c;
+
     uint32_t index;
     // Prepare the camera to be configured
 
-    // Read camera ID
+    // Reg_phi2cmera ID
     printfInfo("Camera ID(OV2640_SENSOR_PIDH): %u\n", ov2640ReadID());
 
     // Table13 addresses chosen of OV2640
