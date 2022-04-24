@@ -1,13 +1,31 @@
+"""Calulates normal map texture.
+
+Args:
+    input files directory (str): input files directory
+    input file name prefix (str): input file name prefix
+    output file location (str): output file in relative path
+    image size x axis (int): input and output images pixels on x axis size
+    image size y axis (int): input and output images pixels on y axis size
+    object size x axis (int): object size in centimeters on x axis
+    object size y axis (int): object size in centimeters on y axis
+    lamp 0 position x axis (int): position of the first lamp in cm (x axis)
+    lamp 0 position y axis (int): position of the first lamp in cm (y axis)
+    lamp 0 position z axis (int): position of the first lamp in cm (z axis)
+"""
+
 import os
 import sys
 import numpy as np
 import time
 from PIL import Image, ImageChops
 import datetime
+import argparse
 
 # Properties
 # debugging = 1 # True
 debugging = 0  # False
+
+"""
 # test = "All black 3x3 px"
 # test = "All white 3x3 px"
 # test = "Simple test 3x3 px"
@@ -15,31 +33,71 @@ debugging = 0  # False
 test = "Photos 2200x2200 px"
 
 if(test == "All black 3x3 px"):
-    assets_path = 'test_input/1.all_black_3x3px/' # test assets location
+    assets_path = 'test_input/1.all_black_3x3px/'  # test assets location
     image_size = np.array([3, 3])  # px test image size
     object_size = np.array([3, 3])  # cm virtual test object size
     lamp_0_position = np.array([40, 0, 15])  # cm
 elif(test == "All white 3x3 px"):
-    assets_path = 'test_input/2.all_white_3x3px/' # test assets location
+    assets_path = 'test_input/2.all_white_3x3px/'  # test assets location
     image_size = np.array([3, 3])  # px test image size
     object_size = np.array([3, 3])  # cm virtual test object size
     lamp_0_position = np.array([0, 0, 15])  # cm
 elif(test == "Simple test 3x3 px"):
-    assets_path = 'test_input/3.simple_test_3x3px/' # test assets location
+    assets_path = 'test_input/3.simple_test_3x3px/'  # test assets location
     image_size = np.array([4, 4])  # px test image size
     object_size = np.array([4, 4])  # cm virtual test object size
     lamp_0_position = np.array([40, 0, 15])  # cm
 elif(test == "Blender 1200x1200 px"):
-    assets_path = 'test_input/4.blender_1200x1200px/' # test assets location
+    assets_path = 'test_input/4.blender_1200x1200px/'  # test assets location
     image_size = np.array([1200, 1200])  # px
     object_size = np.array([20, 20])  # cm
     lamp_0_position = np.array([40, 0, 15])  # cm
 elif(test == "Photos 2200x2200 px"):
-    assets_path = 'test_input/5.photos_2200x2200px/' # test assets location
+    assets_path = 'test_input/5.photos_2200x2200px/'  # test assets location
     image_size = np.array([2200, 2200])  # px test image size
     object_size = np.array([20, 20])  # cm virtual test object size
     lamp_0_position = np.array([40, 0, 22])  # cm
 
+"""
+
+# Script arguments parser
+parser = argparse.ArgumentParser()
+# -id input files directory -o output file -p PASSWORD -size 20000
+parser.add_argument("-i", "--input_directory", dest="assets_path",
+                    default="test_input/4.blender_1200x1200px/", help="input files directory (str)")
+parser.add_argument("-in", "--input_filename_prefix",
+                    dest="input_filename_prefix", default="input_", help="input file name prefix (str)")
+parser.add_argument("-o", "--output", dest="output_file",
+                    default="./tmp/normalmap.bmp", help="output file in relative path (str)")
+
+parser.add_argument("-isx", "--image_size_x", dest="image_size_x", default=1200, type=int,
+                    help="image size x axis (int): input and output images pixels on x axis size")
+parser.add_argument("-isy", "--image_size_y", dest="image_size_y", default=1200, type=int,
+                    help="image size y axis (int): input and output images pixels on y axis size")
+
+parser.add_argument("-osx", "--object_size_x", dest="object_size_x", default=20,
+                    type=int, help="object size x axis (int): object size in centimeters on x axis")
+parser.add_argument("-osy", "--object_size_y", dest="object_size_y", default=20,
+                    type=int, help="object size y axis (int): object size in centimeters on y axis")
+
+parser.add_argument("-lpx", "--lamp_0_position_x", dest="lamp_0_pos_x", default=40, type=int,
+                    help="lamp 0 position x axis (int): position of the first lamp in cm (x axis)")
+parser.add_argument("-lpy", "--lamp_0_position_y", dest="lamp_0_pos_y", default=0, type=int,
+                    help="lamp 0 position y axis (int): position of the first lamp in cm (y axis)")
+parser.add_argument("-lpz", "--lamp_0_position_z", dest="lamp_0_pos_z", default=15, type=int,
+                    help="lamp 0 position z axis (int): position of the first lamp in cm (z axis)")
+
+args = parser.parse_args()
+
+assets_path = args.assets_path
+input_filename_prefix = args.input_filename_prefix
+output_file = args.output_file
+# px test image size
+image_size = np.array([args.image_size_y, args.image_size_x])
+# cm virtual test object size
+object_size = np.array([args.object_size_y, args.object_size_x])
+lamp_0_position = np.array(
+    [args.lamp_0_pos_x, args.lamp_0_pos_y, args.lamp_0_pos_z])  # cm
 
 R, G, B = 0, 1, 2
 X, Y, Z = 0, 1, 2
@@ -117,13 +175,13 @@ def main():
 
     print('Loading of the environment light image.')
     environment_light = load_image(
-        'input_all_off.bmp')
+        input_filename_prefix + 'all_off.bmp')
 
     for a in range(0, angles.size):
         print('Loading of the input data array with angle: %d' %
               angles[a])
         start_time = time.time()
-        name = 'input_' + str(angles[a]) + '.bmp'
+        name = input_filename_prefix + str(angles[a]) + '.bmp'
 
         # Load image
         im = load_image(name)
@@ -224,13 +282,13 @@ def main():
     # Create output image object
     normalmap.show()
     print('Saving')
-    normalmap.save("./tmp/normalmap.bmp")
+    normalmap.save(output_file)
 
     # Printing debug stuff
     if(debugging):
         print("output")
         print(output)
-        sys.stdout.close() # Close logging
+        sys.stdout.close()  # Close logging
 
 
 if __name__ == "__main__":
