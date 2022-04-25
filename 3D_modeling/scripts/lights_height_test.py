@@ -3,6 +3,7 @@ from bpy import context
 import builtins as __builtin__
 import os
 import numpy as np
+import math
 
 output_dir = 'C:/Users/norbe/Repozytoria/NormalMapScanner/3D_modeling/scripts/tmp'
 output_folder_pattern = 'lights_height_%d'
@@ -13,14 +14,13 @@ bpy.context.scene.render.image_settings.color_mode = 'RGB'
 bpy.context.scene.render.image_settings.color_depth = '8'
 bpy.context.scene.render.image_settings.file_format = 'BMP'
 
-angle = 45 # angle between lights
-
 start_height = 0.05 # starting height in meters
 step_height = 0.05 # step in meters
 stop_height = 0.50 # stop height in meters
 
 lights = bpy.data.collections['Lights'].all_objects.values()
 original_height = lights[0].location[2]
+light_distance = lights[0].location[0] # light distance from center of the object
 original_engine = 'CYCLES';
 
 
@@ -44,10 +44,12 @@ def print(*args, **kwargs):
 """-----------------------------------------------------------"""
     
 def change_lights_height(height):
+    angle = math.atan(light_distance/height)# y rotation of light source to beam on the center of the object
     for light in lights:
         light.location[2] = height
-        # TODO: There should be angle correction as well!
+        light.rotation_euler[1] = -angle
     print("Lights height is set to " + str(height))
+    print("Lights angle is set to " + str(angle))
         
 def turn_lights_off():
     for light in lights:
