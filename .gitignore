@@ -316,3 +316,6 @@ desktop.ini
 
 ### EAGLE ###
 *.s#*
+
+### LTSPICE ###
+*.raw
