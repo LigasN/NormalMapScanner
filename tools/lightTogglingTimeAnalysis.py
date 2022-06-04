@@ -1,48 +1,38 @@
-from moviepy.editor import *
-
-
-# clip = VideoFileClip("tmp/my_video.mp4")
-#video = CompositeVideoClip([clip])
-# video.write_videofile("tmp/myHolidays_edited.mp4")
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.style as mplstyle
 
-
-def grabFrame(cap, frame):
-    ret, img = cap.read()
-
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    show_size = (50, 20)
-    gray_show = cv2.resize(gray, show_size)
-    #text_pos = (20,10)
-    #gray_show = cv2.putText(gray_show, "frame: " + str(frame), text_pos,
-    #                        cv2.FONT_HERSHEY_SIMPLEX, 0.2, (255, 255, 255), 2, cv2.LINE_AA)
-
-    hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
-    plt.title("Histogram" + str(frame))
-
-    return hist, cv2.cvtColor(gray_show, cv2.COLOR_GRAY2RGB)
-
-
-cap = cv2.VideoCapture('tmp/my_video.mp4')
+mplstyle.use('fast')
+cap = cv2.VideoCapture('tmp/test1.mp4')
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+framesAmount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 fig = plt.figure(figsize=(8, 4))
 
-hist, vid = grabFrame(cap, 0)
 # create two subplots
 ax1 = plt.subplot(121)
+ax1.text(0, -2, "Fps: " + str(fps))
 ax2 = plt.subplot(122)
-plt.ion()
+    
+show_scale = 0.05
+
 frame = 0
 while(cap.isOpened()):
-    hist, vid = grabFrame(cap, frame)
-    ax1.imshow(vid)
+    plt.title("Frame: " + str(frame) + '/' + str(framesAmount))
+    ret, img = cap.read()
+    if not ret:
+        break
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    show_size = (int(img.shape[1] * show_scale), int(img.shape[0] * show_scale))
+    gray_show = cv2.resize(gray, show_size)
+    ax1.imshow(cv2.cvtColor(gray_show, cv2.COLOR_GRAY2RGB))
+
+    hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
     ax2.plot(hist)
     plt.pause(0.00001)
     frame += 1
-plt.ioff()
+
 plt.show()
 
 cap.release()
