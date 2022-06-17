@@ -25,7 +25,7 @@ import argparse
 # debugging = 1 # True
 debugging = 0  # False
 
-"""
+
 # test = "All black 3x3 px"
 # test = "All white 3x3 px"
 # test = "Simple test 3x3 px"
@@ -58,7 +58,8 @@ elif(test == "Photos 2200x2200 px"):
     object_size = np.array([20, 20])  # cm virtual test object size
     lamp_0_position = np.array([40, 0, 22])  # cm
 
-"""
+input_filename_prefix = "input_"
+output_file = "normalmap.bmp"
 
 # Script arguments parser
 parser = argparse.ArgumentParser()
@@ -88,8 +89,7 @@ parser.add_argument("-lpz", "--lamp_0_position_z", dest="lamp_0_pos_z", default=
                     help="lamp 0 position z axis (int): position of the first lamp in cm (z axis)")
 
 args = parser.parse_args()
-
-assets_path = args.assets_path
+"""assets_path = args.assets_path
 input_filename_prefix = args.input_filename_prefix
 output_file = args.output_file
 # px test image size
@@ -98,7 +98,7 @@ image_size = np.array([args.image_size_y, args.image_size_x])
 object_size = np.array([args.object_size_y, args.object_size_x])
 lamp_0_position = np.array(
     [args.lamp_0_pos_x, args.lamp_0_pos_y, args.lamp_0_pos_z])  # cm
-
+"""
 R, G, B = 0, 1, 2
 X, Y, Z = 0, 1, 2
 angles = np.array(range(0, 360, 45))

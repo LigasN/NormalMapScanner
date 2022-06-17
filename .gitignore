@@ -316,6 +316,7 @@ desktop.ini
 
 ### EAGLE ###
 *.s#*
+*.b#*
 
 ### LTSPICE ###
 *.raw
