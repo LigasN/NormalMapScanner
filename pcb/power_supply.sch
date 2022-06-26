@@ -20155,61 +20155,61 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="B/3528-21R" package3d_urn="urn:adsk.eagle:package:23409/2" value="10u"/>
 <part name="SUPPLY4" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="U1" library="LM1085IT-ADJ" deviceset="LM1085IT-ADJ" device=""/>
-<part name="R90" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
+<part name="R17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
 <part name="Q1" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L1" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON1" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="P1" library="pot" library_urn="urn:adsk.eagle:library:331" deviceset="TRIM_EU-" device="CA6V" package3d_urn="urn:adsk.eagle:package:22691/1" value="2k"/>
 <part name="ACC1" library="con-phoenix-350" library_urn="urn:adsk.eagle:library:174" deviceset="1751248" device="" package3d_urn="urn:adsk.eagle:package:9395/1"/>
 <part name="ACC2" library="con-phoenix-350" library_urn="urn:adsk.eagle:library:174" deviceset="1751248" device="" package3d_urn="urn:adsk.eagle:package:9395/1"/>
 <part name="SWITCH" library="con-phoenix-350" library_urn="urn:adsk.eagle:library:174" deviceset="1751248" device="" package3d_urn="urn:adsk.eagle:package:9395/1"/>
 <part name="IC1" library="AP1507-D5-13" deviceset="AP1507-D5-13" device=""/>
 <part name="SUPPLY13" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
-<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="4.7u"/>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="4.7u"/>
-<part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="22u"/>
-<part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="22u"/>
-<part name="L9" library="SRR1050A-151Y" deviceset="SRR1050A-151Y" device="" value="HPI1040-220"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="22u"/>
+<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="22u"/>
+<part name="L1" library="SRR1050A-151Y" deviceset="SRR1050A-151Y" device="" value="HPI1040-220"/>
 <part name="D1" library="SSB44-E3_52T" deviceset="SSB44-E3_52T" device=""/>
-<part name="R100" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="2.4k"/>
-<part name="R110" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="3.3k"/>
-<part name="R120" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
+<part name="R18" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="2.4k"/>
+<part name="R19" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="3.3k"/>
+<part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY1" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q2" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L2" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON2" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY5" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q3" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L3" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON3" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY6" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q4" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L4" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON4" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY8" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q5" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L5" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON5" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY9" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q6" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L6" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON6" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY10" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q7" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L7" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON7" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="SUPPLY11" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.3k"/>
 <part name="Q8" library="Diodes - FMMT493ATA" deviceset="DIODES_FMMT493ATA" device="DIODES_FMMT493ATA_0_0"/>
-<part name="L8" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="1"/>
+<part name="CON8" library="con-phoenix-254" library_urn="urn:adsk.eagle:library:172" deviceset="MPT2" device="" package3d_urn="urn:adsk.eagle:package:9320/1" value="+"/>
 <part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 </parts>
 <sheets>
@@ -20218,14 +20218,14 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 </plain>
 <instances>
 <instance part="RASPBERRY" gate="G$1" x="-15.24" y="-83.82" smashed="yes">
-<attribute name="NAME" x="-38.1" y="-55.88" size="1.27" layer="95"/>
+<attribute name="NAME" x="-38.354" y="-57.658" size="1.27" layer="95"/>
 <attribute name="VALUE" x="-38.1" y="-121.285" size="1.27" layer="96"/>
 </instance>
 <instance part="SUPPLY3" gate="GND" x="15.24" y="-121.92" smashed="yes">
 <attribute name="VALUE" x="13.335" y="-125.095" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY2" gate="GND" x="-45.72" y="58.42" smashed="yes">
-<attribute name="VALUE" x="-47.625" y="55.245" size="1.778" layer="96"/>
+<instance part="SUPPLY2" gate="GND" x="-30.48" y="63.5" smashed="yes">
+<attribute name="VALUE" x="-32.385" y="60.325" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY7" gate="GND" x="38.1" y="73.66" smashed="yes">
 <attribute name="VALUE" x="36.195" y="70.485" size="1.778" layer="96"/>
@@ -20249,46 +20249,46 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <attribute name="NAME" x="-50.8" y="49.26" size="2.0828" layer="95" ratio="10" rot="SR0"/>
 <attribute name="VALUE" x="-50.8" y="34.1" size="2.0828" layer="96" ratio="10" rot="SR0"/>
 </instance>
-<instance part="R90" gate="G$1" x="-17.78" y="38.1" smashed="yes" rot="R90">
+<instance part="R17" gate="G$1" x="-17.78" y="38.1" smashed="yes" rot="R90">
 <attribute name="NAME" x="-19.2786" y="34.29" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-14.478" y="34.29" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="Q1" gate="G$0" x="58.42" y="101.6" smashed="yes">
 <attribute name="NAME" x="66.04" y="96.52" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L1" gate="-1" x="93.98" y="104.14" smashed="yes">
+<instance part="CON1" gate="-1" x="93.98" y="104.14" smashed="yes">
 <attribute name="NAME" x="97.536" y="103.505" size="1.778" layer="95"/>
 </instance>
-<instance part="L1" gate="-2" x="93.98" y="99.06" smashed="yes">
+<instance part="CON1" gate="-2" x="93.98" y="99.06" smashed="yes">
 <attribute name="NAME" x="97.536" y="98.425" size="1.778" layer="95"/>
 </instance>
 <instance part="P1" gate="1" x="-55.88" y="20.32" smashed="yes" rot="R90">
 <attribute name="NAME" x="-59.69" y="16.891" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-52.07" y="16.51" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="ACC1" gate="-1" x="-40.64" y="88.9" smashed="yes">
-<attribute name="NAME" x="-39.37" y="90.551" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="88.011" size="1.778" layer="96"/>
+<instance part="ACC1" gate="-1" x="-38.1" y="68.58" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="66.929" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="69.469" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="ACC1" gate="-2" x="-40.64" y="81.28" smashed="yes">
-<attribute name="NAME" x="-39.37" y="82.931" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="80.391" size="1.778" layer="96"/>
+<instance part="ACC1" gate="-2" x="-38.1" y="76.2" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="74.549" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="77.089" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="ACC2" gate="-1" x="-40.64" y="71.12" smashed="yes">
-<attribute name="NAME" x="-39.37" y="72.771" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="70.231" size="1.778" layer="96"/>
+<instance part="ACC2" gate="-1" x="-38.1" y="86.36" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="84.709" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="87.249" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="ACC2" gate="-2" x="-40.64" y="63.5" smashed="yes">
-<attribute name="NAME" x="-39.37" y="65.151" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="62.611" size="1.778" layer="96"/>
+<instance part="ACC2" gate="-2" x="-38.1" y="93.98" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="92.329" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="94.869" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="SWITCH" gate="-1" x="-40.64" y="106.68" smashed="yes">
-<attribute name="NAME" x="-39.37" y="103.251" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="108.331" size="1.778" layer="96"/>
+<instance part="SWITCH" gate="-1" x="-38.1" y="104.14" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="107.569" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="102.489" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="SWITCH" gate="-2" x="-40.64" y="99.06" smashed="yes">
-<attribute name="NAME" x="-39.37" y="95.631" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-26.67" y="100.711" size="1.778" layer="96"/>
+<instance part="SWITCH" gate="-2" x="-38.1" y="111.76" smashed="yes" rot="R180">
+<attribute name="NAME" x="-39.37" y="115.189" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-52.07" y="110.109" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="IC1" gate="G$1" x="-58.42" y="-15.24" smashed="yes">
 <attribute name="NAME" x="-52.07" y="-30.48" size="1.778" layer="95" align="center-left"/>
@@ -20297,11 +20297,11 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="SUPPLY13" gate="GND" x="-45.72" y="-43.18" smashed="yes">
 <attribute name="VALUE" x="-52.705" y="-43.815" size="1.778" layer="96"/>
 </instance>
-<instance part="C7" gate="G$1" x="-93.98" y="-22.86" smashed="yes">
+<instance part="C4" gate="G$1" x="-93.98" y="-22.86" smashed="yes">
 <attribute name="NAME" x="-92.456" y="-22.479" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-92.456" y="-27.559" size="1.778" layer="96"/>
 </instance>
-<instance part="C8" gate="G$1" x="-101.6" y="-22.86" smashed="yes">
+<instance part="C3" gate="G$1" x="-101.6" y="-22.86" smashed="yes">
 <attribute name="NAME" x="-100.076" y="-22.479" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-100.076" y="-27.559" size="1.778" layer="96"/>
 </instance>
@@ -20313,15 +20313,15 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <attribute name="NAME" x="-77.216" y="-22.479" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-77.216" y="-27.559" size="1.778" layer="96"/>
 </instance>
-<instance part="C9" gate="G$1" x="-2.54" y="-25.4" smashed="yes">
+<instance part="C7" gate="G$1" x="-2.54" y="-25.4" smashed="yes">
 <attribute name="NAME" x="-1.016" y="-25.019" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-1.016" y="-30.099" size="1.778" layer="96"/>
 </instance>
-<instance part="C10" gate="G$1" x="7.62" y="-25.4" smashed="yes">
+<instance part="C8" gate="G$1" x="7.62" y="-25.4" smashed="yes">
 <attribute name="NAME" x="9.144" y="-25.019" size="1.778" layer="95"/>
 <attribute name="VALUE" x="9.144" y="-30.099" size="1.778" layer="96"/>
 </instance>
-<instance part="L9" gate="G$1" x="-12.7" y="-17.78" smashed="yes">
+<instance part="L1" gate="G$1" x="-12.7" y="-17.78" smashed="yes">
 <attribute name="NAME" x="-20.842340625" y="-14.467690625" size="1.781140625" layer="95"/>
 <attribute name="VALUE" x="-21.09655" y="-20.32881875" size="1.781090625" layer="96"/>
 </instance>
@@ -20329,15 +20329,15 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <attribute name="NAME" x="-19.05" y="-22.86" size="1.778" layer="95" rot="R270" align="center-left"/>
 <attribute name="VALUE" x="-21.59" y="-22.86" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
-<instance part="R100" gate="G$1" x="-66.04" y="-30.48" smashed="yes" rot="R90">
+<instance part="R18" gate="G$1" x="-66.04" y="-30.48" smashed="yes" rot="R90">
 <attribute name="NAME" x="-67.5386" y="-34.29" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-62.738" y="-34.29" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R110" gate="G$1" x="-17.78" y="-7.62" smashed="yes" rot="R180">
+<instance part="R19" gate="G$1" x="-17.78" y="-7.62" smashed="yes" rot="R180">
 <attribute name="NAME" x="-13.97" y="-9.1186" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-13.97" y="-4.318" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="R120" gate="G$1" x="-2.54" y="-7.62" smashed="yes" rot="R180">
+<instance part="R20" gate="G$1" x="-2.54" y="-7.62" smashed="yes" rot="R180">
 <attribute name="NAME" x="1.27" y="-9.1186" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="1.27" y="-4.318" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -20355,10 +20355,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q2" gate="G$0" x="58.42" y="73.66" smashed="yes">
 <attribute name="NAME" x="66.04" y="68.58" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L2" gate="-1" x="93.98" y="76.2" smashed="yes">
+<instance part="CON2" gate="-1" x="93.98" y="76.2" smashed="yes">
 <attribute name="NAME" x="97.536" y="75.565" size="1.778" layer="95"/>
 </instance>
-<instance part="L2" gate="-2" x="93.98" y="71.12" smashed="yes">
+<instance part="CON2" gate="-2" x="93.98" y="71.12" smashed="yes">
 <attribute name="NAME" x="97.536" y="70.485" size="1.778" layer="95"/>
 </instance>
 <instance part="R4" gate="G$1" x="38.1" y="58.42" smashed="yes" rot="R90">
@@ -20375,10 +20375,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q3" gate="G$0" x="58.42" y="45.72" smashed="yes">
 <attribute name="NAME" x="66.04" y="40.64" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L3" gate="-1" x="93.98" y="48.26" smashed="yes">
+<instance part="CON3" gate="-1" x="93.98" y="48.26" smashed="yes">
 <attribute name="NAME" x="97.536" y="47.625" size="1.778" layer="95"/>
 </instance>
-<instance part="L3" gate="-2" x="93.98" y="43.18" smashed="yes">
+<instance part="CON3" gate="-2" x="93.98" y="43.18" smashed="yes">
 <attribute name="NAME" x="97.536" y="42.545" size="1.778" layer="95"/>
 </instance>
 <instance part="R6" gate="G$1" x="38.1" y="30.48" smashed="yes" rot="R90">
@@ -20395,10 +20395,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q4" gate="G$0" x="58.42" y="17.78" smashed="yes">
 <attribute name="NAME" x="66.04" y="12.7" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L4" gate="-1" x="93.98" y="20.32" smashed="yes">
+<instance part="CON4" gate="-1" x="93.98" y="20.32" smashed="yes">
 <attribute name="NAME" x="97.536" y="19.685" size="1.778" layer="95"/>
 </instance>
-<instance part="L4" gate="-2" x="93.98" y="15.24" smashed="yes">
+<instance part="CON4" gate="-2" x="93.98" y="15.24" smashed="yes">
 <attribute name="NAME" x="97.536" y="14.605" size="1.778" layer="95"/>
 </instance>
 <instance part="R8" gate="G$1" x="38.1" y="2.54" smashed="yes" rot="R90">
@@ -20415,10 +20415,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q5" gate="G$0" x="58.42" y="-10.16" smashed="yes">
 <attribute name="NAME" x="66.04" y="-15.24" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L5" gate="-1" x="93.98" y="-7.62" smashed="yes">
+<instance part="CON5" gate="-1" x="93.98" y="-7.62" smashed="yes">
 <attribute name="NAME" x="97.536" y="-8.255" size="1.778" layer="95"/>
 </instance>
-<instance part="L5" gate="-2" x="93.98" y="-12.7" smashed="yes">
+<instance part="CON5" gate="-2" x="93.98" y="-12.7" smashed="yes">
 <attribute name="NAME" x="97.536" y="-13.335" size="1.778" layer="95"/>
 </instance>
 <instance part="R10" gate="G$1" x="38.1" y="-25.4" smashed="yes" rot="R90">
@@ -20435,10 +20435,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q6" gate="G$0" x="58.42" y="-38.1" smashed="yes">
 <attribute name="NAME" x="66.04" y="-43.18" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L6" gate="-1" x="93.98" y="-35.56" smashed="yes">
+<instance part="CON6" gate="-1" x="93.98" y="-35.56" smashed="yes">
 <attribute name="NAME" x="97.536" y="-36.195" size="1.778" layer="95"/>
 </instance>
-<instance part="L6" gate="-2" x="93.98" y="-40.64" smashed="yes">
+<instance part="CON6" gate="-2" x="93.98" y="-40.64" smashed="yes">
 <attribute name="NAME" x="97.536" y="-41.275" size="1.778" layer="95"/>
 </instance>
 <instance part="R12" gate="G$1" x="38.1" y="-53.34" smashed="yes" rot="R90">
@@ -20455,10 +20455,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q7" gate="G$0" x="58.42" y="-66.04" smashed="yes">
 <attribute name="NAME" x="66.04" y="-71.12" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L7" gate="-1" x="93.98" y="-63.5" smashed="yes">
+<instance part="CON7" gate="-1" x="93.98" y="-63.5" smashed="yes">
 <attribute name="NAME" x="97.536" y="-64.135" size="1.778" layer="95"/>
 </instance>
-<instance part="L7" gate="-2" x="93.98" y="-68.58" smashed="yes">
+<instance part="CON7" gate="-2" x="93.98" y="-68.58" smashed="yes">
 <attribute name="NAME" x="97.536" y="-69.215" size="1.778" layer="95"/>
 </instance>
 <instance part="R14" gate="G$1" x="38.1" y="-81.28" smashed="yes" rot="R90">
@@ -20475,10 +20475,10 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <instance part="Q8" gate="G$0" x="58.42" y="-93.98" smashed="yes">
 <attribute name="NAME" x="66.04" y="-99.06" size="2.54" layer="95" align="top-left"/>
 </instance>
-<instance part="L8" gate="-1" x="93.98" y="-91.44" smashed="yes">
+<instance part="CON8" gate="-1" x="93.98" y="-91.44" smashed="yes">
 <attribute name="NAME" x="97.536" y="-92.075" size="1.778" layer="95"/>
 </instance>
-<instance part="L8" gate="-2" x="93.98" y="-96.52" smashed="yes">
+<instance part="CON8" gate="-2" x="93.98" y="-96.52" smashed="yes">
 <attribute name="NAME" x="97.536" y="-97.155" size="1.778" layer="95"/>
 </instance>
 <instance part="R16" gate="G$1" x="38.1" y="-109.22" smashed="yes" rot="R90">
@@ -20536,11 +20536,11 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <pinref part="SUPPLY13" gate="GND" pin="GND"/>
 <wire x1="-45.72" y1="-40.64" x2="-45.72" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-45.72" y="-38.1"/>
-<pinref part="C8" gate="G$1" pin="2"/>
+<pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="-101.6" y1="-27.94" x2="-101.6" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="-101.6" y1="-38.1" x2="-93.98" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-60.96" y="-38.1"/>
-<pinref part="C7" gate="G$1" pin="2"/>
+<pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="-93.98" y1="-38.1" x2="-86.36" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="-86.36" y1="-38.1" x2="-78.74" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="-78.74" y1="-38.1" x2="-66.04" y2="-38.1" width="0.1524" layer="91"/>
@@ -20560,23 +20560,17 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <wire x1="-30.48" y1="-38.1" x2="-25.4" y2="-38.1" width="0.1524" layer="91"/>
 <pinref part="D1" gate="G$1" pin="A"/>
 <wire x1="-25.4" y1="-38.1" x2="-25.4" y2="-35.56" width="0.1524" layer="91"/>
-<pinref part="C9" gate="G$1" pin="2"/>
+<pinref part="C7" gate="G$1" pin="2"/>
 <wire x1="-2.54" y1="-30.48" x2="-2.54" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="-2.54" y1="-38.1" x2="-25.4" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-25.4" y="-38.1"/>
-<pinref part="C10" gate="G$1" pin="2"/>
+<pinref part="C8" gate="G$1" pin="2"/>
 <wire x1="7.62" y1="-30.48" x2="7.62" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="7.62" y1="-38.1" x2="-2.54" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-2.54" y="-38.1"/>
-<pinref part="R100" gate="G$1" pin="1"/>
+<pinref part="R18" gate="G$1" pin="1"/>
 <wire x1="-66.04" y1="-35.56" x2="-66.04" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-66.04" y="-38.1"/>
-</segment>
-<segment>
-<pinref part="ACC2" gate="-2" pin="K"/>
-<pinref part="SUPPLY2" gate="GND" pin="GND"/>
-<wire x1="-45.72" y1="60.96" x2="-45.72" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="-45.72" y1="63.5" x2="-43.18" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
 </segment>
@@ -20656,14 +20650,18 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <wire x1="63.5" y1="-116.84" x2="63.5" y2="-109.22" width="0.1524" layer="91"/>
 <junction x="38.1" y="-116.84"/>
 </segment>
+<segment>
+<pinref part="SUPPLY2" gate="GND" pin="GND"/>
+<wire x1="-30.48" y1="66.04" x2="-30.48" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="ACC1" gate="-1" pin="K"/>
+<wire x1="-30.48" y1="68.58" x2="-35.56" y2="68.58" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="BAT" class="0">
 <segment>
-<label x="-40.64" y="111.76" size="1.778" layer="95"/>
-<pinref part="SWITCH" gate="-1" pin="K"/>
-<wire x1="-43.18" y1="106.68" x2="-45.72" y2="106.68" width="0.1524" layer="91"/>
-<wire x1="-45.72" y1="106.68" x2="-45.72" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="-45.72" y1="111.76" x2="-40.64" y2="111.76" width="0.1524" layer="91"/>
+<label x="-30.48" y="111.76" size="1.778" layer="95"/>
+<pinref part="SWITCH" gate="-2" pin="K"/>
+<wire x1="-30.48" y1="111.76" x2="-35.56" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="-55.88" y1="45.72" x2="-68.58" y2="45.72" width="0.1524" layer="91"/>
@@ -20678,14 +20676,14 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <pinref part="IC1" gate="G$1" pin="VIN"/>
 <wire x1="-58.42" y1="-15.24" x2="-78.74" y2="-15.24" width="0.1524" layer="91"/>
 <label x="-109.22" y="-15.24" size="1.778" layer="95"/>
-<pinref part="C8" gate="G$1" pin="1"/>
+<pinref part="C3" gate="G$1" pin="1"/>
 <wire x1="-78.74" y1="-15.24" x2="-86.36" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="-86.36" y1="-15.24" x2="-93.98" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="-93.98" y1="-15.24" x2="-101.6" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="-101.6" y1="-15.24" x2="-109.22" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="-101.6" y1="-20.32" x2="-101.6" y2="-15.24" width="0.1524" layer="91"/>
 <junction x="-101.6" y="-15.24"/>
-<pinref part="C7" gate="G$1" pin="1"/>
+<pinref part="C4" gate="G$1" pin="1"/>
 <wire x1="-93.98" y1="-20.32" x2="-93.98" y2="-15.24" width="0.1524" layer="91"/>
 <junction x="-93.98" y="-15.24"/>
 <pinref part="C5" gate="G$1" pin="1"/>
@@ -20694,15 +20692,6 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <pinref part="C6" gate="G$1" pin="1"/>
 <wire x1="-78.74" y1="-20.32" x2="-78.74" y2="-15.24" width="0.1524" layer="91"/>
 <junction x="-78.74" y="-15.24"/>
-</segment>
-</net>
-<net name="N$4" class="0">
-<segment>
-<wire x1="-45.72" y1="71.12" x2="-45.72" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="ACC1" gate="-2" pin="K"/>
-<wire x1="-45.72" y1="81.28" x2="-43.18" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="ACC2" gate="-1" pin="K"/>
-<wire x1="-45.72" y1="71.12" x2="-43.18" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$22" class="0">
@@ -20722,41 +20711,41 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <junction x="-12.7" y="45.72"/>
 <label x="-10.16" y="45.72" size="1.778" layer="95"/>
 <pinref part="U1" gate="A" pin="OUT"/>
-<pinref part="R90" gate="G$1" pin="2"/>
+<pinref part="R17" gate="G$1" pin="2"/>
 <wire x1="-17.78" y1="43.18" x2="-17.78" y2="45.72" width="0.1524" layer="91"/>
 <junction x="-17.78" y="45.72"/>
 </segment>
 <segment>
 <wire x1="88.9" y1="111.76" x2="93.98" y2="111.76" width="0.1524" layer="91"/>
 <label x="93.98" y="111.76" size="1.778" layer="95"/>
-<pinref part="L1" gate="-2" pin="1"/>
+<pinref part="CON1" gate="-2" pin="1"/>
 <wire x1="91.44" y1="99.06" x2="88.9" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="111.76" x2="88.9" y2="99.06" width="0.1524" layer="91"/>
-<pinref part="L2" gate="-2" pin="1"/>
+<pinref part="CON2" gate="-2" pin="1"/>
 <wire x1="91.44" y1="71.12" x2="88.9" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="99.06" x2="88.9" y2="71.12" width="0.1524" layer="91"/>
 <junction x="88.9" y="99.06"/>
-<pinref part="L3" gate="-2" pin="1"/>
+<pinref part="CON3" gate="-2" pin="1"/>
 <wire x1="91.44" y1="43.18" x2="88.9" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="71.12" x2="88.9" y2="43.18" width="0.1524" layer="91"/>
 <junction x="88.9" y="71.12"/>
-<pinref part="L4" gate="-2" pin="1"/>
+<pinref part="CON4" gate="-2" pin="1"/>
 <wire x1="91.44" y1="15.24" x2="88.9" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="43.18" x2="88.9" y2="15.24" width="0.1524" layer="91"/>
 <junction x="88.9" y="43.18"/>
-<pinref part="L5" gate="-2" pin="1"/>
+<pinref part="CON5" gate="-2" pin="1"/>
 <wire x1="91.44" y1="-12.7" x2="88.9" y2="-12.7" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="15.24" x2="88.9" y2="-12.7" width="0.1524" layer="91"/>
 <junction x="88.9" y="15.24"/>
-<pinref part="L6" gate="-2" pin="1"/>
+<pinref part="CON6" gate="-2" pin="1"/>
 <wire x1="91.44" y1="-40.64" x2="88.9" y2="-40.64" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="-12.7" x2="88.9" y2="-40.64" width="0.1524" layer="91"/>
 <junction x="88.9" y="-12.7"/>
-<pinref part="L7" gate="-2" pin="1"/>
+<pinref part="CON7" gate="-2" pin="1"/>
 <wire x1="88.9" y1="-40.64" x2="88.9" y2="-68.58" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="-68.58" x2="91.44" y2="-68.58" width="0.1524" layer="91"/>
 <junction x="88.9" y="-40.64"/>
-<pinref part="L8" gate="-2" pin="1"/>
+<pinref part="CON8" gate="-2" pin="1"/>
 <wire x1="91.44" y1="-96.52" x2="88.9" y2="-96.52" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="-68.58" x2="88.9" y2="-96.52" width="0.1524" layer="91"/>
 <junction x="88.9" y="-68.58"/>
@@ -20765,7 +20754,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$29" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="ADJ/GND"/>
-<pinref part="R90" gate="G$1" pin="1"/>
+<pinref part="R17" gate="G$1" pin="1"/>
 <wire x1="-55.88" y1="30.48" x2="-55.88" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="-17.78" y1="33.02" x2="-17.78" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="-17.78" y1="30.48" x2="-55.88" y2="30.48" width="0.1524" layer="91"/>
@@ -20777,7 +20766,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$1" class="0">
 <segment>
 <pinref part="Q1" gate="G$0" pin="C"/>
-<pinref part="L1" gate="-1" pin="1"/>
+<pinref part="CON1" gate="-1" pin="1"/>
 <wire x1="63.5" y1="101.6" x2="63.5" y2="104.14" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="104.14" x2="91.44" y2="104.14" width="0.1524" layer="91"/>
 </segment>
@@ -20888,44 +20877,33 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 </net>
 <net name="RASP_SUPPLY" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="FB"/>
-<wire x1="-58.42" y1="-22.86" x2="-63.5" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="-63.5" y1="-22.86" x2="-63.5" y2="-7.62" width="0.1524" layer="91"/>
-<wire x1="-63.5" y1="-7.62" x2="-22.86" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="R110" gate="G$1" pin="2"/>
-<pinref part="R100" gate="G$1" pin="2"/>
-<wire x1="-66.04" y1="-25.4" x2="-66.04" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="-66.04" y1="-22.86" x2="-63.5" y2="-22.86" width="0.1524" layer="91"/>
-<junction x="-63.5" y="-22.86"/>
-</segment>
-<segment>
 <pinref part="RASPBERRY" gate="G$1" pin="5V0"/>
 <wire x1="10.16" y1="-60.96" x2="15.24" y2="-60.96" width="0.1524" layer="91"/>
 <label x="15.24" y="-60.96" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="C9" gate="G$1" pin="1"/>
-<pinref part="L9" gate="G$1" pin="2"/>
+<pinref part="C7" gate="G$1" pin="1"/>
+<pinref part="L1" gate="G$1" pin="2"/>
 <junction x="-2.54" y="-17.78"/>
 <wire x1="-2.54" y1="-17.78" x2="-5.08" y2="-17.78" width="0.1524" layer="91"/>
 <junction x="-2.54" y="-17.78"/>
 <wire x1="12.7" y1="-17.78" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
-<pinref part="C10" gate="G$1" pin="1"/>
+<pinref part="C8" gate="G$1" pin="1"/>
 <wire x1="7.62" y1="-22.86" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
 <wire x1="7.62" y1="-7.62" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
 <junction x="7.62" y="-17.78"/>
 <wire x1="7.62" y1="-17.78" x2="-2.54" y2="-17.78" width="0.1524" layer="91"/>
 <wire x1="-2.54" y1="-17.78" x2="-2.54" y2="-22.86" width="0.1524" layer="91"/>
 <label x="12.7" y="-17.78" size="1.778" layer="95" rot="R90"/>
-<wire x1="2.54" y1="-7.62" x2="7.62" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="R120" gate="G$1" pin="1"/>
+<pinref part="R20" gate="G$1" pin="1"/>
+<wire x1="7.62" y1="-7.62" x2="2.54" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$32" class="0">
 <segment>
 <pinref part="D1" gate="G$1" pin="K"/>
 <wire x1="-25.4" y1="-20.32" x2="-25.4" y2="-17.78" width="0.1524" layer="91"/>
-<pinref part="L9" gate="G$1" pin="1"/>
+<pinref part="L1" gate="G$1" pin="1"/>
 <wire x1="-25.4" y1="-17.78" x2="-20.32" y2="-17.78" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="OUTPUT"/>
 <wire x1="-58.42" y1="-17.78" x2="-60.96" y2="-17.78" width="0.1524" layer="91"/>
@@ -20933,22 +20911,6 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <wire x1="-60.96" y1="-10.16" x2="-25.4" y2="-10.16" width="0.1524" layer="91"/>
 <wire x1="-25.4" y1="-10.16" x2="-25.4" y2="-17.78" width="0.1524" layer="91"/>
 <junction x="-25.4" y="-17.78"/>
-</segment>
-</net>
-<net name="N$28" class="0">
-<segment>
-<pinref part="R110" gate="G$1" pin="1"/>
-<wire x1="-12.7" y1="-7.62" x2="-7.62" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="R120" gate="G$1" pin="2"/>
-</segment>
-</net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="ACC1" gate="-1" pin="K"/>
-<wire x1="-43.18" y1="88.9" x2="-45.72" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="-45.72" y1="88.9" x2="-45.72" y2="99.06" width="0.1524" layer="91"/>
-<pinref part="SWITCH" gate="-2" pin="K"/>
-<wire x1="-45.72" y1="99.06" x2="-43.18" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$5" class="0">
@@ -20961,7 +20923,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$6" class="0">
 <segment>
 <pinref part="Q2" gate="G$0" pin="C"/>
-<pinref part="L2" gate="-1" pin="1"/>
+<pinref part="CON2" gate="-1" pin="1"/>
 <wire x1="63.5" y1="73.66" x2="63.5" y2="76.2" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="76.2" x2="91.44" y2="76.2" width="0.1524" layer="91"/>
 </segment>
@@ -20976,7 +20938,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$10" class="0">
 <segment>
 <pinref part="Q3" gate="G$0" pin="C"/>
-<pinref part="L3" gate="-1" pin="1"/>
+<pinref part="CON3" gate="-1" pin="1"/>
 <wire x1="63.5" y1="45.72" x2="63.5" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="48.26" x2="91.44" y2="48.26" width="0.1524" layer="91"/>
 </segment>
@@ -20991,7 +20953,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$14" class="0">
 <segment>
 <pinref part="Q4" gate="G$0" pin="C"/>
-<pinref part="L4" gate="-1" pin="1"/>
+<pinref part="CON4" gate="-1" pin="1"/>
 <wire x1="63.5" y1="17.78" x2="63.5" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="20.32" x2="91.44" y2="20.32" width="0.1524" layer="91"/>
 </segment>
@@ -21006,7 +20968,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$18" class="0">
 <segment>
 <pinref part="Q5" gate="G$0" pin="C"/>
-<pinref part="L5" gate="-1" pin="1"/>
+<pinref part="CON5" gate="-1" pin="1"/>
 <wire x1="63.5" y1="-10.16" x2="63.5" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="-7.62" x2="91.44" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
@@ -21021,7 +20983,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$34" class="0">
 <segment>
 <pinref part="Q6" gate="G$0" pin="C"/>
-<pinref part="L6" gate="-1" pin="1"/>
+<pinref part="CON6" gate="-1" pin="1"/>
 <wire x1="63.5" y1="-38.1" x2="63.5" y2="-35.56" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="-35.56" x2="91.44" y2="-35.56" width="0.1524" layer="91"/>
 </segment>
@@ -21036,7 +20998,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$38" class="0">
 <segment>
 <pinref part="Q7" gate="G$0" pin="C"/>
-<pinref part="L7" gate="-1" pin="1"/>
+<pinref part="CON7" gate="-1" pin="1"/>
 <wire x1="63.5" y1="-66.04" x2="63.5" y2="-63.5" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="-63.5" x2="91.44" y2="-63.5" width="0.1524" layer="91"/>
 </segment>
@@ -21051,9 +21013,47 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 <net name="N$42" class="0">
 <segment>
 <pinref part="Q8" gate="G$0" pin="C"/>
-<pinref part="L8" gate="-1" pin="1"/>
+<pinref part="CON8" gate="-1" pin="1"/>
 <wire x1="63.5" y1="-93.98" x2="63.5" y2="-91.44" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="-91.44" x2="91.44" y2="-91.44" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="ACC2" gate="-1" pin="K"/>
+<wire x1="-33.02" y1="86.36" x2="-35.56" y2="86.36" width="0.1524" layer="91"/>
+<pinref part="ACC1" gate="-2" pin="K"/>
+<wire x1="-33.02" y1="76.2" x2="-35.56" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="86.36" x2="-33.02" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="SWITCH" gate="-1" pin="K"/>
+<wire x1="-35.56" y1="104.14" x2="-33.02" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="104.14" x2="-33.02" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="ACC2" gate="-2" pin="K"/>
+<wire x1="-33.02" y1="93.98" x2="-35.56" y2="93.98" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="R20" gate="G$1" pin="2"/>
+<pinref part="R19" gate="G$1" pin="1"/>
+<wire x1="-7.62" y1="-7.62" x2="-12.7" y2="-7.62" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="R19" gate="G$1" pin="2"/>
+<wire x1="-22.86" y1="-7.62" x2="-63.5" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="-7.62" x2="-63.5" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="FB"/>
+<wire x1="-63.5" y1="-22.86" x2="-58.42" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="R18" gate="G$1" pin="2"/>
+<wire x1="-66.04" y1="-25.4" x2="-66.04" y2="-22.86" width="0.1524" layer="91"/>
+<wire x1="-66.04" y1="-22.86" x2="-63.5" y2="-22.86" width="0.1524" layer="91"/>
+<junction x="-63.5" y="-22.86"/>
 </segment>
 </net>
 </nets>
