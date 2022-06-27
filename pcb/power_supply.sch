@@ -21058,6 +21058,11 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="104,1,10.16,-60.96,RASPBERRY,5V0,RASP_SUPPLY,,,"/>
+<approved hash="204,1,10.16,-63.5,RASPBERRY,3V3,,,,"/>
+<approved hash="104,1,10.16,-114.3,RASPBERRY,SHIELD,GND,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>
