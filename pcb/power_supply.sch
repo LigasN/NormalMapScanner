@@ -179,183 +179,6 @@ In this library the device names are the same as the pin names of the symbols, t
 </deviceset>
 </devicesets>
 </library>
-<library name="RASPBERRY_PI_3_MODEL_B_">
-<packages>
-<package name="MODULE_RASPBERRY_PI_3_MODEL_B+">
-<wire x1="-42.5" y1="25" x2="-42.5" y2="-25" width="0.127" layer="21"/>
-<wire x1="-42.5" y1="-25" x2="-39.5" y2="-28" width="0.127" layer="21" curve="90"/>
-<wire x1="-39.5" y1="-28" x2="39.5" y2="-28" width="0.127" layer="21"/>
-<wire x1="39.5" y1="-28" x2="42.5" y2="-25" width="0.127" layer="21" curve="90"/>
-<wire x1="42.5" y1="-25" x2="42.5" y2="25" width="0.127" layer="21"/>
-<wire x1="42.5" y1="25" x2="39.5" y2="28" width="0.127" layer="21" curve="90"/>
-<wire x1="39.5" y1="28" x2="-39.5" y2="28" width="0.127" layer="21"/>
-<wire x1="-39.5" y1="28" x2="-42.5" y2="25" width="0.127" layer="21" curve="90"/>
-<text x="-40.7" y="-30.6" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-<wire x1="23.5" y1="-25.5" x2="45" y2="-25.5" width="0.127" layer="51" style="shortdash"/>
-<wire x1="45" y1="-25.5" x2="45" y2="25.5" width="0.127" layer="51" style="shortdash"/>
-<wire x1="45" y1="25.5" x2="23.5" y2="25.5" width="0.127" layer="51" style="shortdash"/>
-<wire x1="23.5" y1="25.5" x2="23.5" y2="-25.5" width="0.127" layer="51" style="shortdash"/>
-<text x="-40.5" y="29" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<wire x1="-42.75" y1="-30.75" x2="-42.75" y2="28.25" width="0.05" layer="39"/>
-<wire x1="-42.75" y1="28.25" x2="45.25" y2="28.25" width="0.05" layer="39"/>
-<wire x1="45.25" y1="28.25" x2="45.25" y2="-30.75" width="0.05" layer="39"/>
-<wire x1="45.25" y1="-30.75" x2="-42.75" y2="-30.75" width="0.05" layer="39"/>
-<circle x="-43.4" y="23" radius="0.1" width="0.2" layer="21"/>
-<circle x="-43.4" y="23" radius="0.1" width="0.2" layer="51"/>
-<wire x1="-42.5" y1="25" x2="-42.5" y2="-25" width="0.127" layer="51"/>
-<wire x1="-42.5" y1="-25" x2="-39.5" y2="-28" width="0.127" layer="51" curve="90"/>
-<wire x1="-39.5" y1="-28" x2="39.5" y2="-28" width="0.127" layer="51"/>
-<wire x1="39.5" y1="-28" x2="42.5" y2="-25" width="0.127" layer="51" curve="90"/>
-<wire x1="42.5" y1="-25" x2="42.5" y2="25" width="0.127" layer="51"/>
-<wire x1="42.5" y1="25" x2="39.5" y2="28" width="0.127" layer="51" curve="90"/>
-<wire x1="39.5" y1="28" x2="-39.5" y2="28" width="0.127" layer="51"/>
-<wire x1="-39.5" y1="28" x2="-42.5" y2="25" width="0.127" layer="51" curve="90"/>
-<pad name="S4" x="-39" y="-24.5" drill="2.75" diameter="6.2"/>
-<pad name="S3" x="19" y="-24.5" drill="2.75" diameter="6.2"/>
-<pad name="S2" x="19" y="24.5" drill="2.75" diameter="6.2"/>
-<pad name="S1" x="-39" y="24.5" drill="2.75" diameter="6.2"/>
-<pad name="1" x="-34.13" y="23.23" drill="1.016" shape="square"/>
-<pad name="3" x="-31.59" y="23.23" drill="1.016"/>
-<pad name="5" x="-29.05" y="23.23" drill="1.016"/>
-<pad name="7" x="-26.51" y="23.23" drill="1.016"/>
-<pad name="9" x="-23.97" y="23.23" drill="1.016"/>
-<pad name="11" x="-21.43" y="23.23" drill="1.016"/>
-<pad name="2" x="-34.13" y="25.77" drill="1.016"/>
-<pad name="4" x="-31.59" y="25.77" drill="1.016"/>
-<pad name="6" x="-29.05" y="25.77" drill="1.016"/>
-<pad name="8" x="-26.51" y="25.77" drill="1.016"/>
-<pad name="10" x="-23.97" y="25.77" drill="1.016"/>
-<pad name="12" x="-21.43" y="25.77" drill="1.016"/>
-<pad name="13" x="-18.89" y="23.23" drill="1.016"/>
-<pad name="14" x="-18.89" y="25.77" drill="1.016"/>
-<pad name="15" x="-16.35" y="23.23" drill="1.016"/>
-<pad name="17" x="-13.81" y="23.23" drill="1.016"/>
-<pad name="19" x="-11.27" y="23.23" drill="1.016"/>
-<pad name="21" x="-8.73" y="23.23" drill="1.016"/>
-<pad name="23" x="-6.19" y="23.23" drill="1.016"/>
-<pad name="25" x="-3.65" y="23.23" drill="1.016"/>
-<pad name="16" x="-16.35" y="25.77" drill="1.016"/>
-<pad name="18" x="-13.81" y="25.77" drill="1.016"/>
-<pad name="20" x="-11.27" y="25.77" drill="1.016"/>
-<pad name="22" x="-8.73" y="25.77" drill="1.016"/>
-<pad name="24" x="-6.19" y="25.77" drill="1.016"/>
-<pad name="26" x="-3.65" y="25.77" drill="1.016"/>
-<pad name="27" x="-1.11" y="23.23" drill="1.016"/>
-<pad name="28" x="-1.11" y="25.77" drill="1.016"/>
-<pad name="29" x="1.43" y="23.23" drill="1.016"/>
-<pad name="31" x="3.97" y="23.23" drill="1.016"/>
-<pad name="33" x="6.51" y="23.23" drill="1.016"/>
-<pad name="35" x="9.05" y="23.23" drill="1.016"/>
-<pad name="37" x="11.59" y="23.23" drill="1.016"/>
-<pad name="39" x="14.13" y="23.23" drill="1.016"/>
-<pad name="30" x="1.43" y="25.77" drill="1.016"/>
-<pad name="32" x="3.97" y="25.77" drill="1.016"/>
-<pad name="34" x="6.51" y="25.77" drill="1.016"/>
-<pad name="36" x="9.05" y="25.77" drill="1.016"/>
-<pad name="38" x="11.59" y="25.77" drill="1.016"/>
-<pad name="40" x="14.13" y="25.77" drill="1.016"/>
-</package>
-</packages>
-<symbols>
-<symbol name="RASPBERRY_PI_3_MODEL_B+">
-<wire x1="-22.86" y1="25.4" x2="20.32" y2="25.4" width="0.254" layer="94"/>
-<wire x1="20.32" y1="25.4" x2="20.32" y2="-35.56" width="0.254" layer="94"/>
-<wire x1="20.32" y1="-35.56" x2="-22.86" y2="-35.56" width="0.254" layer="94"/>
-<wire x1="-22.86" y1="-35.56" x2="-22.86" y2="25.4" width="0.254" layer="94"/>
-<text x="-22.86" y="27.94" size="1.27" layer="95">&gt;NAME</text>
-<text x="-22.86" y="-37.465" size="1.27" layer="96">&gt;VALUE</text>
-<pin name="5V0" x="25.4" y="22.86" length="middle" direction="pwr" rot="R180"/>
-<pin name="3V3" x="25.4" y="20.32" length="middle" direction="pwr" rot="R180"/>
-<pin name="GPIO2/SDA1" x="-27.94" y="20.32" length="middle"/>
-<pin name="GPIO3/SCL1" x="-27.94" y="17.78" length="middle"/>
-<pin name="GPIO4/GPIO_GCKL" x="-27.94" y="15.24" length="middle"/>
-<pin name="TXD0/GPIO14" x="25.4" y="15.24" length="middle" rot="R180"/>
-<pin name="GND" x="25.4" y="-33.02" length="middle" direction="pwr" rot="R180"/>
-<pin name="RXD0/GPIO15" x="25.4" y="12.7" length="middle" rot="R180"/>
-<pin name="GPIO17/GPIO_GEN0" x="-27.94" y="10.16" length="middle"/>
-<pin name="GPIO18/GPIO_GEN1" x="-27.94" y="5.08" length="middle"/>
-<pin name="GPIO27/GPIO_GEN2" x="-27.94" y="7.62" length="middle"/>
-<pin name="GPIO22/GPIO_GEN3" x="-27.94" y="2.54" length="middle"/>
-<pin name="GPIO23/GPIO_GEN4" x="-27.94" y="0" length="middle"/>
-<pin name="GPIO24/GPIO_GEN5" x="-27.94" y="-2.54" length="middle"/>
-<pin name="GPIO10/SPI_MOSI" x="-27.94" y="-17.78" length="middle"/>
-<pin name="GPIO9/SPI_MISO" x="-27.94" y="-20.32" length="middle"/>
-<pin name="GPIO25/GPIO_GEN6" x="-27.94" y="-5.08" length="middle"/>
-<pin name="GPIO11/SPI_SCLK" x="-27.94" y="-15.24" length="middle"/>
-<pin name="GPIO8/!SPI_CE0!" x="-27.94" y="-10.16" length="middle"/>
-<pin name="GPIO7/!SPI_CE1!" x="-27.94" y="-12.7" length="middle"/>
-<pin name="ID_SD" x="-27.94" y="-25.4" length="middle"/>
-<pin name="ID_SC" x="-27.94" y="-27.94" length="middle"/>
-<pin name="GPIO5" x="25.4" y="2.54" length="middle" rot="R180"/>
-<pin name="GPIO6" x="25.4" y="0" length="middle" rot="R180"/>
-<pin name="GPIO12" x="25.4" y="-2.54" length="middle" rot="R180"/>
-<pin name="GPIO13" x="25.4" y="-5.08" length="middle" rot="R180"/>
-<pin name="GPIO19" x="25.4" y="-10.16" length="middle" rot="R180"/>
-<pin name="GPIO16" x="25.4" y="-7.62" length="middle" rot="R180"/>
-<pin name="GPIO26" x="25.4" y="-17.78" length="middle" rot="R180"/>
-<pin name="GPIO20" x="25.4" y="-12.7" length="middle" rot="R180"/>
-<pin name="GPIO21" x="25.4" y="-15.24" length="middle" rot="R180"/>
-<pin name="SHIELD" x="25.4" y="-30.48" length="middle" direction="pwr" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="RASPBERRY_PI_3_MODEL_B+" prefix="U">
-<description>BCM2835 Raspberry Pi Model B+ - ARM11, VideoCore MPU Embedded Evaluation Board  &lt;a href="https://pricing.snapeda.com/parts/RASPBERRY%20PI%203%20MODEL%20B%2B/Raspberry%20Pi/view-part?ref=eda"&gt;Check availability&lt;/a&gt;</description>
-<gates>
-<gate name="G$1" symbol="RASPBERRY_PI_3_MODEL_B+" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="MODULE_RASPBERRY_PI_3_MODEL_B+">
-<connects>
-<connect gate="G$1" pin="3V3" pad="1 17"/>
-<connect gate="G$1" pin="5V0" pad="2 4"/>
-<connect gate="G$1" pin="GND" pad="6 9 14 20 25 30 34 39"/>
-<connect gate="G$1" pin="GPIO10/SPI_MOSI" pad="19"/>
-<connect gate="G$1" pin="GPIO11/SPI_SCLK" pad="23"/>
-<connect gate="G$1" pin="GPIO12" pad="32"/>
-<connect gate="G$1" pin="GPIO13" pad="33"/>
-<connect gate="G$1" pin="GPIO16" pad="36"/>
-<connect gate="G$1" pin="GPIO17/GPIO_GEN0" pad="11"/>
-<connect gate="G$1" pin="GPIO18/GPIO_GEN1" pad="12"/>
-<connect gate="G$1" pin="GPIO19" pad="35"/>
-<connect gate="G$1" pin="GPIO2/SDA1" pad="3"/>
-<connect gate="G$1" pin="GPIO20" pad="38"/>
-<connect gate="G$1" pin="GPIO21" pad="40"/>
-<connect gate="G$1" pin="GPIO22/GPIO_GEN3" pad="15"/>
-<connect gate="G$1" pin="GPIO23/GPIO_GEN4" pad="16"/>
-<connect gate="G$1" pin="GPIO24/GPIO_GEN5" pad="18"/>
-<connect gate="G$1" pin="GPIO25/GPIO_GEN6" pad="22"/>
-<connect gate="G$1" pin="GPIO26" pad="37"/>
-<connect gate="G$1" pin="GPIO27/GPIO_GEN2" pad="13"/>
-<connect gate="G$1" pin="GPIO3/SCL1" pad="5"/>
-<connect gate="G$1" pin="GPIO4/GPIO_GCKL" pad="7"/>
-<connect gate="G$1" pin="GPIO5" pad="29"/>
-<connect gate="G$1" pin="GPIO6" pad="31"/>
-<connect gate="G$1" pin="GPIO7/!SPI_CE1!" pad="26"/>
-<connect gate="G$1" pin="GPIO8/!SPI_CE0!" pad="24"/>
-<connect gate="G$1" pin="GPIO9/SPI_MISO" pad="21"/>
-<connect gate="G$1" pin="ID_SC" pad="28"/>
-<connect gate="G$1" pin="ID_SD" pad="27"/>
-<connect gate="G$1" pin="RXD0/GPIO15" pad="10"/>
-<connect gate="G$1" pin="SHIELD" pad="S1 S2 S3 S4"/>
-<connect gate="G$1" pin="TXD0/GPIO14" pad="8"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="AVAILABILITY" value="In Stock"/>
-<attribute name="DESCRIPTION" value=" RASPBERRY PI 3 MOD B+ BCM2837B0 "/>
-<attribute name="MF" value="Raspberry Pi"/>
-<attribute name="MP" value="RASPBERRY PI 3 MODEL B+"/>
-<attribute name="PACKAGE" value="None"/>
-<attribute name="PRICE" value="None"/>
-<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/RASPBERRY PI 3 MODEL B+/?ref=eda"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
 <description>&lt;b&gt;Resistors, Capacitors, Inductors&lt;/b&gt;&lt;p&gt;
 Based on the previous libraries:
@@ -20136,6 +19959,182 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 </deviceset>
 </devicesets>
 </library>
+<library name="RASPBERRY_PI_3_MODEL_B_NoScrew">
+<packages>
+<package name="MODULE_RASPBERRY_PI_3_MODEL_B+">
+<wire x1="-42.5" y1="25" x2="-42.5" y2="-25" width="0.127" layer="21"/>
+<wire x1="-42.5" y1="-25" x2="-39.5" y2="-28" width="0.127" layer="21" curve="90"/>
+<wire x1="-39.5" y1="-28" x2="39.5" y2="-28" width="0.127" layer="21"/>
+<wire x1="39.5" y1="-28" x2="42.5" y2="-25" width="0.127" layer="21" curve="90"/>
+<wire x1="42.5" y1="-25" x2="42.5" y2="25" width="0.127" layer="21"/>
+<wire x1="42.5" y1="25" x2="39.5" y2="28" width="0.127" layer="21" curve="90"/>
+<wire x1="39.5" y1="28" x2="-39.5" y2="28" width="0.127" layer="21"/>
+<wire x1="-39.5" y1="28" x2="-42.5" y2="25" width="0.127" layer="21" curve="90"/>
+<text x="-40.7" y="-30.6" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<wire x1="23.5" y1="-25.5" x2="45" y2="-25.5" width="0.127" layer="51" style="shortdash"/>
+<wire x1="45" y1="-25.5" x2="45" y2="25.5" width="0.127" layer="51" style="shortdash"/>
+<wire x1="45" y1="25.5" x2="23.5" y2="25.5" width="0.127" layer="51" style="shortdash"/>
+<wire x1="23.5" y1="25.5" x2="23.5" y2="-25.5" width="0.127" layer="51" style="shortdash"/>
+<text x="-40.5" y="29" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<wire x1="-42.75" y1="-30.75" x2="-42.75" y2="28.25" width="0.05" layer="39"/>
+<wire x1="-42.75" y1="28.25" x2="45.25" y2="28.25" width="0.05" layer="39"/>
+<wire x1="45.25" y1="28.25" x2="45.25" y2="-30.75" width="0.05" layer="39"/>
+<wire x1="45.25" y1="-30.75" x2="-42.75" y2="-30.75" width="0.05" layer="39"/>
+<circle x="-43.4" y="23" radius="0.1" width="0.2" layer="21"/>
+<circle x="-43.4" y="23" radius="0.1" width="0.2" layer="51"/>
+<wire x1="-42.5" y1="-25" x2="-39.5" y2="-28" width="0.127" layer="51" curve="90"/>
+<wire x1="-39.5" y1="-28" x2="39.5" y2="-28" width="0.127" layer="51"/>
+<wire x1="39.5" y1="-28" x2="42.5" y2="-25" width="0.127" layer="51" curve="90"/>
+<wire x1="42.5" y1="-25" x2="42.5" y2="25" width="0.127" layer="51"/>
+<wire x1="42.5" y1="25" x2="39.5" y2="28" width="0.127" layer="51" curve="90"/>
+<wire x1="39.5" y1="28" x2="-39.5" y2="28" width="0.127" layer="51"/>
+<wire x1="-39.5" y1="28" x2="-42.5" y2="25" width="0.127" layer="51" curve="90"/>
+<pad name="S4" x="-39" y="-24.5" drill="2.75" diameter="6.2"/>
+<pad name="S3" x="19" y="-24.5" drill="2.75" diameter="6.2"/>
+<pad name="S2" x="19" y="24.5" drill="2.75" diameter="6.2"/>
+<pad name="S1" x="-39" y="24.5" drill="2.75" diameter="3.81"/>
+<pad name="1" x="-34.13" y="23.23" drill="1.016" shape="square"/>
+<pad name="3" x="-31.59" y="23.23" drill="1.016"/>
+<pad name="5" x="-29.05" y="23.23" drill="1.016"/>
+<pad name="7" x="-26.51" y="23.23" drill="1.016"/>
+<pad name="9" x="-23.97" y="23.23" drill="1.016"/>
+<pad name="11" x="-21.43" y="23.23" drill="1.016"/>
+<pad name="2" x="-34.13" y="25.77" drill="1.016"/>
+<pad name="4" x="-31.59" y="25.77" drill="1.016"/>
+<pad name="6" x="-29.05" y="25.77" drill="1.016"/>
+<pad name="8" x="-26.51" y="25.77" drill="1.016"/>
+<pad name="10" x="-23.97" y="25.77" drill="1.016"/>
+<pad name="12" x="-21.43" y="25.77" drill="1.016"/>
+<pad name="13" x="-18.89" y="23.23" drill="1.016"/>
+<pad name="14" x="-18.89" y="25.77" drill="1.016"/>
+<pad name="15" x="-16.35" y="23.23" drill="1.016"/>
+<pad name="17" x="-13.81" y="23.23" drill="1.016"/>
+<pad name="19" x="-11.27" y="23.23" drill="1.016"/>
+<pad name="21" x="-8.73" y="23.23" drill="1.016"/>
+<pad name="23" x="-6.19" y="23.23" drill="1.016"/>
+<pad name="25" x="-3.65" y="23.23" drill="1.016"/>
+<pad name="16" x="-16.35" y="25.77" drill="1.016"/>
+<pad name="18" x="-13.81" y="25.77" drill="1.016"/>
+<pad name="20" x="-11.27" y="25.77" drill="1.016"/>
+<pad name="22" x="-8.73" y="25.77" drill="1.016"/>
+<pad name="24" x="-6.19" y="25.77" drill="1.016"/>
+<pad name="26" x="-3.65" y="25.77" drill="1.016"/>
+<pad name="27" x="-1.11" y="23.23" drill="1.016"/>
+<pad name="28" x="-1.11" y="25.77" drill="1.016"/>
+<pad name="29" x="1.43" y="23.23" drill="1.016"/>
+<pad name="31" x="3.97" y="23.23" drill="1.016"/>
+<pad name="33" x="6.51" y="23.23" drill="1.016"/>
+<pad name="35" x="9.05" y="23.23" drill="1.016"/>
+<pad name="37" x="11.59" y="23.23" drill="1.016"/>
+<pad name="39" x="14.13" y="23.23" drill="1.016"/>
+<pad name="30" x="1.43" y="25.77" drill="1.016"/>
+<pad name="32" x="3.97" y="25.77" drill="1.016"/>
+<pad name="34" x="6.51" y="25.77" drill="1.016"/>
+<pad name="36" x="9.05" y="25.77" drill="1.016"/>
+<pad name="38" x="11.59" y="25.77" drill="1.016"/>
+<pad name="40" x="14.13" y="25.77" drill="1.016"/>
+</package>
+</packages>
+<symbols>
+<symbol name="RASPBERRY_PI_3_MODEL_B+">
+<wire x1="-22.86" y1="25.4" x2="20.32" y2="25.4" width="0.254" layer="94"/>
+<wire x1="20.32" y1="25.4" x2="20.32" y2="-35.56" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-35.56" x2="-22.86" y2="-35.56" width="0.254" layer="94"/>
+<wire x1="-22.86" y1="-35.56" x2="-22.86" y2="25.4" width="0.254" layer="94"/>
+<text x="-22.86" y="27.94" size="1.27" layer="95">&gt;NAME</text>
+<text x="-22.86" y="-37.465" size="1.27" layer="96">&gt;VALUE</text>
+<pin name="5V0" x="25.4" y="22.86" length="middle" direction="pwr" rot="R180"/>
+<pin name="3V3" x="25.4" y="20.32" length="middle" direction="pwr" rot="R180"/>
+<pin name="GPIO2/SDA1" x="-27.94" y="20.32" length="middle"/>
+<pin name="GPIO3/SCL1" x="-27.94" y="17.78" length="middle"/>
+<pin name="GPIO4/GPIO_GCKL" x="-27.94" y="15.24" length="middle"/>
+<pin name="TXD0/GPIO14" x="25.4" y="15.24" length="middle" rot="R180"/>
+<pin name="GND" x="25.4" y="-33.02" length="middle" direction="pwr" rot="R180"/>
+<pin name="RXD0/GPIO15" x="25.4" y="12.7" length="middle" rot="R180"/>
+<pin name="GPIO17/GPIO_GEN0" x="-27.94" y="10.16" length="middle"/>
+<pin name="GPIO18/GPIO_GEN1" x="-27.94" y="5.08" length="middle"/>
+<pin name="GPIO27/GPIO_GEN2" x="-27.94" y="7.62" length="middle"/>
+<pin name="GPIO22/GPIO_GEN3" x="-27.94" y="2.54" length="middle"/>
+<pin name="GPIO23/GPIO_GEN4" x="-27.94" y="0" length="middle"/>
+<pin name="GPIO24/GPIO_GEN5" x="-27.94" y="-2.54" length="middle"/>
+<pin name="GPIO10/SPI_MOSI" x="-27.94" y="-17.78" length="middle"/>
+<pin name="GPIO9/SPI_MISO" x="-27.94" y="-20.32" length="middle"/>
+<pin name="GPIO25/GPIO_GEN6" x="-27.94" y="-5.08" length="middle"/>
+<pin name="GPIO11/SPI_SCLK" x="-27.94" y="-15.24" length="middle"/>
+<pin name="GPIO8/!SPI_CE0!" x="-27.94" y="-10.16" length="middle"/>
+<pin name="GPIO7/!SPI_CE1!" x="-27.94" y="-12.7" length="middle"/>
+<pin name="ID_SD" x="-27.94" y="-25.4" length="middle"/>
+<pin name="ID_SC" x="-27.94" y="-27.94" length="middle"/>
+<pin name="GPIO5" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="GPIO6" x="25.4" y="0" length="middle" rot="R180"/>
+<pin name="GPIO12" x="25.4" y="-2.54" length="middle" rot="R180"/>
+<pin name="GPIO13" x="25.4" y="-5.08" length="middle" rot="R180"/>
+<pin name="GPIO19" x="25.4" y="-10.16" length="middle" rot="R180"/>
+<pin name="GPIO16" x="25.4" y="-7.62" length="middle" rot="R180"/>
+<pin name="GPIO26" x="25.4" y="-17.78" length="middle" rot="R180"/>
+<pin name="GPIO20" x="25.4" y="-12.7" length="middle" rot="R180"/>
+<pin name="GPIO21" x="25.4" y="-15.24" length="middle" rot="R180"/>
+<pin name="SHIELD" x="25.4" y="-30.48" length="middle" direction="pwr" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="RASPBERRY_PI_3_MODEL_B+" prefix="U">
+<description>BCM2835 Raspberry Pi Model B+ - ARM11, VideoCore MPU Embedded Evaluation Board  &lt;a href="https://pricing.snapeda.com/parts/RASPBERRY%20PI%203%20MODEL%20B%2B/Raspberry%20Pi/view-part?ref=eda"&gt;Check availability&lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="RASPBERRY_PI_3_MODEL_B+" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="MODULE_RASPBERRY_PI_3_MODEL_B+">
+<connects>
+<connect gate="G$1" pin="3V3" pad="1 17"/>
+<connect gate="G$1" pin="5V0" pad="2 4"/>
+<connect gate="G$1" pin="GND" pad="6 9 14 20 25 30 34 39"/>
+<connect gate="G$1" pin="GPIO10/SPI_MOSI" pad="19"/>
+<connect gate="G$1" pin="GPIO11/SPI_SCLK" pad="23"/>
+<connect gate="G$1" pin="GPIO12" pad="32"/>
+<connect gate="G$1" pin="GPIO13" pad="33"/>
+<connect gate="G$1" pin="GPIO16" pad="36"/>
+<connect gate="G$1" pin="GPIO17/GPIO_GEN0" pad="11"/>
+<connect gate="G$1" pin="GPIO18/GPIO_GEN1" pad="12"/>
+<connect gate="G$1" pin="GPIO19" pad="35"/>
+<connect gate="G$1" pin="GPIO2/SDA1" pad="3"/>
+<connect gate="G$1" pin="GPIO20" pad="38"/>
+<connect gate="G$1" pin="GPIO21" pad="40"/>
+<connect gate="G$1" pin="GPIO22/GPIO_GEN3" pad="15"/>
+<connect gate="G$1" pin="GPIO23/GPIO_GEN4" pad="16"/>
+<connect gate="G$1" pin="GPIO24/GPIO_GEN5" pad="18"/>
+<connect gate="G$1" pin="GPIO25/GPIO_GEN6" pad="22"/>
+<connect gate="G$1" pin="GPIO26" pad="37"/>
+<connect gate="G$1" pin="GPIO27/GPIO_GEN2" pad="13"/>
+<connect gate="G$1" pin="GPIO3/SCL1" pad="5"/>
+<connect gate="G$1" pin="GPIO4/GPIO_GCKL" pad="7"/>
+<connect gate="G$1" pin="GPIO5" pad="29"/>
+<connect gate="G$1" pin="GPIO6" pad="31"/>
+<connect gate="G$1" pin="GPIO7/!SPI_CE1!" pad="26"/>
+<connect gate="G$1" pin="GPIO8/!SPI_CE0!" pad="24"/>
+<connect gate="G$1" pin="GPIO9/SPI_MISO" pad="21"/>
+<connect gate="G$1" pin="ID_SC" pad="28"/>
+<connect gate="G$1" pin="ID_SD" pad="27"/>
+<connect gate="G$1" pin="RXD0/GPIO15" pad="10"/>
+<connect gate="G$1" pin="SHIELD" pad="S1 S2 S3 S4"/>
+<connect gate="G$1" pin="TXD0/GPIO14" pad="8"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="AVAILABILITY" value="In Stock"/>
+<attribute name="DESCRIPTION" value=" RASPBERRY PI 3 MOD B+ BCM2837B0 "/>
+<attribute name="MF" value="Raspberry Pi"/>
+<attribute name="MP" value="RASPBERRY PI 3 MODEL B+"/>
+<attribute name="PACKAGE" value="None"/>
+<attribute name="PRICE" value="None"/>
+<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/RASPBERRY PI 3 MODEL B+/?ref=eda"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -20146,7 +20145,7 @@ Source: &lt;a href="https://www.vishay.com/docs/88884/ssb43l.pdf"&gt; Datasheet 
 </class>
 </classes>
 <parts>
-<part name="RASPBERRY" library="RASPBERRY_PI_3_MODEL_B_" deviceset="RASPBERRY_PI_3_MODEL_B+" device=""/>
+<part name="RASPBERRY" library="RASPBERRY_PI_3_MODEL_B_NoScrew" deviceset="RASPBERRY_PI_3_MODEL_B+" device=""/>
 <part name="SUPPLY3" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY2" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY7" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
