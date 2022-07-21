@@ -1,4 +1,4 @@
-"""Calulates normal map texture.
+"""Calculates normal map texture.
 
 Args:
     input files directory (str): input files directory
