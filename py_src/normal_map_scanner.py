@@ -1,9 +1,12 @@
-from multiprocessing.reduction import steal_handle
 import os
 from PIL import Image
 import numpy as np
 
-from normal_map import NormalMap
+import RPi.GPIO as GPIO
+from picamera import PiCamera
+import time
+
+from normal_map.normal_map import NormalMap
 
 # Properties
 sourcefiles = dict()
@@ -21,29 +24,54 @@ verbosity = 1 # Only status
 #        print('File not found: ' + filename)
 
 # Dictionary with GPIO ID for specific light angle
+"""LightsGPIO = {
+    0: 5,
+    45: 6,
+    90: 12,
+    135: 13,
+    180: 16,
+    225: 19,
+    270: 20,
+    315: 21
+}"""
 LightsGPIO = {
-    0: 0,
-    45: 1,
-    90: 2,
-    135: 3,
-    180: 4,
-    225: 5,
-    270: 6,
-    315: 7
+    0: 21,
+    45: 21,
+    90: 21,
+    135: 21,
+    180: 21,
+    225: 21,
+    270: 21,
+    315: 21
 }
 
+camera = PiCamera()
+GPIO.setmode(GPIO.BCM)
+#GPIO.setwarnings(False)
+for GPIOID in LightsGPIO.values():
+    print("Setting GPIOID %d as output", GPIOID)
+    GPIO.setup(GPIOID, GPIO.OUT, initial=0)
+
+
 def makeSingleShot(angle):
+    GPIO.output(LightsGPIO[angle], GPIO.HIGH)
+    time.sleep(1)
+    camera.capture(assets_directory + "/input_" + str(angle) + ".bmp")
+    GPIO.output(LightsGPIO[angle], GPIO.LOW)
+    time.sleep(1)
 
 
 def gatherAllAssets():
     # Ensure that assets directory exist
-    assets_directory = os.path.dirname(os.path.abspath(assets_directory))
     if not os.path.exists(assets_directory):
         os.makedirs(assets_directory, exist_ok=True)
 
     for angle in LightsGPIO.keys():
         makeSingleShot(angle)
-    return 0 
+
+    camera.close()
+    GPIO.cleanup()
+
 
 """def calculateNormalMap():
     for angle in NormalMap.angles:
