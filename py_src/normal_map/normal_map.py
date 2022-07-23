@@ -280,7 +280,8 @@ if __name__ == "__main__":
         "-l", "--log", dest="log", action='store_true', default=False,
         help="Save all logs in ./tmp/log.txt")
     parser.add_argument(
-        "-p", "--no_progress_bar", dest="no_progress_bar", action='store_true', default=False, help="Turns off progress bar.")
+        "-p", "--no_progress_bar", dest="no_progress_bar", 
+        action='store_true', default=False, help="Turns off progress bar.")
 
     args = parser.parse_args()
 
