@@ -1,5 +1,5 @@
 
-from normal_map.normal_map_calculator import calculate_normal_map
+from normal_map.normal_map import calculate_normal_map
 import numpy as np
 
 
