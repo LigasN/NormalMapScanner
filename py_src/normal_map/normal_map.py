@@ -35,6 +35,7 @@ class NormalMap:
         self.image_size = np.array(source_files[0].size)
         self.environment_light = environment_light
         self.normalmap = None
+        self.logfile = None
 
     def __printProgressBar(self, iteration, prefix='', suffix='', decimals=1,
                            length=50, fill='█', printEnd="\r"):
@@ -85,6 +86,11 @@ class NormalMap:
             return np.full(np.shape(v), -np.NINF)
         return v / self.__magnitude(v)
 
+    def __log(self, message):
+        print(message)
+        if self.logfile: 
+            self.logfile.write(message)
+
     def calculateNormalMap(self, verbosity=0, log=False, progressbar=True):
         # Creating tmp directory for future purposes
         if not os.path.exists("./tmp/"):
@@ -92,9 +98,8 @@ class NormalMap:
 
         # Logging initialization
         if (log):
-            sys.stdout = open('./tmp/log.txt', 'w')
-            a = datetime.datetime.now()
-            print(str(datetime.datetime.now()) + '\n')
+            self.logfile = open('./tmp/log.txt', 'w')
+            self.__log(str(datetime.datetime.now()) + '\n')
 
         # single pixel stores sum of RGB colors
         input = dict()
@@ -102,7 +107,7 @@ class NormalMap:
 
         for angle in self.angles:
             if verbosity >= 1:
-                print('Loading of the input data array with angle: %d' %
+                self.__log('Loading of the input data array with angle: %d' %
                       angle)
                 start_time = time.time()
 
@@ -117,11 +122,11 @@ class NormalMap:
                 self.image_size[1], self.image_size[0])
 
             if (verbosity >= 1):
-                print("Loaded and converted in %d ms" %
+                self.__log("Loaded and converted in %d ms" %
                       ((time.time() - start_time) * 1000))
 
         if (verbosity >= 1):
-            print('Calcultion of the positions of the lamps')
+            self.__log('Calcultion of the positions of the lamps')
 
         start_time = time.time()
         lamp_pos = { self.angles[0]: self.lamp_0_position }
@@ -134,12 +139,12 @@ class NormalMap:
                 float(self.lamp_0_position[2])])
 
         if verbosity >= 1:
-            print("Position of lamps calculated in %d ms" %
+            self.__log("Position of lamps calculated in %d ms" %
                   ((time.time() - start_time) * 1000))
-            print('Calculation of the normalmap vectors')
+            self.__log('Calculation of the normalmap vectors')
         
         if verbosity >= 2:
-            print(lamp_pos)
+            self.__log(lamp_pos)
 
         start_time = time.time()
         pixel_size = self.object_size / self.image_size
@@ -173,35 +178,35 @@ class NormalMap:
                 N_vector += L_vector * weight
 
                 if verbosity >= 2:
-                    print("pixel idx [%d, %d]" % (x, y))
-                    print("angle: %d" % angle)
-                    print("pixel size")
-                    print(pixel_size)
-                    print("pixel pos")
-                    print(pixel_pos)
-                    print("Lamp pos")
-                    print(lamp_pos[angle])
-                    print("L vector")
-                    print(L_vector)
-                    print("pixel color")
-                    print(input[angle][y][x])
-                    print("weight")
-                    print(weight)
-                    print("N_vector")
-                    print(L_vector * weight)
-                    print("N_vector after addition")
-                    print(N_vector)
+                    self.__log("pixel idx [%d, %d]" % (x, y))
+                    self.__log("angle: %d" % angle)
+                    self.__log("pixel size")
+                    self.__log(pixel_size)
+                    self.__log("pixel pos")
+                    self.__log(pixel_pos)
+                    self.__log("Lamp pos")
+                    self.__log(lamp_pos[angle])
+                    self.__log("L vector")
+                    self.__log(L_vector)
+                    self.__log("pixel color")
+                    self.__log(input[angle][y][x])
+                    self.__log("weight")
+                    self.__log(weight)
+                    self.__log("N_vector")
+                    self.__log(L_vector * weight)
+                    self.__log("N_vector after addition")
+                    self.__log(N_vector)
 
             output[y][x] = self.__normalize(N_vector)
 
             if verbosity >= 2:
-                print("Output")
-                print(output[y][x])
+                self.__log("Output")
+                self.__log(output[y][x])
 
         if verbosity >= 1:
-            print("\nNormalmap vectors calculated in %d ms" %
+            self.__log("\nNormalmap vectors calculated in %d ms" %
                   ((time.time() - start_time) * 1000))
-            print('Conversion back to PIL')
+            self.__log('Conversion back to PIL')
 
         # Create output image object
         start_time = time.time()
@@ -209,10 +214,10 @@ class NormalMap:
         self.normalmap = Image.fromarray(image_data, mode='RGB')
 
         if verbosity >= 1:
-            print("Convertion back to PIL done in %d ms" %
+            self.__log("Convertion back to PIL done in %d ms" %
                   ((time.time() - start_time) * 1000))
         if (log):
-            sys.stdout.close()  # Close logging
+            self.logfile.close()  # Close logging
 
     def isNormalMapReady(self):
         return self.normalmap != None and self.normalmap.size > [0, 0]
@@ -289,7 +294,7 @@ if __name__ == "__main__":
             args.assets_path + args.input_filename_prefix + str(angle) +
             '.bmp')
 
-    environmentlight = load_image(
+    environment_light = load_image(
         args.assets_path + args.input_filename_prefix +
         args.environment_filename + '.bmp')
 
@@ -298,7 +303,7 @@ if __name__ == "__main__":
                           lamp_0_position=(args.lamp_0_pos_x,
                                            args.lamp_0_pos_y,
                                            args.lamp_0_pos_z),
-                          environment_light=environmentlight)
+                          environment_light=environment_light)
 
     normalmap.calculateNormalMap(verbosity=args.verbosity, log=args.log, 
         progressbar=(not args.no_progress_bar))
