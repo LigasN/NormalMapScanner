@@ -313,4 +313,4 @@ if __name__ == "__main__":
         normalmap.normalmap.show()
         print('Saving')
         
-    normalmap.normalmap.save(args.output_file)
+    normalmap.normalmap.save("./tmp/" + args.output_file)
