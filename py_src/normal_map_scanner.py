@@ -1,22 +1,24 @@
 import os
 from PIL import Image
 import numpy as np
+
+import kivy
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image as uiImage
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 
-
 from normal_map.normal_map import NormalMap
 from stand_driver import Stand
 
+kivy.require("1.9.1")
+Window.fullscreen = True
 
 class NormalMapScanner(App):
-    def build(self):
-
-        return Label(text="NormalMapScanner")
+    pass
 
 # Properties
 sourcefiles = dict()
