@@ -2,11 +2,23 @@ import os
 from PIL import Image
 import numpy as np
 
-import RPi.GPIO as GPIO
-from picamera import PiCamera
-import time
+import kivy
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.image import Image as uiImage
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 
 from normal_map.normal_map import NormalMap
+from stand_driver import Stand
+
+kivy.require("1.9.1")
+Window.fullscreen = True
+
+class NormalMapScanner(App):
+    pass
 
 # Properties
 sourcefiles = dict()
@@ -14,66 +26,19 @@ input_filename_prefix = "input_"
 assets_directory = "./input_assets/"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
+resolution = (300, 300) #px
+object_size = (20, 20) #cm
+lamp_0_position = (40, 0, 20) #cm
 verbosity = 1 # Only status
 
-#def load_image(filename):
-#    try:
-#        return Image.open(
-#            filename)
-#    except FileNotFoundError:
-#        print('File not found: ' + filename)
-
-# Dictionary with GPIO ID for specific light angle
-"""LightsGPIO = {
-    0: 5,
-    45: 6,
-    90: 12,
-    135: 13,
-    180: 16,
-    225: 19,
-    270: 20,
-    315: 21
-}"""
-LightsGPIO = {
-    0: 21,
-    45: 21,
-    90: 21,
-    135: 21,
-    180: 21,
-    225: 21,
-    270: 21,
-    315: 21
-}
-
-camera = PiCamera()
-GPIO.setmode(GPIO.BCM)
-#GPIO.setwarnings(False)
-for GPIOID in LightsGPIO.values():
-    print("Setting GPIOID %d as output", GPIOID)
-    GPIO.setup(GPIOID, GPIO.OUT, initial=0)
+def load_image(filename):
+    try:
+        return Image.open(filename)
+    except FileNotFoundError:
+        print('File not found: ' + filename)
 
 
-def makeSingleShot(angle):
-    GPIO.output(LightsGPIO[angle], GPIO.HIGH)
-    time.sleep(1)
-    camera.capture(assets_directory + "/input_" + str(angle) + ".bmp")
-    GPIO.output(LightsGPIO[angle], GPIO.LOW)
-    time.sleep(1)
-
-
-def gatherAllAssets():
-    # Ensure that assets directory exist
-    if not os.path.exists(assets_directory):
-        os.makedirs(assets_directory, exist_ok=True)
-
-    for angle in LightsGPIO.keys():
-        makeSingleShot(angle)
-
-    camera.close()
-    GPIO.cleanup()
-
-
-"""def calculateNormalMap():
+def calculateNormalMap():
     for angle in NormalMap.angles:
         sourcefiles[angle] = load_image(
             assets_directory + input_filename_prefix + str(angle) +
@@ -96,13 +61,21 @@ def gatherAllAssets():
         print('Saving')
         
     normalmap.normalmap.save(output_file)
-"""
 
 
 def main():
-    gatherAllAssets()
-    #calculateNormalMap()
+    stand = Stand(assets_directory=assets_directory,
+        input_filename_prefix=input_filename_prefix,
+        environment_filename=environment_filename,
+        resolution = resolution
+        )
+    # Ensure that assets directory exist
+    if not os.path.exists(assets_directory):
+        os.makedirs(assets_directory, exist_ok=True)
+    stand.gatherAllAssets()
+    calculateNormalMap()
 
 
 if __name__ == "__main__":
-    main()
+    NormalMapScanner().run()
+    #main()

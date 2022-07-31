@@ -11,15 +11,15 @@ class NormalMap:
     """Calculates normal map texture.
 
     Args:
-        source files: dictionary(int : PIL:Image) - source files given as 
-            a dictionary with key equal to value of the angle of the light 
-            during making a picture and already loaded Image. 
+        source files: dictionary(int : PIL:Image) - source files given as
+            a dictionary with key equal to value of the angle of the light
+            during making a picture and already loaded Image.
         object size: tuple[int] - size of the examined object in milimeters
             given as a 2-tuple (width, height).
-        lamp 0 position: tuple[int] - position of the first lamp of the stand 
+        lamp 0 position: tuple[int] - position of the first lamp of the stand
             in milimeters given as a 3-tuple (x-axis, y-axis, z-axis).
-        environment light: PIL:Image - already loaded Image of the environment 
-            light (no stand lights turned on during making this picture). 
+        environment light: PIL:Image - already loaded Image of the environment
+            light (no stand lights turned on during making this picture).
     """
     R, G, B = 0, 1, 2
     X, Y, Z = 0, 1, 2
@@ -31,7 +31,7 @@ class NormalMap:
             environment_light):
         self.source_files = source_files
         self.object_size = np.array(object_size)
-        self.lamp_0_position = lamp_0_position
+        self.lamp_0_position = np.array(lamp_0_position)
         self.image_size = np.array(source_files[0].size)
         self.environment_light = environment_light
         self.normalmap = None
@@ -142,7 +142,7 @@ class NormalMap:
             self.__log("Position of lamps calculated in %d ms" %
                   ((time.time() - start_time) * 1000))
             self.__log('Calculation of the normalmap vectors')
-        
+
         if verbosity >= 2:
             self.__log(lamp_pos)
 
@@ -313,4 +313,4 @@ if __name__ == "__main__":
         normalmap.normalmap.show()
         print('Saving')
         
-    normalmap.normalmap.save(args.output_file)
+    normalmap.normalmap.save("./tmp/" + args.output_file)

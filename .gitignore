@@ -261,6 +261,7 @@ cython_debug/
 ### User defined ###
 desktop.ini
 *tmp*
+py_src/input_assets
 
 # blender
 *.blend1
@@ -270,6 +271,7 @@ desktop.ini
 *MDK-ARM/
 *EWARM/
 *Debug/
+
 # CrossWorks project files
 !*/*.hzp
 !*/*.hzs
