@@ -2,7 +2,6 @@ import os
 from PIL import Image
 import numpy as np
 
-import kivy
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.gridlayout import GridLayout
@@ -10,15 +9,16 @@ from kivy.uix.label import Label
 from kivy.uix.image import Image as uiImage
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 from normal_map.normal_map import NormalMap
-from stand_driver import Stand
 
-kivy.require("1.9.1")
-Window.fullscreen = True
+try:
+    from stand_driver import Stand
+except:
+    print("Running in no raspbery mode!")
 
-class NormalMapScanner(App):
-    pass
+#Window.fullscreen = True
 
 # Properties
 sourcefiles = dict()
@@ -76,6 +76,36 @@ def main():
     calculateNormalMap()
 
 
-if __name__ == "__main__":
-    NormalMapScanner().run()
+#if __name__ == "__main__":
+ #   NormalMapScannerApp().run()
     #main()
+class MenuScreen(Screen):
+    pass
+
+class FullProcessPart1Screen(Screen):
+    pass
+
+class GatherScreen(Screen):
+    pass
+
+class CalculateScreen(Screen):
+    pass
+
+class CalibrateScreen(Screen):
+    pass
+
+class NormalMapScannerApp(App):
+
+    def build(self):
+        # Create the screen manager
+        sm = ScreenManager()
+        sm.add_widget(MenuScreen(name='menu_screen'))
+        sm.add_widget(FullProcessPart1Screen(name='full_process_part_1_screen'))
+        sm.add_widget(GatherScreen(name='gather_screen'))
+        sm.add_widget(CalculateScreen(name='calculate_screen'))
+        sm.add_widget(CalibrateScreen(name='calibrate_screen'))
+
+        return sm
+
+if __name__ == '__main__':
+    NormalMapScannerApp().run()

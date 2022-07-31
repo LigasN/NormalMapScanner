@@ -1,12 +1,55 @@
-#:kivy 1.9
+<MenuScreen>:
+    GridLayout:
+        cols: 1
+        Image:
+            source: 'logo.png'
+        Button:
+            text: 'Full normal map generation process'
+            on_press: root.manager.current = 'full_process_part_1_screen'
+        Button:
+            text: 'Gather input images'
+            on_press: root.manager.current = 'gather_screen'
+        Button:
+            text: 'Calculate normal map'
+            on_press: root.manager.current = 'calculate_screen'
+        Button:
+            text: 'Calibrate camera'
+            on_press: root.manager.current = 'calibrate_screen'
+        Button:
+            text: 'Quit'
 
+<FullProcessPart1Screen>:
+    GridLayout:
+        cols: 1
+        rows: 2
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu_screen'
 
-FloatLayout:
+<GatherScreen>:
+    GridLayout:
+        cols: 1
+        rows: 2
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu_screen'
 
-    Button:
-        pos: (0,0)
-        font_size: 50
-        background_color: (1, 1, 1, 1)
-        color: (1, 1, 1, 1)
-        size: (80, 400)
-        text: 'Hello from normalmapscanner.kv'
+<CalculateScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu_screen'
+
+<CalibrateScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu_screen'
