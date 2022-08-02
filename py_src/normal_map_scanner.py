@@ -18,7 +18,6 @@ try:
 except:
     print("Running in no raspbery mode!")
 
-#Window.fullscreen = True
 
 # Properties
 sourcefiles = dict()
@@ -76,9 +75,9 @@ def main():
     calculateNormalMap()
 
 
-#if __name__ == "__main__":
- #   NormalMapScannerApp().run()
-    #main()
+#Window.fullscreen = True
+Window.size = (960, 540)
+
 class MenuScreen(Screen):
     pass
 
