@@ -1,35 +1,43 @@
+#:set font_size_height_factor 0.7
+#:set font_size_width_factor 0.09
+
 <MenuScreen>:
     GridLayout:
         rows: 2
         padding: 20
         spacing: 50
         Image:
-            source: 'logo.png'
+            source: 'assets/logo.png'
         GridLayout:
             rows: 2
             padding: (50, 0)
-            spacing: 10
+            spacing: 30
             GridLayout:
                 cols: 3
-                spacing: 20
+                spacing: 30
                 Button:
                     text: 'Full normal map\ngeneration process'
+                    font_size: self.width * font_size_width_factor
                     halign: 'center'
                     on_press: root.manager.current = 'full_process_part_1_screen'      
                 GridLayout:
                     rows:2
-                    spacing: 10
+                    spacing: 30
                     Button:
                         text: 'Gather input images'
+                        font_size: self.width * font_size_width_factor
                         on_press: root.manager.current = 'gather_screen'
                     Button:
                         text: 'Calculate normal map'
+                        font_size: self.width * font_size_width_factor
                         on_press: root.manager.current = 'calculate_screen'
                 Button:
                     text: 'Calibrate camera'
+                    font_size: self.width * font_size_width_factor
                     on_press: root.manager.current = 'calibrate_screen'
             Button:
                 text: 'Quit'
+                font_size: self.height * font_size_height_factor
                 size_hint_y: 0.2
 
 <FullProcessPart1Screen>:
@@ -43,14 +51,29 @@
             on_press: root.manager.current = 'menu_screen'
 
 <GatherScreen>:
-    GridLayout:
-        cols: 1
-        rows: 2
+    FloatLayout:
+        Label:
+            text: 'Gather all input images'
+            size_hint: 0.5, 0.11
+            font_size: self.height
+            halign: 'center'
+            valign: 'middle'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
         Button:
-            text: 'My settings button'
-        Button:
+            size_hint: (0.2, 0.05)
+            pos_hint: {'center_x': 0.11, 'center_y': 0.05}
             text: 'Back to menu'
+            font_size: self.height * font_size_height_factor
             on_press: root.manager.current = 'menu_screen'
+        Button:
+            size_hint: (0.2, 0.05)
+            pos_hint: {'center_x': 0.89, 'center_y': 0.05}
+            text: 'Capture all images'
+            font_size: self.height * font_size_height_factor
+            on_press: root.manager.current = 'menu_screen'
+        GridLayout:
+            padding: 20
+            spacing: 50
 
 <CalculateScreen>:
     BoxLayout:
