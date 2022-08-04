@@ -1,5 +1,6 @@
 #:set font_size_height_factor 0.7
 #:set font_size_width_factor 0.09
+#:set tmp_dir './tmp/'
 
 <MenuScreen>:
     GridLayout:
@@ -67,21 +68,21 @@
             on_press: root.manager.current = 'menu_screen'
         Button:
             size_hint: (0.2, 0.05)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.05}
+            text: 'Check camera'
+            font_size: self.height * font_size_height_factor
+            on_release: root.check_camera
+        Button:
+            size_hint: (0.2, 0.05)
             pos_hint: {'center_x': 0.89, 'center_y': 0.05}
             text: 'Capture all images'
             font_size: self.height * font_size_height_factor
             on_press: root.manager.current = 'menu_screen'
-        GridLayout:
-            padding: 20
-            spacing: 50
-            Texture:
-                size_hint: 0.5, 0.5
-                pos_hint: {'center_x': 0.0, 'center_y': 0.0}
-            Camera:
-                size_hint: 0.5, 0.5
-                resolution: (640, 480)
-                pos_hint: {'center_x': 0.0, 'center_y': 0.0}
-                play: True
+        Image:
+            id: check_image
+            size_hint: 0.5, 0.5
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            source: tmp_dir + 'tmp.png'
 
 <CalculateScreen>:
     BoxLayout:

@@ -6,17 +6,18 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
+from camera4kivy import Preview
+
 import time
 Builder.load_string('''
 <CameraClick>:
     orientation: 'vertical'
-    Camera:
+    Preview:
         id: camera
-        resolution: (640, 480)
-        play: False
+	    aspect_ratio: '16:9'
     ToggleButton:
         text: 'Play'
-        on_press: camera.play = not camera.play
+        on_press: root.start_preview()
         size_hint_y: None
         height: '48dp'
     Button:
@@ -28,6 +29,14 @@ Builder.load_string('''
 
 
 class CameraClick(BoxLayout):
+    def build(self):
+        self.preview = Preview(aspect_ratio = '16:9')
+        self.preview.connect_camera(enable_analyze_pixels = True)
+
+    def start_preview(self):
+        camera = self.ids['camera']
+        camera.start_preview()
+
     def capture(self):
         '''
         Function to capture the images and give them the names

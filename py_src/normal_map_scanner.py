@@ -31,6 +31,7 @@ resolution = (300, 300) #px
 object_size = (20, 20) #cm
 lamp_0_position = (40, 0, 20) #cm
 verbosity = 1 # Only status
+tmp_dir = "./tmp/"
 
 def load_image(filename):
     try:
@@ -93,11 +94,12 @@ class FullProcessPart1Screen(Screen):
     pass
 
 class GatherScreen(Screen):
-    def start_preview(self):
-       g_stand.start_preview()
-
-    def stop_preview(self):
-       g_stand.stop_preview()
+    def check_camera(self):
+        if not os.path.exists(tmp_dir):
+            os.makedirs(tmp_dir, exist_ok=True)
+        g_stand.check_camera("tmp.png")
+        self.ids.check_image.source = tmp_dir + "tmp.png"
+        self.ids.check_image.reload()
 
 class CalculateScreen(Screen):
     pass

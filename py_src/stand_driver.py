@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from picamera import PiCamera
 import time
+import os
 
 
 # Dictionary with GPIO ID for specific light angle
@@ -58,14 +59,22 @@ class Stand:
         self.camera.capture(self.assets_directory + "/" + 
             self.input_filename_prefix + self.environment_filename + ".bmp")
 
+    def __TurnAllLightsOn(self):
+        for  lightGPIO in self.LightsGPIO.values():
+            GPIO.output(lightGPIO, GPIO.HIGH)
+
+    def __TurnAllLightsOff(self):
+        for  lightGPIO in self.LightsGPIO.values():
+            GPIO.output(lightGPIO, GPIO.LOW)
+
+
     def gatherAllAssets(self):
         self.__makeEnviromentLightShot()
         for angle in self.LightsGPIO.keys():
             self.__makeSingleShot(angle)
 
-    def start_preview(self):
-        self.camera.start_preview()
-
-    def stop_preview(self):
-        self.camera.stop_preview()
+    def check_camera_to_path(self, path):
+        self.__TurnAllLightsOn()
+        self.camera.capture(path)
+        self.__TurnAllLightsOff()
 
