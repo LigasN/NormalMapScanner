@@ -65,14 +65,12 @@ def calculateNormalMap():
     normalmap.normalmap.save(output_file)
 
 # Stand object
-global g_stand
-
-def main():
-    g_stand = Stand(assets_directory=assets_directory,
+g_stand = Stand(assets_directory=assets_directory,
         input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
-        resolution = resolution
-        )
+        resolution = resolution)
+
+def main():
     # Ensure that assets directory exist
     if not os.path.exists(assets_directory):
         os.makedirs(assets_directory, exist_ok=True)
@@ -97,8 +95,7 @@ class GatherScreen(Screen):
     def check_camera(self):
         if not os.path.exists(tmp_dir):
             os.makedirs(tmp_dir, exist_ok=True)
-#        g_stand.check_camera("tmp.png")
-        self.ids.check_image.source = tmp_dir + "tmp1.png"
+        g_stand.check_camera_to_path(tmp_dir + "tmp.png")
         self.ids.check_image.reload()
 
 class CalculateScreen(Screen):
