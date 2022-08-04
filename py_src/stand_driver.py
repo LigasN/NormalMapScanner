@@ -63,3 +63,9 @@ class Stand:
         for angle in self.LightsGPIO.keys():
             self.__makeSingleShot(angle)
 
+    def start_preview(self):
+        self.camera.start_preview()
+
+    def stop_preview(self):
+        self.camera.stop_preview()
+
