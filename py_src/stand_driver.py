@@ -42,10 +42,28 @@ class Stand:
         self.environment_filename = environment_filename
         self.resolution = resolution
 
+        self.__IntroTest()
+
     def __del__(self):
         self.camera.close()
         GPIO.cleanup()
 
+
+    def __TurnAllLightsOn(self):
+        for lightGPIO in self.LightsGPIO.values():
+            GPIO.output(lightGPIO, GPIO.HIGH)
+
+    def __TurnAllLightsOff(self):
+        for lightGPIO in self.LightsGPIO.values():
+            GPIO.output(lightGPIO, GPIO.LOW)
+
+    def __IntroTest(self):
+        self.__TurnAllLightsOff()
+        for _ in range(0, 2):
+            for lightGPIO in self.LightsGPIO.values():
+                GPIO.output(lightGPIO, GPIO.HIGH)
+                time.sleep(0.1)
+                GPIO.output(lightGPIO, GPIO.LOW)
 
     def __makeSingleShot(self, angle):
         GPIO.output(Stand.LightsGPIO[angle], GPIO.HIGH)
@@ -58,14 +76,6 @@ class Stand:
     def __makeEnviromentLightShot(self):
         self.camera.capture(self.assets_directory + "/" + 
             self.input_filename_prefix + self.environment_filename + ".bmp")
-
-    def __TurnAllLightsOn(self):
-        for  lightGPIO in self.LightsGPIO.values():
-            GPIO.output(lightGPIO, GPIO.HIGH)
-
-    def __TurnAllLightsOff(self):
-        for  lightGPIO in self.LightsGPIO.values():
-            GPIO.output(lightGPIO, GPIO.LOW)
 
 
     def gatherAllAssets(self):
