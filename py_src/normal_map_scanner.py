@@ -10,6 +10,8 @@ from kivy.uix.image import Image as uiImage
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.logger import Logger
+import logging
 
 from normal_map.normal_map import NormalMap
 
@@ -61,9 +63,11 @@ def calculateNormalMap():
         
     normalmap.normalmap.save(output_file)
 
+# Stand object
+global g_stand
 
 def main():
-    stand = Stand(assets_directory=assets_directory,
+    g_stand = Stand(assets_directory=assets_directory,
         input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
         resolution = resolution
@@ -71,10 +75,14 @@ def main():
     # Ensure that assets directory exist
     if not os.path.exists(assets_directory):
         os.makedirs(assets_directory, exist_ok=True)
-    stand.gatherAllAssets()
+    g_stand.gatherAllAssets()
     calculateNormalMap()
 
+# -----------------------------------------------------------------------------
+#                                    GUI
+# -----------------------------------------------------------------------------
 
+Logger.setLevel(logging.TRACE)
 #Window.fullscreen = True
 Window.size = (960, 540)
 
@@ -85,7 +93,11 @@ class FullProcessPart1Screen(Screen):
     pass
 
 class GatherScreen(Screen):
-    pass
+    def start_preview(self):
+       g_stand.start_preview()
+
+    def stop_preview(self):
+       g_stand.stop_preview()
 
 class CalculateScreen(Screen):
     pass
