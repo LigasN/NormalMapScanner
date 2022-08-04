@@ -97,8 +97,8 @@ class GatherScreen(Screen):
     def check_camera(self):
         if not os.path.exists(tmp_dir):
             os.makedirs(tmp_dir, exist_ok=True)
-        g_stand.check_camera("tmp.png")
-        self.ids.check_image.source = tmp_dir + "tmp.png"
+#        g_stand.check_camera("tmp.png")
+        self.ids.check_image.source = tmp_dir + "tmp1.png"
         self.ids.check_image.reload()
 
 class CalculateScreen(Screen):
