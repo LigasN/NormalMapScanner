@@ -85,6 +85,8 @@ class Stand:
 
     def check_camera_to_path(self, path):
         self.__TurnAllLightsOn()
+        time.sleep(1)
         self.camera.capture(path)
+        time.sleep(1)
         self.__TurnAllLightsOff()
 

@@ -61,35 +61,51 @@
             valign: 'middle'
             pos_hint: {'center_x': 0.5, 'center_y': 0.9}
         Button:
-            size_hint: (0.2, 0.05)
-            pos_hint: {'center_x': 0.11, 'center_y': 0.05}
+            size_hint: (0.3, 0.05)
+            pos_hint: {'center_x': 0.15, 'center_y': 0.05}
             text: 'Back to menu'
             font_size: self.height * font_size_height_factor
             on_press: root.manager.current = 'menu_screen'
         Button:
-            size_hint: (0.2, 0.05)
+            size_hint: (0.3, 0.05)
             pos_hint: {'center_x': 0.5, 'center_y': 0.05}
             text: 'Check camera'
             font_size: self.height * font_size_height_factor
             on_release: root.check_camera()
         Button:
-            size_hint: (0.2, 0.05)
-            pos_hint: {'center_x': 0.89, 'center_y': 0.05}
+            size_hint: (0.3, 0.05)
+            pos_hint: {'center_x': 0.85, 'center_y': 0.05}
             text: 'Capture all images'
             font_size: self.height * font_size_height_factor
-            on_press: root.manager.current = 'menu_screen'
+            on_press: root.capture_all_assets()
         Image:
             id: check_image
-            size_hint: 0.5, 0.5
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            size_hint_y: 0.7
+            allow_stretch: True
+            keep_ratio: True
+            pos_hint: {'center_x': 0.5, 'center_y': 0.45}
             source: tmp_dir + 'tmp.png'
 
 <CalculateScreen>:
-    BoxLayout:
+    FloatLayout:
+        Image:
+            id: normal_map_image
+            size_hint_y: 0.7
+            allow_stretch: True
+            keep_ratio: True
+            pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+            source: tmp_dir + 'normal_map.bmp'
         Button:
-            text: 'My settings button'
+            size_hint: (0.3, 0.05)
+            pos_hint: {'center_x': 0.85, 'center_y': 0.05}
+            text: 'Calculate normal map'
+            font_size: self.height * font_size_height_factor
+            on_press: root.calculate_normal_map()
         Button:
+            size_hint: (0.3, 0.05)
+            pos_hint: {'center_x': 0.15, 'center_y': 0.05}
             text: 'Back to menu'
+            font_size: self.height * font_size_height_factor
             on_press: root.manager.current = 'menu_screen'
 
 <CalibrateScreen>:

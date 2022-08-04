@@ -61,8 +61,10 @@ def calculateNormalMap():
     if verbosity >= 1:
         normalmap.normalmap.show()
         print('Saving')
-        
-    normalmap.normalmap.save(output_file)
+    
+    if not os.path.exists(tmp_dir):
+        os.makedirs(tmp_dir, exist_ok=True)
+    normalmap.normalmap.save(tmp_dir + output_file)
 
 # Stand object
 g_stand = Stand(assets_directory=assets_directory,
@@ -75,7 +77,6 @@ def main():
     if not os.path.exists(assets_directory):
         os.makedirs(assets_directory, exist_ok=True)
     g_stand.gatherAllAssets()
-    calculateNormalMap()
 
 # -----------------------------------------------------------------------------
 #                                    GUI
@@ -98,8 +99,15 @@ class GatherScreen(Screen):
         g_stand.check_camera_to_path(tmp_dir + "tmp.png")
         self.ids.check_image.reload()
 
+    def capture_all_assets(self):
+        if not os.path.exists(assets_directory):
+            os.makedirs(assets_directory, exist_ok=True)
+        g_stand.gatherAllAssets()
+
 class CalculateScreen(Screen):
-    pass
+    def calculate_normal_map(self):
+        calculateNormalMap()
+        self.ids.normal_map_image.reload()
 
 class CalibrateScreen(Screen):
     pass
