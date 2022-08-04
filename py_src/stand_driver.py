@@ -4,18 +4,9 @@ import time
 
 
 # Dictionary with GPIO ID for specific light angle
-"""LightsGPIO = {
-    0: 5,
-    45: 6,
-    90: 12,
-    135: 13,
-    180: 16,
-    225: 19,
-    270: 20,
-    315: 21
-}"""
+
 class Stand:
-    LightsGPIO = {
+    """LightsGPIO = {
        0: 21,
         45: 21,
         90: 21,
@@ -24,8 +15,17 @@ class Stand:
         225: 21,
         270: 21,
         315: 21
+    }"""
+    LightsGPIO = {
+        0: 5,
+        45: 6,
+        90: 12,
+        135: 13,
+        180: 16,
+        225: 19,
+        270: 20,
+        315: 21
     }
-
     def __init__(self, assets_directory, input_filename_prefix, 
             environment_filename, resolution):
         self.camera = PiCamera()
