@@ -88,19 +88,44 @@
 
 <CalculateScreen>:
     FloatLayout:
+        Label:
+            text: 'Calculate normal map'
+            size_hint: 0.5, 0.11
+            font_size: self.height
+            halign: 'center'
+            valign: 'middle'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
         Image:
             id: normal_map_image
             size_hint_y: 0.7
             allow_stretch: True
             keep_ratio: True
             pos_hint: {'center_x': 0.5, 'center_y': 0.45}
-            source: tmp_dir + 'normal_map.bmp'
+            source: tmp_dir + 'normalmap.bmp'
         Button:
             size_hint: (0.3, 0.05)
             pos_hint: {'center_x': 0.85, 'center_y': 0.05}
             text: 'Calculate normal map'
             font_size: self.height * font_size_height_factor
             on_press: root.calculate_normal_map()
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint: (0.38, None)
+            pos_hint: {'center_x': 0.3, 'center_y': 0.5}
+            Label:
+                size_hint: (0.15, 0.05)
+                pos_hint: {'left': 0.1, 'bottom': 0}
+                text: 'Assets path: '
+                font_size: self.width * 0.15
+                halign: 'left'
+                valign: 'middle'
+            Spinner:
+                id: spinner_id
+                font_size: self.width * 0.05
+                pos_hint: {'right': 1, 'bottom': 0}
+                text: "Click to choose assets path"
+                on_text: root.spinner_clicked(spinner_id.text)
         Button:
             size_hint: (0.3, 0.05)
             pos_hint: {'center_x': 0.15, 'center_y': 0.05}

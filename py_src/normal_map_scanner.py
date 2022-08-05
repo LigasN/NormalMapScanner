@@ -1,6 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
+from datetime import datetime
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -9,7 +10,7 @@ from kivy.uix.label import Label
 from kivy.uix.image import Image as uiImage
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.logger import Logger
 import logging
 
@@ -24,10 +25,10 @@ except:
 # Properties
 sourcefiles = dict()
 input_filename_prefix = "input_"
-assets_directory = "./input_assets/"
+assets_parent_directory = "./input_assets/"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
-resolution = (300, 300) #px
+resolution = (800, 800) #px
 object_size = (20, 20) #cm
 lamp_0_position = (40, 0, 20) #cm
 verbosity = 1 # Only status
@@ -40,14 +41,18 @@ def load_image(filename):
         print('File not found: ' + filename)
 
 
-def calculateNormalMap():
+def calculateNormalMap(assets_path = ""):
+
+    if not assets_path:
+        assets_path = assets_parent_directory
+
     for angle in NormalMap.angles:
         sourcefiles[angle] = load_image(
-            assets_directory + input_filename_prefix + str(angle) +
+            assets_path + input_filename_prefix + str(angle) +
             '.bmp')
 
     environment_light = load_image(
-        assets_directory + input_filename_prefix +
+        assets_path + input_filename_prefix +
         environment_filename + '.bmp')
 
     normalmap = NormalMap(source_files=sourcefiles,
@@ -67,16 +72,9 @@ def calculateNormalMap():
     normalmap.normalmap.save(tmp_dir + output_file)
 
 # Stand object
-g_stand = Stand(assets_directory=assets_directory,
-        input_filename_prefix=input_filename_prefix,
+g_stand = Stand(input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
         resolution = resolution)
-
-def main():
-    # Ensure that assets directory exist
-    if not os.path.exists(assets_directory):
-        os.makedirs(assets_directory, exist_ok=True)
-    g_stand.gatherAllAssets()
 
 # -----------------------------------------------------------------------------
 #                                    GUI
@@ -100,13 +98,31 @@ class GatherScreen(Screen):
         self.ids.check_image.reload()
 
     def capture_all_assets(self):
-        if not os.path.exists(assets_directory):
-            os.makedirs(assets_directory, exist_ok=True)
-        g_stand.gatherAllAssets()
+        time = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
+        save_dir = assets_parent_directory + time + '/'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir, exist_ok=True)
+        g_stand.gatherAllAssets(save_dir)
 
 class CalculateScreen(Screen):
+    current_assets_path = assets_parent_directory
+    gather_input_message_value = ["Please gather input images first"]
+    assets_paths_list = []
+    def build(self):
+        for dir_name in os.listdir(assets_parent_directory):
+            if os.path.isdir(os.path.join(assets_parent_directory, dir_name)):
+                self.assets_paths_list.append(dir_name)
+
+        if self.assets_paths_list:
+            self.ids.spinner_id.values = self.assets_paths_list
+        else:
+            self.ids.spinner_id.values = self.gather_input_message_value
+
+    def spinner_clicked(self, value):
+        self.current_assets_path = value
+
     def calculate_normal_map(self):
-        calculateNormalMap()
+        calculateNormalMap(self.currect_assets_path)
         self.ids.normal_map_image.reload()
 
 class CalibrateScreen(Screen):
@@ -117,6 +133,7 @@ class NormalMapScannerApp(App):
     def build(self):
         # Create the screen manager
         sm = ScreenManager()
+        sm.transition = NoTransition()
         sm.add_widget(MenuScreen(name='menu_screen'))
         sm.add_widget(FullProcessPart1Screen(name='full_process_part_1_screen'))
         sm.add_widget(GatherScreen(name='gather_screen'))

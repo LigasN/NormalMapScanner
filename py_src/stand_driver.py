@@ -27,17 +27,19 @@ class Stand:
         270: 20,
         315: 21
     }
-    def __init__(self, assets_directory, input_filename_prefix, 
+    shot_delay = 0.2
+
+    def __init__(self, input_filename_prefix, 
             environment_filename, resolution):
         self.camera = PiCamera()
         self.camera.resolution = resolution
+        self.camera.rotation = 180
 
         GPIO.setmode(GPIO.BCM)
         #GPIO.setwarnings(False)
         for GPIOID in Stand.LightsGPIO.values():
             GPIO.setup(GPIOID, GPIO.OUT, initial=0)
 
-        self.assets_directory = assets_directory
         self.input_filename_prefix = input_filename_prefix
         self.environment_filename = environment_filename
         self.resolution = resolution
@@ -58,35 +60,36 @@ class Stand:
             GPIO.output(lightGPIO, GPIO.LOW)
 
     def __IntroTest(self):
+        intro_lights_change_delay = 0.05
         self.__TurnAllLightsOff()
-        for _ in range(0, 2):
+        for _ in range(0,2):
             for lightGPIO in self.LightsGPIO.values():
                 GPIO.output(lightGPIO, GPIO.HIGH)
-                time.sleep(0.1)
+                time.sleep(intro_lights_change_delay)
                 GPIO.output(lightGPIO, GPIO.LOW)
 
-    def __makeSingleShot(self, angle):
+    def __makeSingleShot(self, angle, path):
         GPIO.output(Stand.LightsGPIO[angle], GPIO.HIGH)
-        time.sleep(0.2)
-        self.camera.capture(self.assets_directory + "/" + 
+        time.sleep(self.shot_delay)
+        self.camera.capture(path + "/" + 
             self.input_filename_prefix + str(angle) + ".bmp")
+        time.sleep(self.shot_delay)
         GPIO.output(Stand.LightsGPIO[angle], GPIO.LOW)
-        time.sleep(0.2)
 
-    def __makeEnviromentLightShot(self):
-        self.camera.capture(self.assets_directory + "/" + 
+    def __makeEnviromentLightShot(self, path):
+        self.camera.capture(path + "/" + 
             self.input_filename_prefix + self.environment_filename + ".bmp")
 
 
-    def gatherAllAssets(self):
-        self.__makeEnviromentLightShot()
+    def gatherAllAssets(self, path):
+        self.__makeEnviromentLightShot(path)
         for angle in self.LightsGPIO.keys():
-            self.__makeSingleShot(angle)
+            self.__makeSingleShot(angle, path)
 
     def check_camera_to_path(self, path):
         self.__TurnAllLightsOn()
-        time.sleep(1)
+        time.sleep(self.shot_delay)
         self.camera.capture(path)
-        time.sleep(1)
+        time.sleep(self.shot_delay)
         self.__TurnAllLightsOff()
 
