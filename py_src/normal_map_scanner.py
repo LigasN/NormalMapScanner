@@ -72,9 +72,12 @@ def calculateNormalMap(assets_path = ""):
     normalmap.normalmap.save(tmp_dir + output_file)
 
 # Stand object
-g_stand = Stand(input_filename_prefix=input_filename_prefix,
+try:
+    g_stand = Stand(input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
         resolution = resolution)
+except:
+    pass
 
 # -----------------------------------------------------------------------------
 #                                    GUI
@@ -108,7 +111,9 @@ class CalculateScreen(Screen):
     current_assets_path = assets_parent_directory
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
-    def build(self):
+    
+    def __init__(self,**kwargs):
+        super(CalculateScreen, self).__init__(**kwargs)
         for dir_name in os.listdir(assets_parent_directory):
             if os.path.isdir(os.path.join(assets_parent_directory, dir_name)):
                 self.assets_paths_list.append(dir_name)
