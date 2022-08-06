@@ -1,16 +1,23 @@
+from asyncio.windows_events import NULL
+from genericpath import isdir
 import os
 from PIL import Image
 import numpy as np
 from datetime import datetime
+import glob
 
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image as uiImage
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
+from kivy.properties import ObjectProperty, StringProperty
+from kivy.uix.popup import Popup
 from kivy.logger import Logger
 import logging
 
@@ -25,14 +32,15 @@ except:
 # Properties
 sourcefiles = dict()
 input_filename_prefix = "input_"
-assets_parent_directory = "./input_assets/"
+assets_parent_directory = "input_assets/"
+tmp_dir = "tmp/"
+workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
 resolution = (800, 800) #px
 object_size = (20, 20) #cm
 lamp_0_position = (40, 0, 20) #cm
 verbosity = 1 # Only status
-tmp_dir = "./tmp/"
 
 def load_image(filename):
     try:
@@ -44,16 +52,16 @@ def load_image(filename):
 def calculateNormalMap(assets_path = ""):
 
     if not assets_path:
-        assets_path = assets_parent_directory
+        assets_path = os.path.join(workspace_path, assets_parent_directory)
+    else:
+        assets_path = os.path.join(workspace_path, assets_path)
 
+    load_angle_assets_path = os.path.join(assets_path, input_filename_prefix, str(angle), '.bmp')
     for angle in NormalMap.angles:
-        sourcefiles[angle] = load_image(
-            assets_path + input_filename_prefix + str(angle) +
-            '.bmp')
+        sourcefiles[angle] = load_image(load_angle_assets_path)
 
-    environment_light = load_image(
-        assets_path + input_filename_prefix +
-        environment_filename + '.bmp')
+    load_environment_path = os.path.join(assets_path, input_filename_prefix, environment_filename, '.bmp')
+    environment_light = load_image(load_environment_path)
 
     normalmap = NormalMap(source_files=sourcefiles,
                           object_size=object_size,
@@ -67,9 +75,10 @@ def calculateNormalMap(assets_path = ""):
         normalmap.normalmap.show()
         print('Saving')
     
-    if not os.path.exists(tmp_dir):
-        os.makedirs(tmp_dir, exist_ok=True)
-    normalmap.normalmap.save(tmp_dir + output_file)
+    tmp_path = os.path.join(workspace_path, tmp_dir)
+    if not os.path.exists(tmp_path):
+        os.makedirs(tmp_path, exist_ok=True)
+    normalmap.normalmap.save(os.path.join(tmp_path, output_file))
 
 # Stand object
 try:
@@ -87,36 +96,73 @@ Logger.setLevel(logging.TRACE)
 #Window.fullscreen = True
 Window.size = (960, 540)
 
+
+class ChooseWorkspaceDialog(FloatLayout):
+    change_workspace = ObjectProperty(None)
+    cancel = ObjectProperty(None)
+
 class MenuScreen(Screen):
-    pass
+
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+    def show_change_workspace_menu(self):
+        content = ChooseWorkspaceDialog(change_workspace=self.change_workspace, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Change workspace", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+
+    def change_workspace(self, path):
+        global workspace_path
+        workspace = os.path.join(path)
+        if os.path.isdir(workspace):
+            workspace_path = workspace
+            self.ids.workspace_id.refresh_workspace_path_label()
+            self.dismiss_popup()
 
 class FullProcessPart1Screen(Screen):
     pass
 
 class GatherScreen(Screen):
+    def on_pre_enter(self):
+        self.ids.workspace_id.refresh_workspace_path_label()
+
     def check_camera(self):
-        if not os.path.exists(tmp_dir):
-            os.makedirs(tmp_dir, exist_ok=True)
-        g_stand.check_camera_to_path(tmp_dir + "tmp.png")
+        tmp_path = os.path.join(workspace_path, tmp_dir)
+        if not os.path.exists(tmp_path):
+            os.makedirs(tmp_path, exist_ok=True)
+        g_stand.check_camera_to_path(tmp_path + "tmp.png")
         self.ids.check_image.reload()
 
     def capture_all_assets(self):
         time = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
-        save_dir = assets_parent_directory + time + '/'
+        save_dir = os.path.join(workspace_path, assets_parent_directory, time, '/')
         if not os.path.exists(save_dir):
             os.makedirs(save_dir, exist_ok=True)
         g_stand.gatherAllAssets(save_dir)
 
 class CalculateScreen(Screen):
-    current_assets_path = assets_parent_directory
+    current_assets_path = os.path.join(workspace_path, assets_parent_directory)
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
-    
+
     def __init__(self,**kwargs):
         super(CalculateScreen, self).__init__(**kwargs)
-        for dir_name in os.listdir(assets_parent_directory):
-            if os.path.isdir(os.path.join(assets_parent_directory, dir_name)):
-                self.assets_paths_list.append(dir_name)
+        self.reload_current_assets_path()
+
+    def on_pre_enter(self):
+        self.ids.workspace_id.refresh_workspace_path_label()
+        self.reload_current_assets_path()
+
+    def reload_current_assets_path(self):
+        self.assets_paths_list.clear()
+        assets_parent_path = os.path.join(workspace_path, assets_parent_directory)
+        if os.path.isdir(assets_parent_path):
+            for dir_name in os.listdir(assets_parent_path):
+                possible_path = os.path.join(assets_parent_path, dir_name)
+                possible_asset_file_path = os.path.join(possible_path, "*.bmp")
+                if os.path.isdir(possible_path) and glob.glob(possible_asset_file_path):
+                    self.assets_paths_list.append(dir_name)
 
         if self.assets_paths_list:
             self.ids.spinner_id.values = self.assets_paths_list
@@ -127,11 +173,17 @@ class CalculateScreen(Screen):
         self.current_assets_path = value
 
     def calculate_normal_map(self):
-        calculateNormalMap(self.currect_assets_path)
-        self.ids.normal_map_image.reload()
+        if os.path.isdir(self.current_assets_path) and glob.glob(os.path.join(self.current_assets_path, "*.bmp" )):
+            calculateNormalMap(self.current_assets_path)
+            self.ids.normal_map_image.reload()
 
 class CalibrateScreen(Screen):
     pass
+
+class WorkspaceWidget(FloatLayout):
+    workspace_path_property = StringProperty(os.path.abspath(workspace_path))
+    def refresh_workspace_path_label(self):
+        self.ids.workspace_path_label.text = "Workspace path: " + os.path.abspath(workspace_path)
 
 class NormalMapScannerApp(App):
 
