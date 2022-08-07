@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from genericpath import isdir
 import os
 from PIL import Image
 import numpy as np
@@ -74,7 +72,7 @@ def calculateNormalMap(assets_path = ""):
     if verbosity >= 1:
         normalmap.normalmap.show()
         print('Saving')
-    
+
     tmp_path = os.path.join(workspace_path, tmp_dir)
     if not os.path.exists(tmp_path):
         os.makedirs(tmp_path, exist_ok=True)
@@ -92,9 +90,9 @@ except:
 #                                    GUI
 # -----------------------------------------------------------------------------
 
-Logger.setLevel(logging.TRACE)
-#Window.fullscreen = True
-Window.size = (960, 540)
+#Logger.setLevel(logging.TRACE)
+Window.fullscreen = True
+#Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
@@ -136,7 +134,7 @@ class GatherScreen(Screen):
 
     def capture_all_assets(self):
         time = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
-        save_dir = os.path.join(workspace_path, assets_parent_directory, time, '/')
+        save_dir = os.path.join(os.path.abspath(workspace_path), assets_parent_directory, time)
         if not os.path.exists(save_dir):
             os.makedirs(save_dir, exist_ok=True)
         g_stand.gatherAllAssets(save_dir)
