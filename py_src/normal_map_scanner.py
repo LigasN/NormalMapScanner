@@ -132,10 +132,12 @@ class GatherScreen(Screen):
         self.ids.workspace_id.refresh_workspace_path_label()
 
     def check_camera(self):
-        tmp_path = os.path.join(workspace_path, tmp_dir)
+        tmp_path = os.path.join(os.path.abspath(workspace_path), tmp_dir)
         if not os.path.exists(tmp_path):
             os.makedirs(tmp_path, exist_ok=True)
-        g_stand.check_camera_to_path(tmp_path + "tmp.png")
+        check_filepath = tmp_path + "tmp.png"
+        g_stand.check_camera_to_path(check_filepath)
+        self.ids.source = check_filepath
         self.ids.check_image.reload()
 
     def capture_all_assets(self):
