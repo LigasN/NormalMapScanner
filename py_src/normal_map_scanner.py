@@ -1,5 +1,4 @@
 import os
-from types import NoneType
 from PIL import Image
 import numpy as np
 from datetime import datetime
