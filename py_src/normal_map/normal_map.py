@@ -37,6 +37,9 @@ class NormalMap:
         self.normalmap = None
         self.logfile = None
 
+    def __calculatePercentageProcessStatus(self, iteration):
+        return 100 * (iteration / float(self.image_size[1]))
+
     def __printProgressBar(self, iteration, prefix='', suffix='', decimals=1,
                            length=50, fill='█', printEnd="\r"):
         """
@@ -50,8 +53,7 @@ class NormalMap:
             fill        - Optional  : bar fill character (Str)
             printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
         """
-        percent = ("{0:." + str(decimals) + "f}").format(
-            100 * (iteration / float(self.image_size[1])))
+        percent = ("{0:." + str(decimals) + "f}").format(self.__calculatePercentageProcessStatus(iteration))
         filledLength = int(length * iteration // self.image_size[1])
         bar = fill * filledLength + '-' * (length - filledLength)
         print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
@@ -91,7 +93,7 @@ class NormalMap:
         if self.logfile: 
             self.logfile.write(message)
 
-    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True):
+    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True, set_progress_bar_value_function=None):
         # Creating tmp directory for future purposes
         if not os.path.exists("./tmp/"):
             os.makedirs("./tmp/")
@@ -154,6 +156,8 @@ class NormalMap:
 
             if (verbosity >= 1 or progressbar):
                 self.__printProgressBar(y + 1)
+            if (set_progress_bar_value_function != None):
+                set_progress_bar_value_function(self.__calculatePercentageProcessStatus(y + 1))
 
             pixel_idx = np.array((x, y))
             # Pixel position calculation is at first calculated for an object

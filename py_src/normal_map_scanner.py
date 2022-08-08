@@ -1,6 +1,5 @@
-from asyncio.windows_events import NULL
-from genericpath import isdir
 import os
+from types import NoneType
 from PIL import Image
 import numpy as np
 from datetime import datetime
@@ -18,8 +17,12 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.popup import Popup
+from kivy.utils import platform
 from kivy.logger import Logger
+from kivy.clock import Clock
 import logging
+
+from threading import Thread
 
 from normal_map.normal_map import NormalMap
 
@@ -49,19 +52,21 @@ def load_image(filename):
         print('File not found: ' + filename)
 
 
-def calculateNormalMap(assets_path = ""):
+def calculateNormalMap(session_abs_path, set_progress_bar_value_function):
+    tmp_path = os.path.join(session_abs_path, tmp_dir)
+    if not os.path.exists(tmp_path):
+        os.makedirs(tmp_path, exist_ok=True)
 
-    if not assets_path:
-        assets_path = os.path.join(workspace_path, assets_parent_directory)
-    else:
-        assets_path = os.path.join(workspace_path, assets_path)
-
-    load_angle_assets_path = os.path.join(assets_path, input_filename_prefix, str(angle), '.bmp')
+    assets_path = os.path.join(session_abs_path, assets_parent_directory)
+    load_angle_assets_path = os.path.join(os.path.abspath(assets_path))
     for angle in NormalMap.angles:
-        sourcefiles[angle] = load_image(load_angle_assets_path)
+        filename = input_filename_prefix + str(angle) + '.bmp'
+        filepath = os.path.join(load_angle_assets_path, filename)
+        sourcefiles[angle] = load_image(filepath)
 
-    load_environment_path = os.path.join(assets_path, input_filename_prefix, environment_filename, '.bmp')
-    environment_light = load_image(load_environment_path)
+    environment_file_name = input_filename_prefix + environment_filename + '.bmp'
+    environment_path = os.path.join(os.path.abspath(assets_path), environment_file_name)
+    environment_light = load_image(environment_path)
 
     normalmap = NormalMap(source_files=sourcefiles,
                           object_size=object_size,
@@ -69,16 +74,13 @@ def calculateNormalMap(assets_path = ""):
                           environment_light=environment_light)
 
     normalmap.calculateNormalMap(verbosity=verbosity, log=True, 
-        progressbar=True)
+        progressbar=True, set_progress_bar_value_function=set_progress_bar_value_function)
 
     if verbosity >= 1:
         normalmap.normalmap.show()
         print('Saving')
-    
-    tmp_path = os.path.join(workspace_path, tmp_dir)
-    if not os.path.exists(tmp_path):
-        os.makedirs(tmp_path, exist_ok=True)
-    normalmap.normalmap.save(os.path.join(tmp_path, output_file))
+
+    normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
 
 # Stand object
 try:
@@ -92,9 +94,9 @@ except:
 #                                    GUI
 # -----------------------------------------------------------------------------
 
-Logger.setLevel(logging.TRACE)
-#Window.fullscreen = True
-Window.size = (960, 540)
+#Logger.setLevel(logging.TRACE)
+Window.fullscreen = True
+#Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
@@ -135,14 +137,14 @@ class GatherScreen(Screen):
         self.ids.check_image.reload()
 
     def capture_all_assets(self):
-        time = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
-        save_dir = os.path.join(workspace_path, assets_parent_directory, time, '/')
+        session_dir = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
+        save_dir = os.path.join(os.path.abspath(workspace_path), session_dir, assets_parent_directory)
         if not os.path.exists(save_dir):
             os.makedirs(save_dir, exist_ok=True)
         g_stand.gatherAllAssets(save_dir)
 
 class CalculateScreen(Screen):
-    current_assets_path = os.path.join(workspace_path, assets_parent_directory)
+    current_session_path = os.path.join(os.path.abspath(workspace_path), assets_parent_directory)
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
 
@@ -150,18 +152,22 @@ class CalculateScreen(Screen):
         super(CalculateScreen, self).__init__(**kwargs)
         self.reload_current_assets_path()
 
+    def __del__(self):
+        self.thread.exit()
+
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
         self.reload_current_assets_path()
+        self.set_progress_bar_value(0)
 
     def reload_current_assets_path(self):
         self.assets_paths_list.clear()
-        assets_parent_path = os.path.join(workspace_path, assets_parent_directory)
-        if os.path.isdir(assets_parent_path):
-            for dir_name in os.listdir(assets_parent_path):
-                possible_path = os.path.join(assets_parent_path, dir_name)
-                possible_asset_file_path = os.path.join(possible_path, "*.bmp")
-                if os.path.isdir(possible_path) and glob.glob(possible_asset_file_path):
+        workspace_abs_path = os.path.abspath(workspace_path)
+        if os.path.isdir(workspace_abs_path):
+            for dir_name in os.listdir(workspace_abs_path):
+                possible_assets_path = os.path.join(workspace_abs_path, dir_name, assets_parent_directory)
+                possible_asset_file_path = os.path.join(possible_assets_path, "*.bmp")
+                if os.path.isdir(possible_assets_path) and glob.glob(possible_asset_file_path):
                     self.assets_paths_list.append(dir_name)
 
         if self.assets_paths_list:
@@ -170,11 +176,22 @@ class CalculateScreen(Screen):
             self.ids.spinner_id.values = self.gather_input_message_value
 
     def spinner_clicked(self, value):
-        self.current_assets_path = value
+        self.current_session_path = value
+        self.ids.normal_map_image.source = os.path.join(os.path.abspath(value), output_file)
+        self.ids.normal_map_image.reload()
+
+    def set_progress_bar_value(self, percentage_value):
+        self.ids.progress_bar.value = percentage_value
+        self.ids.progress_label.text = "{:.2f}".format(percentage_value) + '%'
+        
 
     def calculate_normal_map(self):
-        if os.path.isdir(self.current_assets_path) and glob.glob(os.path.join(self.current_assets_path, "*.bmp" )):
-            calculateNormalMap(self.current_assets_path)
+        session_path = os.path.join(os.path.abspath(workspace_path), self.current_session_path)
+        assets_path = os.path.join(session_path, assets_parent_directory, "*.bmp")
+        if os.path.isdir(session_path) and glob.glob(assets_path):
+            self.set_progress_bar_value(0)
+            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value))
+            self.thread.start()
             self.ids.normal_map_image.reload()
 
 class CalibrateScreen(Screen):

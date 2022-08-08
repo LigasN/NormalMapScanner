@@ -81,7 +81,6 @@
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
-
         BoxLayout:
             size_hint_y: None
             height: 30
@@ -148,23 +147,39 @@
 <CalculateScreen>:
     on_pre_enter: root.reload_current_assets_path()
     FloatLayout:
+        id: calculate_layout
         FloatLayout:
             size_hint: (1, 0.95)
             pos_hint: {'left': 0, 'top': 1}
             Label:
                 text: 'Calculate normal map'
                 size_hint: 0.5, 0.11
+                pos_hint: {'center_x': 0.5, 'center_y': 0.9}
                 font_size: self.height
                 halign: 'center'
                 valign: 'middle'
-                pos_hint: {'center_x': 0.5, 'center_y': 0.9}
             Image:
                 id: normal_map_image
                 size_hint_y: 0.7
+                pos_hint: {'center_x': 0.5, 'center_y': 0.47}
                 allow_stretch: True
                 keep_ratio: True
-                pos_hint: {'center_x': 0.5, 'center_y': 0.45}
                 source: tmp_dir + 'normalmap.bmp'
+            Label:
+                id: progress_label
+                text: '0%'
+                size_hint: 0.05, 0.03
+                pos_hint: {'right': 0.09, 'center_y': 0.1}
+                font_size: self.height
+                halign: 'center'
+                valign: 'middle'
+            ProgressBar:
+                id: progress_bar
+                size_hint: 0.9, 0.01
+                pos_hint: {'center_x': 0.54, 'center_y': 0.1}
+                min: 0
+                max: 100
+                value: 0
             Button:
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.85, 'center_y': 0.05}
