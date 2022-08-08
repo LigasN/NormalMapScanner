@@ -93,7 +93,7 @@ class NormalMap:
         if self.logfile: 
             self.logfile.write(message)
 
-    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True, set_progress_bar_value_function=None):
+    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True, set_progress_bar_value_function=None, is_asked_to_exit=None):
         # Creating tmp directory for future purposes
         if not os.path.exists("./tmp/"):
             os.makedirs("./tmp/")
@@ -154,6 +154,8 @@ class NormalMap:
 
         for y, x in np.ndindex(self.image_size[1], self.image_size[0]):
 
+            if is_asked_to_exit != None and is_asked_to_exit() == True:
+                return
             if (verbosity >= 1 or progressbar):
                 self.__printProgressBar(y + 1)
             if (set_progress_bar_value_function != None):

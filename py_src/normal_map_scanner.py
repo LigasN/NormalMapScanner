@@ -1,4 +1,6 @@
 import os
+import sys
+from threading import Thread
 from PIL import Image
 import numpy as np
 from datetime import datetime
@@ -20,8 +22,6 @@ from kivy.utils import platform
 from kivy.logger import Logger
 from kivy.clock import Clock
 import logging
-
-from threading import Thread
 
 from normal_map.normal_map import NormalMap
 
@@ -51,7 +51,8 @@ def load_image(filename):
         print('File not found: ' + filename)
 
 
-def calculateNormalMap(session_abs_path, set_progress_bar_value_function):
+def calculateNormalMap(session_abs_path, set_progress_bar_value_function, 
+        is_asked_to_exit):
     tmp_path = os.path.join(session_abs_path, tmp_dir)
     if not os.path.exists(tmp_path):
         os.makedirs(tmp_path, exist_ok=True)
@@ -73,13 +74,15 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function):
                           environment_light=environment_light)
 
     normalmap.calculateNormalMap(verbosity=verbosity, log=True, 
-        progressbar=True, set_progress_bar_value_function=set_progress_bar_value_function)
+        progressbar=True, set_progress_bar_value_function=set_progress_bar_value_function,
+        is_asked_to_exit=is_asked_to_exit)
 
-    if verbosity >= 1:
-        normalmap.normalmap.show()
-        print('Saving')
+    if normalmap.normalmap:
+        if verbosity >= 1:
+            normalmap.normalmap.show()
+            print('Saving')
 
-    normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
+        normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
 
 # Stand object
 try:
@@ -146,13 +149,26 @@ class CalculateScreen(Screen):
     current_session_path = os.path.join(os.path.abspath(workspace_path), assets_parent_directory)
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
+    asked_to_exit = False
 
     def __init__(self,**kwargs):
         super(CalculateScreen, self).__init__(**kwargs)
         self.reload_current_assets_path()
 
     def __del__(self):
-        self.thread.exit()
+        self.asked_to_exit = True
+        self.thread.join()
+
+    def exit(self):
+        self.asked_to_exit = True
+        self.thread.join()
+        self.manager.current = 'menu_screen'
+
+    def is_asked_to_exit(self):
+        if self.asked_to_exit:
+            self.asked_to_exit = False
+            return True
+        return False
 
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
@@ -189,7 +205,7 @@ class CalculateScreen(Screen):
         assets_path = os.path.join(session_path, assets_parent_directory, "*.bmp")
         if os.path.isdir(session_path) and glob.glob(assets_path):
             self.set_progress_bar_value(0)
-            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value))
+            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value, self.is_asked_to_exit))
             self.thread.start()
             self.ids.normal_map_image.reload()
 
@@ -217,3 +233,4 @@ class NormalMapScannerApp(App):
 
 if __name__ == '__main__':
     NormalMapScannerApp().run()
+    sys.exit()
