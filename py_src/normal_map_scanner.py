@@ -99,8 +99,8 @@ except:
 # -----------------------------------------------------------------------------
 
 #Logger.setLevel(logging.TRACE)
-Window.fullscreen = True
-#Window.size = (960, 540)
+#Window.fullscreen = True
+Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
@@ -150,14 +150,13 @@ class GatherScreen(Screen):
         g_stand.gatherAllAssets(save_dir)
 
 class CalculateScreen(Screen):
-    current_session_path = os.path.join(os.path.abspath(workspace_path), assets_parent_directory)
+    session_path = os.path.abspath(workspace_path)
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
     asked_to_exit = False
 
     def __init__(self,**kwargs):
         super(CalculateScreen, self).__init__(**kwargs)
-        self.reload_current_assets_path()
 
     def __del__(self):
         self.asked_to_exit = True
@@ -175,12 +174,23 @@ class CalculateScreen(Screen):
         return False
 
     def is_done(self):
-        self.ids.normal_map_image.reload()
+        self.__refresh_normalmap()
+
+    def __refresh_normalmap(self):
+        self.ids.normal_map_image.source = os.path.join(os.path.abspath(self.session_path), output_file)
+        if os.path.exists(self.ids.normal_map_image.source):
+            self.ids.normal_map_image.reload()
+        else:
+            self.ids.normal_map_image.source = os.path.join("./assets/preview.jpg")
+            self.ids.normal_map_image.reload()
+
+
 
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
         self.reload_current_assets_path()
         self.set_progress_bar_value(0)
+        self.__refresh_normalmap()
 
     def reload_current_assets_path(self):
         self.assets_paths_list.clear()
@@ -198,9 +208,8 @@ class CalculateScreen(Screen):
             self.ids.spinner_id.values = self.gather_input_message_value
 
     def spinner_clicked(self, value):
-        self.current_session_path = value
-        self.ids.normal_map_image.source = os.path.join(os.path.abspath(value), output_file)
-        self.ids.normal_map_image.reload()
+        self.session_path = os.path.join(os.path.abspath(workspace_path), value)
+        self.__refresh_normalmap()
 
     def set_progress_bar_value(self, percentage_value):
         self.ids.progress_bar.value = percentage_value
@@ -208,11 +217,10 @@ class CalculateScreen(Screen):
         
 
     def calculate_normal_map(self):
-        session_path = os.path.join(os.path.abspath(workspace_path), self.current_session_path)
-        assets_path = os.path.join(session_path, assets_parent_directory, "*.bmp")
-        if os.path.isdir(session_path) and glob.glob(assets_path):
+        assets_path = os.path.join(self.session_path, assets_parent_directory, "*.bmp")
+        if os.path.isdir(self.session_path) and glob.glob(assets_path):
             self.set_progress_bar_value(0)
-            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
+            self.thread = Thread(target = calculateNormalMap, args = (self.session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
             self.thread.start()
 
 class CalibrateScreen(Screen):
