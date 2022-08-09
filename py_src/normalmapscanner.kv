@@ -170,7 +170,7 @@
                 id: progress_label
                 text: '0%'
                 size_hint: 0.05, 0.03
-                pos_hint: {'right': 0.09, 'center_y': 0.1}
+                pos_hint: {'right': 0.073, 'center_y': 0.1}
                 font_size: self.height
                 halign: 'center'
                 valign: 'middle'
@@ -211,7 +211,7 @@
                 pos_hint: {'center_x': 0.15, 'center_y': 0.05}
                 text: 'Back to menu'
                 font_size: self.height * font_size_height_factor
-                on_press: root.exit()
+                on_press: root.manager.current = 'menu_screen'
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)

@@ -52,7 +52,7 @@ def load_image(filename):
 
 
 def calculateNormalMap(session_abs_path, set_progress_bar_value_function, 
-        is_asked_to_exit):
+        is_asked_to_exit, is_done_callback):
     tmp_path = os.path.join(session_abs_path, tmp_dir)
     if not os.path.exists(tmp_path):
         os.makedirs(tmp_path, exist_ok=True)
@@ -83,6 +83,8 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
             print('Saving')
 
         normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
+    is_done_callback()
+
 
 # Stand object
 try:
@@ -170,6 +172,9 @@ class CalculateScreen(Screen):
             return True
         return False
 
+    def is_done(self):
+        self.ids.normal_map_image.reload()
+
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
         self.reload_current_assets_path()
@@ -205,9 +210,8 @@ class CalculateScreen(Screen):
         assets_path = os.path.join(session_path, assets_parent_directory, "*.bmp")
         if os.path.isdir(session_path) and glob.glob(assets_path):
             self.set_progress_bar_value(0)
-            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value, self.is_asked_to_exit))
+            self.thread = Thread(target = calculateNormalMap, args = (session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
             self.thread.start()
-            self.ids.normal_map_image.reload()
 
 class CalibrateScreen(Screen):
     pass
