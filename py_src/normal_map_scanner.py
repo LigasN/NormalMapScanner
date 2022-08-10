@@ -99,8 +99,8 @@ except:
 # -----------------------------------------------------------------------------
 
 #Logger.setLevel(logging.TRACE)
-#Window.fullscreen = True
-Window.size = (960, 540)
+Window.fullscreen = True
+#Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
@@ -132,22 +132,30 @@ class FullProcessPart1Screen(Screen):
 class GatherScreen(Screen):
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
+        self.__reload_check_image()
 
     def check_camera(self):
         tmp_path = os.path.join(os.path.abspath(workspace_path), tmp_dir)
         if not os.path.exists(tmp_path):
             os.makedirs(tmp_path, exist_ok=True)
-        check_filepath = tmp_path + "tmp.png"
+        check_filepath =  os.path.join(tmp_path, "tmp.png")
         g_stand.check_camera_to_path(check_filepath)
-        self.ids.source = check_filepath
+        self.__reload_check_image(check_filepath)
+
+    def __reload_check_image(self, image_filepath = "./tmp/tmp.png"):
+        if os.path.exists(image_filepath):
+            self.ids.check_image.source = os.path.join(os.path.abspath(image_filepath))
+        else:
+            self.ids.check_image.source = os.path.join("./assets/preview.jpg")
         self.ids.check_image.reload()
 
     def capture_all_assets(self):
         session_dir = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
-        save_dir = os.path.join(os.path.abspath(workspace_path), session_dir, assets_parent_directory)
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir, exist_ok=True)
-        g_stand.gatherAllAssets(save_dir)
+        save_path = os.path.join(os.path.abspath(workspace_path), session_dir, assets_parent_directory)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, exist_ok=True)
+        g_stand.gatherAllAssets(save_path = save_path,
+            preview_callback = self.__reload_check_image)
 
 class CalculateScreen(Screen):
     session_path = os.path.abspath(workspace_path)
@@ -160,11 +168,13 @@ class CalculateScreen(Screen):
 
     def __del__(self):
         self.asked_to_exit = True
-        self.thread.join()
+        if self.thread:
+            self.thread.join()
 
     def exit(self):
         self.asked_to_exit = True
-        self.thread.join()
+        if self.thread:
+            self.thread.join()
         self.manager.current = 'menu_screen'
 
     def is_asked_to_exit(self):
@@ -183,8 +193,6 @@ class CalculateScreen(Screen):
         else:
             self.ids.normal_map_image.source = os.path.join("./assets/preview.jpg")
             self.ids.normal_map_image.reload()
-
-
 
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()

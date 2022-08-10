@@ -68,11 +68,10 @@ class Stand:
                 time.sleep(intro_lights_change_delay)
                 GPIO.output(lightGPIO, GPIO.LOW)
 
-    def __makeSingleShot(self, angle, path):
+    def __makeSingleShot(self, angle, output_filepath):
         GPIO.output(Stand.LightsGPIO[angle], GPIO.HIGH)
         time.sleep(self.shot_delay)
-        self.camera.capture(path + "/" + 
-            self.input_filename_prefix + str(angle) + ".bmp")
+        self.camera.capture(output_filepath)
         time.sleep(self.shot_delay)
         GPIO.output(Stand.LightsGPIO[angle], GPIO.LOW)
 
@@ -81,10 +80,16 @@ class Stand:
             self.input_filename_prefix + self.environment_filename + ".bmp")
 
 
-    def gatherAllAssets(self, path):
-        self.__makeEnviromentLightShot(path)
+    def gatherAllAssets(self, save_path, preview_callback = None):
+        self.__makeEnviromentLightShot(save_path)
+        output_filepath = None 
         for angle in self.LightsGPIO.keys():
-            self.__makeSingleShot(angle, path)
+            output_filepath = os.path.join(os.path.abspath(save_path),
+                self.input_filename_prefix + str(angle) + ".bmp")
+            self.__makeSingleShot(angle, output_filepath)
+        if preview_callback:
+            preview_callback(output_filepath)
+
 
     def check_camera_to_path(self, path):
         self.__TurnAllLightsOn()

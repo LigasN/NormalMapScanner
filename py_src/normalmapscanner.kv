@@ -211,7 +211,7 @@
                 pos_hint: {'center_x': 0.15, 'center_y': 0.05}
                 text: 'Back to menu'
                 font_size: self.height * font_size_height_factor
-                on_press: root.manager.current = 'menu_screen'
+                on_press: root.exit()
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)
