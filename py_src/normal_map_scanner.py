@@ -79,7 +79,7 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
 
     if normalmap.normalmap:
         if verbosity >= 1:
-            normalmap.normalmap.show()
+            #normalmap.normalmap.show()
             print('Saving')
 
         normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
