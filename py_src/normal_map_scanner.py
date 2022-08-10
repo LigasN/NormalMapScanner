@@ -77,13 +77,14 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
         progressbar=True, set_progress_bar_value_function=set_progress_bar_value_function,
         is_asked_to_exit=is_asked_to_exit)
 
+    savefile_path = os.path.join(session_abs_path, output_file)
     if normalmap.normalmap:
         if verbosity >= 1:
             #normalmap.normalmap.show()
             print('Saving')
 
-        normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
-    is_done_callback()
+        normalmap.normalmap.save(savefile_path)
+    is_done_callback(savefile_path)
 
 
 # Stand object
@@ -183,11 +184,15 @@ class CalculateScreen(Screen):
             return True
         return False
 
-    def is_done(self):
-        self.__refresh_normalmap()
+    def is_done(self, path = None):
+        self.__refresh_normalmap(path)
 
-    def __refresh_normalmap(self):
-        self.ids.normal_map_image.source = os.path.join(os.path.abspath(self.session_path), output_file)
+    def __refresh_normalmap(self, path = None):
+        if not path:
+            self.ids.normal_map_image.source = os.path.join(os.path.abspath(self.session_path), output_file)
+        else:
+            self.ids.normal_map_image.source = path
+
         if os.path.exists(self.ids.normal_map_image.source):
             self.ids.normal_map_image.reload()
         else:
