@@ -1,6 +1,7 @@
 import os
 import sys
 from threading import Thread
+import time
 from PIL import Image
 import numpy as np
 from datetime import datetime
@@ -53,15 +54,10 @@ def load_image(filename):
 
 def calculateNormalMap(session_abs_path, set_progress_bar_value_function, 
         is_asked_to_exit, is_done_callback):
-    tmp_path = os.path.join(session_abs_path, tmp_dir)
-    if not os.path.exists(tmp_path):
-        os.makedirs(tmp_path, exist_ok=True)
-
     assets_path = os.path.join(session_abs_path, assets_parent_directory)
-    load_angle_assets_path = os.path.join(os.path.abspath(assets_path))
     for angle in NormalMap.angles:
         filename = input_filename_prefix + str(angle) + '.bmp'
-        filepath = os.path.join(load_angle_assets_path, filename)
+        filepath = os.path.join(assets_path, filename)
         sourcefiles[angle] = load_image(filepath)
 
     environment_file_name = input_filename_prefix + environment_filename + '.bmp'
@@ -83,6 +79,7 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
             print('Saving')
 
         normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
+        time.sleep(0.1)
     is_done_callback()
 
 
@@ -99,8 +96,8 @@ except:
 # -----------------------------------------------------------------------------
 
 #Logger.setLevel(logging.TRACE)
-Window.fullscreen = True
-#Window.size = (960, 540)
+#Window.fullscreen = True
+Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
