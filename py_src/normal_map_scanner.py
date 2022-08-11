@@ -96,8 +96,8 @@ except:
 # -----------------------------------------------------------------------------
 
 #Logger.setLevel(logging.TRACE)
-#Window.fullscreen = True
-Window.size = (960, 540)
+Window.fullscreen = True
+#Window.size = (960, 540)
 
 
 class ChooseWorkspaceDialog(FloatLayout):
@@ -199,10 +199,10 @@ class CalculateScreen(Screen):
 
     def reload_current_assets_path(self):
         self.assets_paths_list.clear()
-        workspace_abs_path = os.path.abspath(workspace_path)
-        if os.path.isdir(workspace_abs_path):
-            for dir_name in os.listdir(workspace_abs_path):
-                possible_assets_path = os.path.join(workspace_abs_path, dir_name, assets_parent_directory)
+        self.session_path = os.path.abspath(workspace_path)
+        if os.path.isdir(self.session_path):
+            for dir_name in os.listdir(self.session_path):
+                possible_assets_path = os.path.join(self.session_path, dir_name, assets_parent_directory)
                 possible_asset_file_path = os.path.join(possible_assets_path, "*.bmp")
                 if os.path.isdir(possible_assets_path) and glob.glob(possible_asset_file_path):
                     self.assets_paths_list.append(dir_name)
@@ -227,6 +227,7 @@ class CalculateScreen(Screen):
             self.set_progress_bar_value(0)
             self.thread = Thread(target = calculateNormalMap, args = (self.session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
             self.thread.start()
+            self.__refresh_normalmap()
 
 class CalibrateScreen(Screen):
     pass
