@@ -154,7 +154,8 @@ class NormalMap:
 
         for y, x in np.ndindex(self.image_size[1], self.image_size[0]):
 
-            if is_asked_to_exit != None and is_asked_to_exit() == True:
+            if (None != is_asked_to_exit) and (True == is_asked_to_exit()):
+                print("Asked to exit! Exiting algorithm during process!")
                 return
             if (verbosity >= 1 or progressbar):
                 self.__printProgressBar(y + 1)
