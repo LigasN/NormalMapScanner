@@ -40,7 +40,7 @@ tmp_dir = "tmp/"
 workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
-resolution = (800, 800) #px
+resolution = (300, 300) #px
 object_size = (20, 20) #cm
 lamp_0_position = (40, 0, 20) #cm
 verbosity = 1 # Only status
@@ -79,7 +79,6 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
             print('Saving')
 
         normalmap.normalmap.save(os.path.join(session_abs_path, output_file))
-        time.sleep(0.1)
     is_done_callback()
 
 
@@ -159,6 +158,8 @@ class CalculateScreen(Screen):
     gather_input_message_value = ["Please gather input images first"]
     assets_paths_list = []
     asked_to_exit = False
+    thread = None
+    spinner_last_value = None
 
     def __init__(self,**kwargs):
         super(CalculateScreen, self).__init__(**kwargs)
@@ -175,27 +176,25 @@ class CalculateScreen(Screen):
         self.manager.current = 'menu_screen'
 
     def is_asked_to_exit(self):
-        if self.asked_to_exit:
+        if (True == self.asked_to_exit):
             self.asked_to_exit = False
             return True
         return False
 
-    def is_done(self, path = None):
-        self.__refresh_normalmap(path)
+    def is_done(self):
+        self.__refresh_normalmap()
 
-    def __refresh_normalmap(self, path = None):
-        if not path:
-            self.ids.normal_map_image.source = os.path.join(os.path.abspath(self.session_path), output_file)
-        else:
-            self.ids.normal_map_image.source = path
+    def __refresh_normalmap(self):
+        self.ids.normal_map_image.source = os.path.join(os.path.abspath(self.session_path), output_file)
 
-        if os.path.exists(self.ids.normal_map_image.source):
-            self.ids.normal_map_image.reload()
-        else:
+        if not os.path.exists(self.ids.normal_map_image.source):
             self.ids.normal_map_image.source = os.path.join("./assets/preview.jpg")
-            self.ids.normal_map_image.reload()
+        
+        self.ids.normal_map_image.reload()
+        print("image source: " + self.ids.normal_map_image.source)
 
     def on_pre_enter(self):
+        self.asked_to_exit = False
         self.ids.workspace_id.refresh_workspace_path_label()
         self.reload_current_assets_path()
         self.set_progress_bar_value(0)
@@ -203,10 +202,12 @@ class CalculateScreen(Screen):
 
     def reload_current_assets_path(self):
         self.assets_paths_list.clear()
-        self.session_path = os.path.abspath(workspace_path)
-        if os.path.isdir(self.session_path):
-            for dir_name in os.listdir(self.session_path):
-                possible_assets_path = os.path.join(self.session_path, dir_name, assets_parent_directory)
+        abs_workspace_path = os.path.abspath(workspace_path)
+        if os.path.isdir(abs_workspace_path):
+            if self.spinner_last_value != None:
+                self.session_path = os.path.join(abs_workspace_path, self.spinner_last_value)
+            for dir_name in os.listdir(abs_workspace_path):
+                possible_assets_path = os.path.join(abs_workspace_path, dir_name, assets_parent_directory)
                 possible_asset_file_path = os.path.join(possible_assets_path, "*.bmp")
                 if os.path.isdir(possible_assets_path) and glob.glob(possible_asset_file_path):
                     self.assets_paths_list.append(dir_name)
@@ -217,6 +218,7 @@ class CalculateScreen(Screen):
             self.ids.spinner_id.values = self.gather_input_message_value
 
     def spinner_clicked(self, value):
+        self.spinner_last_value = value
         self.session_path = os.path.join(os.path.abspath(workspace_path), value)
         self.__refresh_normalmap()
 
