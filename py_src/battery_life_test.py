@@ -21,17 +21,24 @@ verbosity = 1 # Only status
 if not os.path.exists("./tmp/"):
     os.makedirs("./tmp/")
 
-logfile = open('./tmp/log.txt', 'w')
+logfile = open('./tmp/testlog.txt', 'w')
 
 def log( message):
     print(message)
     if logfile: 
         logfile.write(message)
+        logfile.flush()
+        os.fsync(logfile.fileno())
 
+last_percentage_progress = -1
 def log_progress(percentage):
-    log("Calculation progress (" + str(datetime.now().time()) + "): " + "{:.2f}".format(percentage) + '%')
+    text = "Calculation progress (" + str(datetime.now().time()) + "): " + "{:.2f}".format(percentage) + '%'
+    print(text)
+    if logfile and last_percentage_progress != percentage: 
+        last_percentage_progress = percentage
+        logfile.write(text)
 
-log(str(datetime.now()) + '\n')
+log("Battery Life Test: " + str(datetime.now()) + '\n')
 
 def load_image(filename):
     try:
@@ -57,7 +64,7 @@ def calculateNormalMap():
                           )
 
     normalmap.calculateNormalMap(verbosity=verbosity, log=False, 
-        progressbar=True, set_progress_bar_value_function = log_progress)
+        progressbar=True)
 
     if verbosity >= 1:
         normalmap.normalmap.show()
@@ -67,8 +74,7 @@ def calculateNormalMap():
 
 
 def main():
-    stand = Stand(assets_directory=assets_directory,
-        input_filename_prefix=input_filename_prefix,
+    stand = Stand(input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
         resolution = resolution
         )
@@ -82,11 +88,12 @@ def main():
         if not os.path.exists(assets_directory):
             os.makedirs(assets_directory, exist_ok=True)
 
-        log("gathering assets[" + str(i) + "]: " + str(datetime.now().time()))
-        stand.gatherAllAssets()
+        log("gathering assets[" + str(i) + "]: " + str(datetime.now().time()) + '\n')
+        stand.gatherAllAssets(assets_directory)
 
-        log("calculating map[" + str(i) + "]: " + str(datetime.now().time()))
+        log("calculating map[" + str(i) + "]: " + str(datetime.now().time())+ '\n')
         calculateNormalMap()
+        log("calculations done[" + str(i) + "]: " + str(datetime.now().time())+ '\n')
 
         try:
             os.rmdir(assets_directory)
