@@ -22,6 +22,7 @@ from kivy.uix.popup import Popup
 from kivy.utils import platform
 from kivy.logger import Logger
 from kivy.clock import Clock
+from kivy.uix.settings import SettingsWithNoMenu
 import logging
 
 from normal_map.normal_map import NormalMap
@@ -41,7 +42,7 @@ workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
 # 3280px x 2464px
-resolution = (1500, 100) #px
+resolution = np.array([1500, 100]) #px
 object_size = (50, 50) #cm
 lamp_0_position = (55, 0, 35) #cm
 verbosity = 1 # Only status
@@ -128,6 +129,9 @@ class GatherScreen(Screen):
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
         self.__reload_check_image()
+        global resolution
+        self.ids.resolutionWidthTextInput.text = str(resolution[0])
+        self.ids.resolutionHeightTextInput.text = str(resolution[1])
 
     def check_camera(self):
         tmp_path = os.path.join(os.path.abspath(workspace_path), tmp_dir)
@@ -151,6 +155,15 @@ class GatherScreen(Screen):
             os.makedirs(save_path, exist_ok=True)
         g_stand.gatherAllAssets(save_path = save_path,
             preview_callback = self.__reload_check_image)
+
+    def setResolutionHeight(self):
+        global resolution
+        resolution[1] = int(self.ids.resolutionHeightTextInput.text)
+
+    def setResolutionWidth(self):
+        global resolution
+        resolution[0] = int(self.ids.resolutionWidthTextInput.text)
+
 
 
 class CalculateScreen(Screen):

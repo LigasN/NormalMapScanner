@@ -127,10 +127,36 @@
                     allow_stretch: True
                     keep_ratio: True
                     source: tmp_dir + 'tmp.png'
-            BoxLayout:
-                pos_hint: {'center_x': 0.325, 'center_y': 0.45}
-                size_hint: (0.3, 0.7)
-                pos_hint: {'center_x': 0.85, 'center_y': 0.05}
+            GridLayout:
+                rows:1
+                cols:4
+                pos_hint: {'center_x': 0.85, 'center_y': 0.45}
+                halign: 'left'
+                size_hint: (0.3, 0.06)
+                Label:
+                    text: 'Resolution:'
+                    size_hint: (0.5, 1)
+                    font_size: self.width * font_size_width_factor * 2
+                TextInput:
+                    id: resolutionWidthTextInput
+                    text: '3280'
+                    valign: 'middle'
+                    font_size: self.width * 0.39
+                    size_hint: (0.2, 1)
+                    multiline: False
+                    on_text: root.setResolutionWidth()
+                Label:
+                    text: 'x'
+                    size_hint: (0.1, 1)
+                    font_size: self.width * 0.8
+                TextInput:
+                    id: resolutionHeightTextInput
+                    text: '2464'
+                    valign: 'middle'
+                    font_size: self.width * 0.39
+                    size_hint: (0.2, 1)
+                    multiline: False
+                    on_text: root.setResolutionHeight()
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)
