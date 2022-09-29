@@ -40,9 +40,13 @@ tmp_dir = "tmp/"
 workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
-resolution = (1500, 1500) #px
-object_size = (50, 50) #cm
-lamp_0_position = (55, 0, 35) #cm
+resolution = (300, 300) #px
+object_size = (30, 30) #cm
+lamp_0_position = (40, 0, 20) #cm
+#resolution = (1500, 1500) #px
+#object_size = (50, 50) #cm
+#lamp_0_position = (55, 0, 35) #cm
+
 verbosity = 1 # Only status
 
 def load_image(filename):
