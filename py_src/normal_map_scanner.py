@@ -40,13 +40,10 @@ tmp_dir = "tmp/"
 workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
-resolution = (300, 300) #px
-object_size = (30, 30) #cm
-lamp_0_position = (40, 0, 20) #cm
-#resolution = (1500, 1500) #px
-#object_size = (50, 50) #cm
-#lamp_0_position = (55, 0, 35) #cm
-
+# 3280px x 2464px
+resolution = (1500, 100) #px
+object_size = (50, 50) #cm
+lamp_0_position = (55, 0, 35) #cm
 verbosity = 1 # Only status
 
 def load_image(filename):
@@ -126,8 +123,6 @@ class MenuScreen(Screen):
             self.ids.workspace_id.refresh_workspace_path_label()
             self.dismiss_popup()
 
-class FullProcessPart1Screen(Screen):
-    pass
 
 class GatherScreen(Screen):
     def on_pre_enter(self):
@@ -156,6 +151,7 @@ class GatherScreen(Screen):
             os.makedirs(save_path, exist_ok=True)
         g_stand.gatherAllAssets(save_path = save_path,
             preview_callback = self.__reload_check_image)
+
 
 class CalculateScreen(Screen):
     session_path = os.path.abspath(workspace_path)
@@ -230,7 +226,6 @@ class CalculateScreen(Screen):
         self.ids.progress_bar.value = percentage_value
         self.ids.progress_label.text = "{:.2f}".format(percentage_value) + '%'
         
-
     def calculate_normal_map(self):
         assets_path = os.path.join(self.session_path, assets_parent_directory, "*.bmp")
         if os.path.isdir(self.session_path) and glob.glob(assets_path):
@@ -238,13 +233,12 @@ class CalculateScreen(Screen):
             self.thread = Thread(target = calculateNormalMap, args = (self.session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
             self.thread.start()
 
-class CalibrateScreen(Screen):
-    pass
 
 class WorkspaceWidget(FloatLayout):
     workspace_path_property = StringProperty(os.path.abspath(workspace_path))
     def refresh_workspace_path_label(self):
         self.ids.workspace_path_label.text = "Workspace path: " + os.path.abspath(workspace_path)
+
 
 class NormalMapScannerApp(App):
 
@@ -253,12 +247,11 @@ class NormalMapScannerApp(App):
         sm = ScreenManager()
         sm.transition = NoTransition()
         sm.add_widget(MenuScreen(name='menu_screen'))
-        sm.add_widget(FullProcessPart1Screen(name='full_process_part_1_screen'))
         sm.add_widget(GatherScreen(name='gather_screen'))
         sm.add_widget(CalculateScreen(name='calculate_screen'))
-        sm.add_widget(CalibrateScreen(name='calibrate_screen'))
 
         return sm
+
 
 if __name__ == '__main__':
     NormalMapScannerApp().run()
