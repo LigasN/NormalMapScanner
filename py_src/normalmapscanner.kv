@@ -99,7 +99,7 @@
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.15, 'center_y': 0.05}
                 font_size: self.height * font_size_height_factor
-                on_press: root.manager.current = 'menu_screen'
+                on_release: root.manager.current = 'menu_screen'
             Button:
                 text: 'Check camera'
                 size_hint: (0.3, 0.05)
@@ -111,7 +111,7 @@
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.85, 'center_y': 0.05}
                 font_size: self.height * font_size_height_factor
-                on_press: root.capture_all_assets()
+                on_release: root.capture_all_assets()
             BoxLayout:
                 pos_hint: {'center_x': 0.325, 'center_y': 0.45}
                 size_hint: (0.647, 0.7)
@@ -122,7 +122,7 @@
                     Line:
                         width: 1
                         rectangle: self.x, self.y, self.width, self.height
-                Image:
+                AsyncImage:
                     id: check_image
                     allow_stretch: True
                     keep_ratio: True
@@ -144,7 +144,7 @@
                     font_size: self.width * 0.39
                     size_hint: (0.2, 1)
                     multiline: False
-                    on_text_validate: root.setResolution()
+                    on_text_validate: root.set_resolution()
                 Label:
                     text: 'x'
                     size_hint: (0.1, 1)
@@ -156,7 +156,7 @@
                     font_size: self.width * 0.39
                     size_hint: (0.2, 1)
                     multiline: False
-                    on_text_validate: root.setResolution()
+                    on_text_validate: root.set_resolution()
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)
@@ -176,7 +176,7 @@
                 font_size: self.height
                 halign: 'center'
                 valign: 'middle'
-            Image:
+            AsyncImage:
                 id: normal_map_image
                 size_hint_y: 0.7
                 pos_hint: {'center_x': 0.5, 'center_y': 0.47}

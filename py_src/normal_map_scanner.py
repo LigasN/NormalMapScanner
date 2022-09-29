@@ -156,7 +156,7 @@ class GatherScreen(Screen):
         g_stand.gatherAllAssets(save_path = save_path,
             preview_callback = self.__reload_check_image)
 
-    def setResolution(self):
+    def set_resolution(self):
         try:
             resolution = np.array([int(self.ids.resolutionWidthTextInput.text), int(self.ids.resolutionHeightTextInput.text)])
             Logger.info('Settings: try to set resolution: ' + str(resolution))
