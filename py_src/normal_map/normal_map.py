@@ -20,6 +20,7 @@ class NormalMap:
         environment light: PIL:Image - already loaded Image of the environment
             light (no stand lights turned on during making this picture).
     """
+    angles = np.array(range(0, 360, 45))
 
     def __init__(
         self, source_files, object_size, lamp_0_position,
@@ -75,7 +76,6 @@ class NormalMap:
         return self.normalmap != None and self.normalmap.size > [0, 0]
 
     def calculateNormalMap(self, verbosity=0, log=False, progressbar=True,  set_progress_bar_value_function=None, is_asked_to_exit=None):
-        angles = np.array(range(0, 360, 45))
 
         # Creating tmp directory for logging purposes
         if not os.path.exists("./tmp/"):
@@ -90,7 +90,7 @@ class NormalMap:
         input = dict()
         output = np.zeros((self.image_size[1], self.image_size[0], 3), float)
 
-        for angle in angles:
+        for angle in self.angles:
             if verbosity >= 1:
                 self.__log('Loading of the input data array with angle: %d' %
                       angle)
@@ -114,9 +114,9 @@ class NormalMap:
             self.__log('Calcultion of the positions of the lamps')
 
         start_time = time.time()
-        lamp_pos = { angles[0]: self.lamp_0_position }
+        lamp_pos = { self.angles[0]: self.lamp_0_position }
         lamp_distance = self.lamp_0_position[0]
-        for angle in angles[1:angles.size]:
+        for angle in self.angles[1:self.angles.size]:
             # Calculate every lamp position (z position is not changing)
             lamp_pos[angle] = np.array([
                 float(np.cos(self.__deg2Rad(angle)) * lamp_distance),
@@ -155,7 +155,7 @@ class NormalMap:
             pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
 
             N_vector = np.zeros(3, float)
-            for angle in angles:
+            for angle in self.angles:
                 # Vector pointing to the light source
                 L_vector = lamp_pos[angle] - pixel_pos
                 # L_vector is pointing to the lamp. Input image for normal
