@@ -162,7 +162,7 @@ class GatherScreen(Screen):
             Logger.info('Settings: try to set resolution: ' + str(resolution))
             g_stand.setResolution(resolution)
         except:
-            Logger.info('Settings: failed to set resolution to: [' + self.ids.resolutionWidthTextInput.text + ', ' + self.ids.resolutionHeightTextInput.text + ']')
+            Logger.error('Settings: failed to set resolution to: [' + self.ids.resolutionWidthTextInput.text + ', ' + self.ids.resolutionHeightTextInput.text + ']')
             resolution = g_stand.getResolution()
             self.ids.resolutionWidthTextInput.text = str(resolution[0])
             self.ids.resolutionHeightTextInput.text = str(resolution[1])
@@ -207,8 +207,9 @@ class CalculateScreen(Screen):
         if not os.path.exists(self.ids.normal_map_image.source):
             self.ids.normal_map_image.source = os.path.join("./assets/preview.jpg")
         
+        Logger.info("Image: source set to: " + self.ids.normal_map_image.source)
         self.ids.normal_map_image.reload()
-        print("image source: " + self.ids.normal_map_image.source)
+        Logger.info("Image: reloaded")
 
     def on_pre_enter(self):
         self.asked_to_exit = False
