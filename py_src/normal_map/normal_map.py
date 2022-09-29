@@ -1,10 +1,9 @@
 import argparse
 import os
-import sys
 import numpy as np
 import time
 from PIL import Image, ImageChops
-import datetime
+from datetime import datetime
 
 
 class NormalMap:
@@ -21,10 +20,6 @@ class NormalMap:
         environment light: PIL:Image - already loaded Image of the environment
             light (no stand lights turned on during making this picture).
     """
-    R, G, B = 0, 1, 2
-    X, Y, Z = 0, 1, 2
-    angles = np.array(range(0, 360, 45))
-    angles_rad = np.array((angles * np.pi) / 180, float)
 
     def __init__(
         self, source_files, object_size, lamp_0_position,
@@ -61,23 +56,6 @@ class NormalMap:
     def __deg2Rad(self, angle):
         return (angle * np.pi) / 180,
 
-    def __sRGB2Linear(self, im):
-        """
-        Converts image stored in convertable to np.array object from sRGB 
-        color mapping space to linear.
-
-        @params:
-            im   - Required  : image stored in convertable to np.array object
-        """
-        # Convert to numpy array of float
-        arr = np.array(im, dtype=np.float32) / 255.0
-        # Convert sRGB -> linear
-        arr = np.where(arr <= 0.04045, arr/12.92, ((arr+0.055)/1.055)**2.4)
-        # Convert to 8-bit
-        arrOut = np.uint8(np.rint(arr * 255.0))
-        # Convert back to PIL
-        return Image.fromarray(arrOut)
-
     def __magnitude(self, v):
         return np.sqrt(np.sum(v**2))
 
@@ -93,21 +71,26 @@ class NormalMap:
         if self.logfile: 
             self.logfile.write(message)
 
-    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True, set_progress_bar_value_function=None, is_asked_to_exit=None):
-        # Creating tmp directory for future purposes
+    def isNormalMapReady(self):
+        return self.normalmap != None and self.normalmap.size > [0, 0]
+
+    def calculateNormalMap(self, verbosity=0, log=False, progressbar=True,  set_progress_bar_value_function=None, is_asked_to_exit=None):
+        angles = np.array(range(0, 360, 45))
+
+        # Creating tmp directory for logging purposes
         if not os.path.exists("./tmp/"):
             os.makedirs("./tmp/")
 
         # Logging initialization
         if (log):
-            self.logfile = open('./tmp/log.txt', 'w')
-            self.__log(str(datetime.datetime.now()) + '\n')
+            self.logfile = open('./tmp/log.txt', 'a')
+            self.__log("Normal map calculation process: " + str(datetime.now()) + '\n')
 
         # single pixel stores sum of RGB colors
         input = dict()
         output = np.zeros((self.image_size[1], self.image_size[0], 3), float)
 
-        for angle in self.angles:
+        for angle in angles:
             if verbosity >= 1:
                 self.__log('Loading of the input data array with angle: %d' %
                       angle)
@@ -118,9 +101,9 @@ class NormalMap:
                 self.source_files[angle], self.environment_light)
 
             # Sum colors
-            input[angle] = (np.array(im.getdata(self.R), float) +
-                        np.array(im.getdata(self.G), float) +
-                        np.array(im.getdata(self.B), float)).reshape(
+            input[angle] = (np.array(im.getdata(0), float) +
+                        np.array(im.getdata(1), float) +
+                        np.array(im.getdata(2), float)).reshape(
                 self.image_size[1], self.image_size[0])
 
             if (verbosity >= 1):
@@ -131,9 +114,9 @@ class NormalMap:
             self.__log('Calcultion of the positions of the lamps')
 
         start_time = time.time()
-        lamp_pos = { self.angles[0]: self.lamp_0_position }
+        lamp_pos = { angles[0]: self.lamp_0_position }
         lamp_distance = self.lamp_0_position[0]
-        for angle in self.angles[1:self.angles.size]:
+        for angle in angles[1:angles.size]:
             # Calculate every lamp position (z position is not changing)
             lamp_pos[angle] = np.array([
                 float(np.cos(self.__deg2Rad(angle)) * lamp_distance),
@@ -143,10 +126,7 @@ class NormalMap:
         if verbosity >= 1:
             self.__log("Position of lamps calculated in %d ms" %
                   ((time.time() - start_time) * 1000))
-            self.__log('Calculation of the normalmap vectors')
-
-        if verbosity >= 2:
-            self.__log(lamp_pos)
+            self.__log('Calculation of the normal map vectors')
 
         start_time = time.time()
         pixel_size = self.object_size / self.image_size
@@ -167,7 +147,7 @@ class NormalMap:
             # aligned with its bottom left corner to (0, 0)). However Pillow
             # library is storing images aligned with its upper left corner to
             # the (0, 0) point. So after first calculations the value of
-            # pixel_pos variable is set on (x, -y, 0) to correct the equations
+            # pixel_pos variable is set to (x, -y, 0) to correct the equations
             # for Pillow alignment.
             pixel_pos = ((pixel_idx * pixel_size) +
                          (pixel_size / 2) -
@@ -175,40 +155,14 @@ class NormalMap:
             pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
 
             N_vector = np.zeros(3, float)
-            for angle in self.angles:
+            for angle in angles:
                 # Vector pointing to the light source
                 L_vector = lamp_pos[angle] - pixel_pos
                 # L_vector is pointing to the lamp. Input image for normal
-                # vector equal to this should be white (255,255,255). For
-                # opposite vector color would be black (0,0,0).
+                # vector equal to this should be white (255,255,255).
                 weight = input[angle][y][x] / 765.0
                 N_vector += L_vector * weight
-
-                if verbosity >= 2:
-                    self.__log("pixel idx [%d, %d]" % (x, y))
-                    self.__log("angle: %d" % angle)
-                    self.__log("pixel size")
-                    self.__log(pixel_size)
-                    self.__log("pixel pos")
-                    self.__log(pixel_pos)
-                    self.__log("Lamp pos")
-                    self.__log(lamp_pos[angle])
-                    self.__log("L vector")
-                    self.__log(L_vector)
-                    self.__log("pixel color")
-                    self.__log(input[angle][y][x])
-                    self.__log("weight")
-                    self.__log(weight)
-                    self.__log("N_vector")
-                    self.__log(L_vector * weight)
-                    self.__log("N_vector after addition")
-                    self.__log(N_vector)
-
             output[y][x] = self.__normalize(N_vector)
-
-            if verbosity >= 2:
-                self.__log("Output")
-                self.__log(output[y][x])
 
         if verbosity >= 1:
             self.__log("\nNormalmap vectors calculated in %d ms" %
@@ -226,9 +180,6 @@ class NormalMap:
         if (log):
             self.logfile.close()  # Close logging
 
-    def isNormalMapReady(self):
-        return self.normalmap != None and self.normalmap.size > [0, 0]
-
 
 if __name__ == "__main__":
 
@@ -241,7 +192,6 @@ if __name__ == "__main__":
 
     # Script arguments parser
     parser = argparse.ArgumentParser()
-    # -id input files directory -o output file -p PASSWORD -size 20000
     parser.add_argument("-i", "--input_directory", dest="assets_path",
                         default="test_input/4.blender_1200x1200px/",
                         help="input files directory (str)")
