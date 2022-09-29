@@ -144,7 +144,7 @@
                     font_size: self.width * 0.39
                     size_hint: (0.2, 1)
                     multiline: False
-                    on_text: root.setResolutionWidth()
+                    on_text_validate: root.setResolution()
                 Label:
                     text: 'x'
                     size_hint: (0.1, 1)
@@ -156,7 +156,7 @@
                     font_size: self.width * 0.39
                     size_hint: (0.2, 1)
                     multiline: False
-                    on_text: root.setResolutionHeight()
+                    on_text_validate: root.setResolution()
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)
