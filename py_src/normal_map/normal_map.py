@@ -33,8 +33,8 @@ class NormalMap:
         self.normalmap = None
         self.logfile = None
 
-    def __calculatePercentageProcessStatus(self, iteration):
-        return 100 * (iteration / float(self.image_size[1]))
+    def __calculateProcessStatus(self, iteration):
+        return (float(iteration) / float(self.image_size[1]))
 
     def __printProgressBar(self, iteration, prefix='', suffix='', decimals=1,
                            length=50, fill='█', printEnd="\r"):
@@ -49,7 +49,7 @@ class NormalMap:
             fill        - Optional  : bar fill character (Str)
             printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
         """
-        percent = ("{0:." + str(decimals) + "f}").format(self.__calculatePercentageProcessStatus(iteration))
+        percent = ("{0:." + str(decimals) + "f}").format(100.00 * self.__calculateProcessStatus(iteration))
         filledLength = int(length * iteration // self.image_size[1])
         bar = fill * filledLength + '-' * (length - filledLength)
         print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
@@ -76,6 +76,7 @@ class NormalMap:
         return self.normalmap != None and self.normalmap.size > [0, 0]
 
     def calculateNormalMap(self, verbosity=0, log=False, progressbar=True,  set_progress_bar_value_function=None, is_asked_to_exit=None):
+        app_progress_value = 0.00
 
         # Creating tmp directory for logging purposes
         if not os.path.exists("./tmp/"):
@@ -109,6 +110,9 @@ class NormalMap:
             if (verbosity >= 1):
                 self.__log("Loaded and converted in %d ms" %
                       ((time.time() - start_time) * 1000))
+            if (set_progress_bar_value_function != None):
+                app_progress_value += 1.20
+                set_progress_bar_value_function(app_progress_value)
 
         if (verbosity >= 1):
             self.__log('Calcultion of the positions of the lamps')
@@ -122,12 +126,15 @@ class NormalMap:
                 float(np.cos(self.__deg2Rad(angle)) * lamp_distance),
                 float(np.sin(self.__deg2Rad(angle)) * lamp_distance),
                 float(self.lamp_0_position[2])])
+        if (set_progress_bar_value_function != None):
+            app_progress_value += 0.40
+            set_progress_bar_value_function(app_progress_value)
 
         if verbosity >= 1:
             self.__log("Position of lamps calculated in %d ms" %
                   ((time.time() - start_time) * 1000))
             self.__log('Calculation of the normal map vectors')
-
+        print(app_progress_value)
         start_time = time.time()
         pixel_size = self.object_size / self.image_size
         pixel_idx = np.zeros(2)
@@ -140,7 +147,7 @@ class NormalMap:
             if (verbosity >= 1 or progressbar):
                 self.__printProgressBar(y + 1)
             if (set_progress_bar_value_function != None):
-                set_progress_bar_value_function(self.__calculatePercentageProcessStatus(y + 1))
+                set_progress_bar_value_function(app_progress_value + 90 * self.__calculateProcessStatus(y + 1))
 
             pixel_idx = np.array((x, y))
             # Pixel position calculation is at first calculated for an object
