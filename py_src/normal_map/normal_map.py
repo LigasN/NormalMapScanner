@@ -3,6 +3,7 @@ import os
 import numpy as np
 import time
 from PIL import Image, ImageChops
+from threading import Thread
 from datetime import datetime
 
 
@@ -33,9 +34,6 @@ class NormalMap:
         self.normalmap = None
         self.logfile = None
 
-    def __calculateProcessStatus(self, iteration):
-        return (float(iteration) / float(self.image_size[1]))
-
     def __printProgressBar(self, iteration, prefix='', suffix='', decimals=1,
                            length=50, fill='█', printEnd="\r"):
         """
@@ -49,7 +47,7 @@ class NormalMap:
             fill        - Optional  : bar fill character (Str)
             printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
         """
-        percent = ("{0:." + str(decimals) + "f}").format(100.00 * self.__calculateProcessStatus(iteration))
+        percent = ("{0:." + str(decimals) + "f}").format(100.00 * self.(float(iteration) / float(self.image_size[1]))
         filledLength = int(length * iteration // self.image_size[1])
         bar = fill * filledLength + '-' * (length - filledLength)
         print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
@@ -71,6 +69,40 @@ class NormalMap:
         print(message)
         if self.logfile: 
             self.logfile.write(message)
+
+    def __calculateSetOfNormals(self, begin, end, input, lamp_pos, output, app_progress_value, verbosity=0, progressbar=True,  set_progress_bar_value_function=None, is_asked_to_exit=None):
+        #for y, x in np.ndindex(self.image_size[1], self.image_size[0]):
+        for y, x in (np.ndindex(end - begin) + begin):
+            if (None != is_asked_to_exit) and (True == is_asked_to_exit()):
+                print("Asked to exit! Exiting algorithm during process!")
+                return
+            if (verbosity >= 1 or progressbar):
+                self.__printProgressBar(y + 1)
+            if (set_progress_bar_value_function != None):
+                set_progress_bar_value_function(app_progress_value + (90 / float(self.image_size[1])))
+
+            pixel_idx = np.array((x, y))
+            # Pixel position calculation is at first calculated for an object
+            # aligned with its bottom left corner to (0, 0)). However Pillow
+            # library is storing images aligned with its upper left corner to
+            # the (0, 0) point. So after first calculations the value of
+            # pixel_pos variable is set to (x, -y, 0) to correct the equations
+            # for Pillow alignment.
+            pixel_pos = ((pixel_idx * pixel_size) +
+                         (pixel_size / 2) -
+                         (self.object_size / 2))
+            pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
+
+            N_vector = np.zeros(3, float)
+            for angle in self.angles:
+                # Vector pointing to the light source
+                L_vector = lamp_pos[angle] - pixel_pos
+                # L_vector is pointing to the lamp. Input image for normal
+                # vector equal to this should be white (255,255,255).
+                weight = input[angle][y][x] / 765.0
+                N_vector += L_vector * weight
+            output[y][x] = self.__normalize(N_vector)
+        
 
     def isNormalMapReady(self):
         return self.normalmap != None and self.normalmap.size > [0, 0]
@@ -139,37 +171,9 @@ class NormalMap:
         pixel_size = self.object_size / self.image_size
         pixel_idx = np.zeros(2)
 
-        for y, x in np.ndindex(self.image_size[1], self.image_size[0]):
-
-            if (None != is_asked_to_exit) and (True == is_asked_to_exit()):
-                print("Asked to exit! Exiting algorithm during process!")
-                return
-            if (verbosity >= 1 or progressbar):
-                self.__printProgressBar(y + 1)
-            if (set_progress_bar_value_function != None):
-                set_progress_bar_value_function(app_progress_value + 90 * self.__calculateProcessStatus(y + 1))
-
-            pixel_idx = np.array((x, y))
-            # Pixel position calculation is at first calculated for an object
-            # aligned with its bottom left corner to (0, 0)). However Pillow
-            # library is storing images aligned with its upper left corner to
-            # the (0, 0) point. So after first calculations the value of
-            # pixel_pos variable is set to (x, -y, 0) to correct the equations
-            # for Pillow alignment.
-            pixel_pos = ((pixel_idx * pixel_size) +
-                         (pixel_size / 2) -
-                         (self.object_size / 2))
-            pixel_pos = np.array((pixel_pos[0], -pixel_pos[1], 0.))
-
-            N_vector = np.zeros(3, float)
-            for angle in self.angles:
-                # Vector pointing to the light source
-                L_vector = lamp_pos[angle] - pixel_pos
-                # L_vector is pointing to the lamp. Input image for normal
-                # vector equal to this should be white (255,255,255).
-                weight = input[angle][y][x] / 765.0
-                N_vector += L_vector * weight
-            output[y][x] = self.__normalize(N_vector)
+        #for y, x in np.ndindex(self.image_size[1], self.image_size[0]):
+        for _ in range(0, 3):
+            Thread(target = self.__calculateSetOfNormals, args = ((np.array([self.image_size[1] * 0.3]), end, input, lamp_pos, output, app_progress_value, verbosity=0, progressbar=True,  set_progress_bar_value_function=None, is_asked_to_exit=None)))
 
         if verbosity >= 1:
             self.__log("\nNormalmap vectors calculated in %d ms" %
