@@ -17,7 +17,7 @@ class Stand:
         270: 20,
         315: 21
     }
-    shot_delay = 0.2
+    shot_delay = 1
 
     def __init__(self, input_filename_prefix, 
             environment_filename, resolution):
