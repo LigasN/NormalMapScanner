@@ -7,16 +7,6 @@ import os
 # Dictionary with GPIO ID for specific light angle
 
 class Stand:
-    """LightsGPIO = {
-       0: 21,
-        45: 21,
-        90: 21,
-        135: 21,
-        180: 21,
-        225: 21,
-        270: 21,
-        315: 21
-    }"""
     LightsGPIO = {
         0: 5,
         45: 6,
@@ -50,7 +40,6 @@ class Stand:
         self.camera.close()
         GPIO.cleanup()
 
-
     def __TurnAllLightsOn(self):
         for lightGPIO in self.LightsGPIO.values():
             GPIO.output(lightGPIO, GPIO.HIGH)
@@ -80,6 +69,13 @@ class Stand:
             self.input_filename_prefix + self.environment_filename + ".bmp")
 
 
+    def setResolution(self, resolution):
+        self.camera.resolution = resolution
+
+    def getResolution(self):
+        return self.camera.resolution
+
+
     def gatherAllAssets(self, save_path, preview_callback = None):
         self.__makeEnviromentLightShot(save_path)
         output_filepath = None 
@@ -91,7 +87,7 @@ class Stand:
             preview_callback(output_filepath)
 
 
-    def check_camera_to_path(self, path):
+    def checkCameraToPath(self, path):
         self.__TurnAllLightsOn()
         time.sleep(self.shot_delay)
         self.camera.capture(path)

@@ -22,6 +22,7 @@ from kivy.uix.popup import Popup
 from kivy.utils import platform
 from kivy.logger import Logger
 from kivy.clock import Clock
+from kivy.uix.settings import SettingsWithNoMenu
 import logging
 
 from normal_map.normal_map import NormalMap
@@ -40,7 +41,8 @@ tmp_dir = "tmp/"
 workspace_path = "./"
 environment_filename = "all_off"
 output_file = "normalmap.bmp"
-resolution = (1500, 1500) #px
+max_resolution =  np.array([3280, 2464]) #px
+default_resolution = np.array([3280, 2464]) #px
 object_size = (50, 50) #cm
 lamp_0_position = (55, 0, 35) #cm
 verbosity = 1 # Only status
@@ -86,7 +88,7 @@ def calculateNormalMap(session_abs_path, set_progress_bar_value_function,
 try:
     g_stand = Stand(input_filename_prefix=input_filename_prefix,
         environment_filename=environment_filename,
-        resolution = resolution)
+        resolution = default_resolution)
 except:
     pass
 
@@ -122,20 +124,21 @@ class MenuScreen(Screen):
             self.ids.workspace_id.refresh_workspace_path_label()
             self.dismiss_popup()
 
-class FullProcessPart1Screen(Screen):
-    pass
 
 class GatherScreen(Screen):
     def on_pre_enter(self):
         self.ids.workspace_id.refresh_workspace_path_label()
         self.__reload_check_image()
+        resolution = g_stand.getResolution()
+        self.ids.resolutionWidthTextInput.text = str(resolution[0])
+        self.ids.resolutionHeightTextInput.text = str(resolution[1])
 
     def check_camera(self):
         tmp_path = os.path.join(os.path.abspath(workspace_path), tmp_dir)
         if not os.path.exists(tmp_path):
             os.makedirs(tmp_path, exist_ok=True)
         check_filepath =  os.path.join(tmp_path, "tmp.png")
-        g_stand.check_camera_to_path(check_filepath)
+        g_stand.checkCameraToPath(check_filepath)
         self.__reload_check_image(check_filepath)
 
     def __reload_check_image(self, image_filepath = "./tmp/tmp.png"):
@@ -152,6 +155,20 @@ class GatherScreen(Screen):
             os.makedirs(save_path, exist_ok=True)
         g_stand.gatherAllAssets(save_path = save_path,
             preview_callback = self.__reload_check_image)
+
+    def set_resolution(self):
+        try:
+            resolution = np.array([int(self.ids.resolutionWidthTextInput.text), int(self.ids.resolutionHeightTextInput.text)])
+            Logger.info('Settings: try to set resolution: ' + str(resolution))
+            g_stand.setResolution(resolution)
+        except:
+            Logger.error('Settings: failed to set resolution to: [' + self.ids.resolutionWidthTextInput.text + ', ' + self.ids.resolutionHeightTextInput.text + ']')
+            resolution = g_stand.getResolution()
+            self.ids.resolutionWidthTextInput.text = str(resolution[0])
+            self.ids.resolutionHeightTextInput.text = str(resolution[1])
+        else:
+            Logger.info('Settings: resolution set to: ' + str(resolution))
+
 
 class CalculateScreen(Screen):
     session_path = os.path.abspath(workspace_path)
@@ -190,8 +207,9 @@ class CalculateScreen(Screen):
         if not os.path.exists(self.ids.normal_map_image.source):
             self.ids.normal_map_image.source = os.path.join("./assets/preview.jpg")
         
+        Logger.info("Image: source set to: " + self.ids.normal_map_image.source)
         self.ids.normal_map_image.reload()
-        print("image source: " + self.ids.normal_map_image.source)
+        Logger.info("Image: reloaded")
 
     def on_pre_enter(self):
         self.asked_to_exit = False
@@ -226,7 +244,6 @@ class CalculateScreen(Screen):
         self.ids.progress_bar.value = percentage_value
         self.ids.progress_label.text = "{:.2f}".format(percentage_value) + '%'
         
-
     def calculate_normal_map(self):
         assets_path = os.path.join(self.session_path, assets_parent_directory, "*.bmp")
         if os.path.isdir(self.session_path) and glob.glob(assets_path):
@@ -234,13 +251,12 @@ class CalculateScreen(Screen):
             self.thread = Thread(target = calculateNormalMap, args = (self.session_path, self.set_progress_bar_value, self.is_asked_to_exit, self.is_done))
             self.thread.start()
 
-class CalibrateScreen(Screen):
-    pass
 
 class WorkspaceWidget(FloatLayout):
     workspace_path_property = StringProperty(os.path.abspath(workspace_path))
     def refresh_workspace_path_label(self):
         self.ids.workspace_path_label.text = "Workspace path: " + os.path.abspath(workspace_path)
+
 
 class NormalMapScannerApp(App):
 
@@ -249,12 +265,11 @@ class NormalMapScannerApp(App):
         sm = ScreenManager()
         sm.transition = NoTransition()
         sm.add_widget(MenuScreen(name='menu_screen'))
-        sm.add_widget(FullProcessPart1Screen(name='full_process_part_1_screen'))
         sm.add_widget(GatherScreen(name='gather_screen'))
         sm.add_widget(CalculateScreen(name='calculate_screen'))
-        sm.add_widget(CalibrateScreen(name='calibrate_screen'))
 
         return sm
+
 
 if __name__ == '__main__':
     NormalMapScannerApp().run()

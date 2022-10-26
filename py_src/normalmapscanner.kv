@@ -13,6 +13,7 @@
             Image:
                 source: 'assets/logo.png'
             GridLayout:
+                size_hint_y: 0.5
                 rows: 2
                 padding: (50, 0)
                 spacing: 30
@@ -20,36 +21,24 @@
                     cols: 3
                     spacing: 30
                     Button:
-                        text: 'Full normal map\ngeneration process'
+                        text: 'Gather input images'
                         font_size: self.width * font_size_width_factor
                         halign: 'center'
-                        on_press: root.manager.current = 'full_process_part_1_screen'
-                    GridLayout:
-                        rows:2
-                        spacing: 30
-                        Button:
-                            text: 'Gather input images'
-                            font_size: self.width * font_size_width_factor
-                            on_press: root.manager.current = 'gather_screen'
-                        Button:
-                            text: 'Calculate normal map'
-                            font_size: self.width * font_size_width_factor
-                            on_press: root.manager.current = 'calculate_screen'
-                    GridLayout:
-                        rows:2
-                        spacing: 30
-                        Button:
-                            text: 'Calibrate camera'
-                            font_size: self.width * font_size_width_factor
-                            on_press: root.manager.current = 'calibrate_screen'
-                        Button:
-                            text: 'Change workspace'
-                            font_size: self.width * font_size_width_factor
-                            on_press: root.show_change_workspace_menu()
+                        on_press: root.manager.current = 'gather_screen'
+                    Button:
+                        text: 'Calculate normal map'
+                        font_size: self.width * font_size_width_factor
+                        halign: 'center'
+                        on_press: root.manager.current = 'calculate_screen'
+                    Button:
+                        text: 'Change workspace'
+                        font_size: self.width * font_size_width_factor
+                        halign: 'center'
+                        on_press: root.show_change_workspace_menu()
                 Button:
                     text: 'Quit'
                     font_size: self.height * font_size_height_factor
-                    size_hint_y: 0.2
+                    size_hint_y: 0.3
                     on_press: app.stop()
         WorkspaceWidget:
             id: workspace_id
@@ -93,16 +82,6 @@
                 text: "Change"
                 on_release: root.change_workspace(filechooser.path)
 
-<FullProcessPart1Screen>:
-    GridLayout:
-        cols: 1
-        rows: 2
-        Button:
-            text: 'My settings button'
-        Button:
-            text: 'Back to menu'
-            on_press: root.manager.current = 'menu_screen'
-
 <GatherScreen>:
     FloatLayout:
         FloatLayout:
@@ -116,30 +95,68 @@
                 valign: 'middle'
                 pos_hint: {'center_x': 0.5, 'center_y': 0.9}
             Button:
+                text: 'Back to menu'
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.15, 'center_y': 0.05}
-                text: 'Back to menu'
                 font_size: self.height * font_size_height_factor
-                on_press: root.manager.current = 'menu_screen'
+                on_release: root.manager.current = 'menu_screen'
             Button:
+                text: 'Check camera'
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.05}
-                text: 'Check camera'
                 font_size: self.height * font_size_height_factor
                 on_release: root.check_camera()
             Button:
+                text: 'Capture all images'
                 size_hint: (0.3, 0.05)
                 pos_hint: {'center_x': 0.85, 'center_y': 0.05}
-                text: 'Capture all images'
                 font_size: self.height * font_size_height_factor
-                on_press: root.capture_all_assets()
-            Image:
-                id: check_image
-                size_hint_y: 0.7
-                allow_stretch: True
-                keep_ratio: True
-                pos_hint: {'center_x': 0.5, 'center_y': 0.45}
-                source: tmp_dir + 'tmp.png'
+                on_release: root.capture_all_assets()
+            BoxLayout:
+                pos_hint: {'center_x': 0.325, 'center_y': 0.45}
+                size_hint: (0.647, 0.7)
+                padding: 2
+                canvas:
+                    Color:
+                        rgba: 1, 1, 1, 1
+                    Line:
+                        width: 1
+                        rectangle: self.x, self.y, self.width, self.height
+                AsyncImage:
+                    id: check_image
+                    allow_stretch: True
+                    keep_ratio: True
+                    source: tmp_dir + 'tmp.png'
+            GridLayout:
+                rows:1
+                cols:4
+                pos_hint: {'center_x': 0.85, 'center_y': 0.45}
+                halign: 'left'
+                size_hint: (0.3, 0.06)
+                Label:
+                    text: 'Resolution:'
+                    size_hint: (0.5, 1)
+                    font_size: self.width * font_size_width_factor * 2
+                TextInput:
+                    id: resolutionWidthTextInput
+                    text: '3280'
+                    valign: 'middle'
+                    font_size: self.width * 0.39
+                    size_hint: (0.2, 1)
+                    multiline: False
+                    on_text_validate: root.set_resolution()
+                Label:
+                    text: 'x'
+                    size_hint: (0.1, 1)
+                    font_size: self.width * 0.8
+                TextInput:
+                    id: resolutionHeightTextInput
+                    text: '2464'
+                    valign: 'middle'
+                    font_size: self.width * 0.39
+                    size_hint: (0.2, 1)
+                    multiline: False
+                    on_text_validate: root.set_resolution()
         WorkspaceWidget:
             id: workspace_id
             size_hint: (1, 0.05)
@@ -159,7 +176,7 @@
                 font_size: self.height
                 halign: 'center'
                 valign: 'middle'
-            Image:
+            AsyncImage:
                 id: normal_map_image
                 size_hint_y: 0.7
                 pos_hint: {'center_x': 0.5, 'center_y': 0.47}
@@ -216,11 +233,3 @@
             id: workspace_id
             size_hint: (1, 0.05)
             pos_hint: {'left': 0.0, 'bottom': 0.0}
-
-<CalibrateScreen>:
-    BoxLayout:
-        Button:
-            text: 'My settings button'
-        Button:
-            text: 'Back to menu'
-            on_press: root.manager.current = 'menu_screen'
