@@ -1,4 +1,4 @@
-![Normal Mapping for 3D Texture by Treehouse.gif](https://3wga6448744j404mpt11pbx4-wpengine.netdna-ssl.com/wp-content/uploads/2015/08/gold.gif)
+[![NormalMapScanner](https://j.gifs.com/jYKP3W.gif "https://www.youtube.com/watch?v=KlRckV2yOt0")](https://www.youtube.com/watch?v=KlRckV2yOt0)
 # NormalMapScanner
 Experimental stand for generating normal maps for quasi-flat objects.
 
