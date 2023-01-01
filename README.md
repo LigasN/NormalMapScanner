@@ -1,4 +1,4 @@
-[![NormalMapScanner](https://j.gifs.com/jYKP3W.gif "https://www.youtube.com/watch?v=KlRckV2yOt0")](https://www.youtube.com/watch?v=KlRckV2yOt0)
+[![NormalMapScanner](https://j.gifs.com/83NlR5.gif "https://www.youtube.com/watch?v=KlRckV2yOt0")](https://www.youtube.com/watch?v=KlRckV2yOt0)
 # NormalMapScanner
 Experimental stand for generating normal maps for quasi-flat objects.
 
